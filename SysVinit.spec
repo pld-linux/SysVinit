@@ -4,8 +4,8 @@ Summary(fr):	Programme d'initialisation Sys V
 Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
-Version:	2.83
-Release:	6
+Version:	2.84
+Release:	1
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
