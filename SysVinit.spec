@@ -13,12 +13,12 @@ Summary(ru):	Программы, управляющие базовыми системными процессами
 Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	2.85
-Release:	9
+Version:	2.86
+Release:	0.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
-# Source0-md5:	8a2d8f1ed5a2909da04132fefa44905e
+# Source0-md5:	7d5d61c026122ab791ac04c8a84db967
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
@@ -29,14 +29,13 @@ Patch3:		sysvinit-wtmp.patch
 Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
-Patch7:		sysvinit-initctl.patch
-Patch8:		sysvinit-autofsck.patch
-Patch9:		sysvinit-pidof.patch
-Patch10:	sysvinit-log-signals.patch
-Patch11:	sysvinit-killall5.patch
+Patch7:		sysvinit-autofsck.patch
+Patch8:		sysvinit-pidof.patch
+Patch9:		sysvinit-killall5.patch
 # based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
-Patch12:	sysvinit-selinux.patch
-%{?with_selinux:BuildRequires:	libselinux-devel >= 1.14}
+Patch10:	sysvinit-selinux.patch
+%{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
+BuildRequires:	libsepol-devel
 BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -48,11 +47,13 @@ Requires:	login
 Requires:	logrotate
 %endif
 Requires:	mingetty
-%{?with_selinux:Requires:	libselinux >= 1.14}
+%{?with_selinux:Requires:	libselinux >= 1.18}
 Provides:	group(utmp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
+# as in original flags
+%define		specflags	-fomit-frame-pointer
 
 %description
 The SysVinit package contains a group of processes that control the
@@ -116,20 +117,19 @@ sonlanmalarЩnЩ saПlar/denetler.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%{?with_selinux:%patch12 -p1}
+%{?with_selinux:%patch10 -p1}
 
 %build
 %{__make} -C src \
 	CC="%{__cc}" \
 	LCRYPT="-lcrypt" \
-	OPTIMIZE="%{rpmcflags}"
+	OPTIMIZE="%{rpmcflags}" \
+	LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
-	$RPM_BUILD_ROOT{%{_sysconfdir},/etc/logrotate.d,/var/log}
+install -d $RPM_BUILD_ROOT{/bin,%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
+	$RPM_BUILD_ROOT{%{_includedir},%{_sysconfdir},/etc/logrotate.d,/var/log}
 
 %{__make} install -C src \
 	ROOT=$RPM_BUILD_ROOT \
@@ -186,6 +186,7 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{Propaganda,Changelog,*.lsm}
 
+%attr(755,root,root) /bin/mountpoint
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
@@ -212,3 +213,6 @@ fi
 %lang(ja) %{_mandir}/ja/man[158]/*
 %lang(ko) %{_mandir}/ko/man[158]/*
 %lang(pl) %{_mandir}/pl/man[158]/*
+
+# devel?
+#%{_includedir}/initreq.h
