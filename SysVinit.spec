@@ -25,6 +25,7 @@ Patch9:		sysvinit-notty.patch
 Patch10:	sysvinit-wall-n.patch
 Patch11:	sysvinit-owl-bound-format.patch
 Patch12:	sysvinit-cread.patch
+Patch13:	sysvinit-umask.patch
 BuildRequires:	glibc-devel
 Prereq:		shadow
 Prereq:		make
@@ -76,6 +77,7 @@ sonlanmalarýný saðlar/denetler.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
