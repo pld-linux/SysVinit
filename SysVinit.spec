@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	8
+Release:	9
 License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -93,21 +93,6 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 %pre
 groupadd -f -r -g 60 utmp
 update-db
-
-%post
-if [ -f /var/log/wtmp ]; then
-	mv -f /var/log/wtmp /var/log/wtmp.rpmsave
-fi
-
-for i in lastlog wtmpx btmpx; do 
-	if [ ! -f /var/log/$i ]; then 
-		>/var/log/$i 
-	fi
-done
-
-chmod 0644 /var/log/lastlog /var/log/wtmpx
-chmod 0640 /var/log/btmpx
-chgrp utmp /var/log/wtmpx
 
 %postun
 groupdel utmp
