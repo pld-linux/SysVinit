@@ -69,19 +69,23 @@ diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
  #if 0
  #define HALTSCRIPT1	"/etc/init.d/halt"	/* Called by "fast" shutdown */
  #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
-diff -Nur sysvinit-2.76/src/utmpdump.c sysvinit-2.76.pld/src/utmpdump.c
---- sysvinit-2.76/src/utmpdump.c	Tue Aug 13 11:57:12 1996
-+++ sysvinit-2.76.pld/src/utmpdump.c	Sun May 23 15:23:48 1999
-@@ -48,10 +48,10 @@
+diff -Nur sysvinit-2.77/src/utmpdump.c sysvinit-2.77.new/src/utmpdump.c
+--- sysvinit-2.76/src/utmpdump.c	Sun Dec 27 17:32:04 1998
++++ sysvinit-2.76/src.new/utmpdump.c	Wed Sep  1 10:16:16 1999
+@@ -263,14 +263,14 @@
+ 	}
  
-   for(f = 1; f < argc; f++) {
- 	if (strcmp(argv[f], "-") == 0) {
--		printf("Utmp dump of stdin\n");
-+		printf("Utmpx dump of stdin\n");
- 		dump(stdin);
- 	} else if ((fp = fopen(argv[f], "r")) != NULL) {
--		printf("Utmp dump of %s\n", argv[f]);
-+		printf("Utmpx dump of %s\n", argv[f]);
- 		dump(fp);
- 		fclose(fp);
- 	} else
+ 	if (optind < argc) {
+-		fprintf(stderr, "Utmp %sdump of %s\n", reverse ? "un" : "", argv[optind]);
++		fprintf(stderr, "Utmpx %sdump of %s\n", reverse ? "un" : "", argv[optind]);
+ 		if ((fp = fopen(argv[optind], "r")) == NULL) {
+ 			perror("Unable to open file");
+ 			exit(1);
+ 		}
+ 	}
+ 	else {
+-		fprintf(stderr, "Utmp %sdump of stdin\n", reverse ? "un" : "");
++		fprintf(stderr, "Utmpx %sdump of stdin\n", reverse ? "un" : "");
+ 		fp = stdin;
+ 	}
+ 
