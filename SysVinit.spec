@@ -15,8 +15,10 @@ Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
+Prereq:		fileutils
+Prereq:		utempter
 Requires:	logrotate
-Buildroot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
 
