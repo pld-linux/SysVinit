@@ -14,6 +14,7 @@ Source1:	sysvinit-initscript
 Source2:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-man.patch
+Patch2:		sysvinit-bequiet.patch
 Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
@@ -48,6 +49,7 @@ saðlar/denetler.
 %setup -q -n sysvinit-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 make -C src OPTIMIZE="$RPM_OPT_FLAGS"
