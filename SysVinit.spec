@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.77
-Release:	5
+Release:	6
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -89,7 +89,9 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %post
-mv -f /var/log/wtmp /var/log/wtmp.rpmorig
+if [ -f /var/log/wtmp ]; then
+	mv -f /var/log/wtmp /var/log/wtmp.rpmsave
+fi
 touch /var/log/{lastlog,wtmpx,btmpx}
 chmod 0644 /var/log/lastlog /var/log/wtmpx
 chmod 0640 /var/log/btmpx
