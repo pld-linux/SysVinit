@@ -7,12 +7,13 @@ Name:		SysVinit
 Version:	2.76
 Release:	9
 Copyright:	GPL
-Group:		Daemons
-Group(pl):	Serwery
-URL:		ftp://ftp.cistron.nl/pub/people/miquels/software
-Source0:	sysvinit-%{version}.tar.gz
+Group:		Base
+Group(pl):	Bazowe
+Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
-Patch:		sysvinit-optimize.patch
+Patch0:		sysvinit-optimize.patch
+Patch1:		sysvinit-FHS2.patch
+Requires:	/dev/initctl
 Buildroot:	/tmp/%{name}-%{version}-root
 
 %description
@@ -42,7 +43,8 @@ saðlar/denetler.
 
 %prep
 %setup -q -n sysvinit-%{version}
-%patch -p1
+%patch0 -p1
+%patch1 -p1
 
 %build
 make -C src OPTIMIZE="$RPM_OPT_FLAGS"
@@ -50,32 +52,33 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{sbin,etc,dev,var/run,usr/{bin,man/man{1,5,8}}}
+install -d $RPM_BUILD_ROOT/{sbin,etc,dev,var/run,usr/{bin,share/man/man{1,5,8}}}
 
-make -C src ROOT=$RPM_BUILD_ROOT BIN_OWNER=`id -u` BIN_GROUP=`id -g` install
+make install -C src \
+	ROOT=$RPM_BUILD_ROOT \
+	BIN_OWNER=`id -u` \
+	BIN_GROUP=`id -g`
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/initscript
 
-#ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
-
-#mknod --mode=0600 $RPM_BUILD_ROOT/dev/initctl p 
+ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
 # man pages cleaning & compressing ;)
 
-rm -f $RPM_BUILD_ROOT/usr/man/man1/lastb.1
+rm -f $RPM_BUILD_ROOT/usr/share/man/man1/lastb.1
 
-echo .so last.1 > $RPM_BUILD_ROOT/usr/man/man1/lastb.1
+echo .so last.1 > $RPM_BUILD_ROOT/usr/share/man/man1/lastb.1
 
-rm -f $RPM_BUILD_ROOT/usr/man/man8/poweroff.8
-rm -f $RPM_BUILD_ROOT/usr/man/man8/telinit.8
-rm -f $RPM_BUILD_ROOT/usr/man/man8/reboot.8
+rm -f $RPM_BUILD_ROOT/usr/share/man/man8/poweroff.8
+rm -f $RPM_BUILD_ROOT/usr/share/man/man8/telinit.8
+rm -f $RPM_BUILD_ROOT/usr/share/man/man8/reboot.8
 
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/reboot.8
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/telinit.8
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/poweroff.8
+echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/reboot.8
+echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/telinit.8
+echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/poweroff.8
 
-gzip -9nf $RPM_BUILD_ROOT/usr/man/{man1/*,man5/*,man8/*} \
+gzip -9nf $RPM_BUILD_ROOT/usr/share/man/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %clean
@@ -92,11 +95,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /usr/bin/*
 #%attr(600,root,root) /dev/initctl
 %attr(640,root,root) /etc/initscript
-/usr/man/man[158]/*
+/usr/share/man/man[158]/*
 
 %changelog
-* Tue Apr 27 1999 Wojciech "Sas" Cieciwa <cieciwa@alpha.zarz.agh.edu.pl>
+* Tue May 11 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.74-9]
+- now package is FHS 2.0 compiliat.
+
+* Tue Apr 27 1999 Wojciech "Sas" Cieciwa <cieciwa@alpha.zarz.agh.edu.pl>
 - removed /dev/initctl, now this is part of dev package.
 
 * Tue Apr 20 1999 Artur Frysiak <wiget@pld.org.pl>
