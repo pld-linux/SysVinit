@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	20
+Release:	21
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -71,7 +71,7 @@ sonlanmalarýný saðlar/denetler.
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
-	OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O0}"
+	OPTIMIZE="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
