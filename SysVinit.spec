@@ -1,11 +1,11 @@
 Summary:	System V initialization program
 Summary(de):	System V-Intialisierungsprogramm
-Summary(fr):	Programme d'initialisation Sys V.
+Summary(fr):	Programme d'initialisation Sys V
 Summary(pl):	Program inicjalizuj±cy w Systemie V 
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
