@@ -1,8 +1,12 @@
 Summary:	System V initialization program
 Summary(de):	System V-Intialisierungsprogramm
+Summary(es):	Programa de inicializaciСn System V
 Summary(fr):	Programme d'initialisation Sys V
 Summary(pl):	Program inicjalizuj╠cy w Systemie V
+Summary(pt_BR):	Programa de inicializaГЦo System V
+Summary(ru):	Программы, управляющие базовыми системными процессами
 Summary(tr):	System V baЧlatma programЩ
+Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.84
 Release:	4
@@ -41,6 +45,11 @@ SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel
 gestartet wird. Es steuert das Starten, AusfЭhren und Beenden aller
 anderen Programme.
 
+%description -l es
+SysVinit es el primer programa ejecutado por el kernel Linux cuando se
+inicia el sistema. Controla arranque, funcionamiento y cierre de todos
+los otros programas.
+
 %description -l fr
 SysVinit est le premier programme exИcutИ par le noyau de Linux
 lorsque le systХme dИmarre, il contrТle le lancement, l'exИcution et
@@ -51,10 +60,28 @@ SysVinit jest pierwszym programem uruchamianym przez j╠dro podczas
 startu systemu. Kontroluje start, pracЙ oraz zamykanie wszystkich
 innych programСw.
 
+%description -l pt_BR
+SysVinit И o primeiro programa executado pelo kernel Linux quando o
+sistema И inicializado. Controla inicializaГЦo, funcionamento e
+finalizaГЦo de todos os outros programas.
+
+%description -l ru
+Пакет SysVinit содержит группу процессов, которые управляют самыми
+базовыми функциями вашей системы. SysVinit включает программу init,
+самую первую программу, которая запускается ядром Linux при загрузке
+системы. После этого init управляет запуском, исполнением и остановом
+всех остальных программ.
+
 %description -l tr
 SysVinit, sistem aГЩlЩrken Linux ГekirdeПi tarafЩndan ГalЩЧtЩrЩlan ilk
 programdЩr. DiПer programlarЩn baЧlamalarЩnЩ, ГalЩЧmalarЩnЩ ve
 sonlanmalarЩnЩ saПlar/denetler.
+
+%description -l uk
+Пакет SysVinit м╕стить групу процес╕в, котр╕ керують самими базовими
+функц╕ями вашо╖ системи. SysVinit м╕стить програму init, першу
+програму, яку запуска╓ ядро Linux п╕д час загрузки системи. П╕сля
+цього init керу╓ запуском, виконанням та зупинкою вс╕х ╕нших програм.
 
 %prep
 %setup -q -n sysvinit-%{version}
