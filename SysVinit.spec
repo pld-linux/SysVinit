@@ -24,25 +24,26 @@ Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-The SysVinit package contains a group of processes that control the very
-basic functions of your system. SysVinit includes the init program, the
-first program started by the Linux kernel when the system boots. Init then
-controls the startup, running and shutdown of all other programs.
+The SysVinit package contains a group of processes that control the
+very basic functions of your system. SysVinit includes the init
+program, the first program started by the Linux kernel when the system
+boots. Init then controls the startup, running and shutdown of all
+other programs.
 
 %description -l de
 SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel
-gestartet wird. Es steuert das Starten, Ausführen und Beenden aller anderen
-Programme.
+gestartet wird. Es steuert das Starten, Ausführen und Beenden aller
+anderen Programme.
 
 %description -l fr
-SysVinit est le premier programme exécuté par le noyau de Linux lorsque le
-système démarre, il contrôle le lancement, l'exécution et l'arrêt de tous
-les autres programmes.
+SysVinit est le premier programme exécuté par le noyau de Linux
+lorsque le système démarre, il contrôle le lancement, l'exécution et
+l'arrêt de tous les autres programmes.
 
 %description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas startu
-systemu. Kontroluje start, pracê oraz zamykanie wszystkich innych
-programów.
+SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas
+startu systemu. Kontroluje start, pracê oraz zamykanie wszystkich
+innych programów.
 
 %description -l tr
 SysVinit, sistem açýlýrken Linux çekirdeði tarafýndan çalýþtýrýlan ilk
@@ -73,7 +74,7 @@ make install -C src \
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
-ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
+ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
 touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
@@ -113,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(2555,root,tty) %{_bindir}/wall
 
 %attr(640,root,root) /etc/logrotate.d/*
-%ghost /etc/initrunlvl
+%ghost %{_sysconfdir}/initrunlvl
 %attr(660,root,utmp) %ghost /var/log/lastlog
 %attr(660,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
