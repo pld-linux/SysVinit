@@ -5,16 +5,18 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	10
+Release:	11
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
-Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
+URL:		ftp://ftp.cistron.nl/pub/people/miquels/software/
+Source0:	sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
 Source2:	sysvinit.syslog
-Patch0:		sysvinit-misc.patch
+Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-man.patch
 Requires:	/dev/initctl
+Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
 %description
@@ -54,15 +56,15 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_prefix}/{bin,share/man/man{1,5,8}}
-install -d $RPM_BUILD_ROOT/{sbin,etc/{log.d,rc.d},var/{run,log}}
+install -d $RPM_BUILD_ROOT/{sbin,etc/{logrotate.d,sysconfig},var/{run,log}}
 
 make install -C src \
 	ROOT=$RPM_BUILD_ROOT \
 	BIN_OWNER=`id -u` \
 	BIN_GROUP=`id -g`
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/initscript
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/log.d/lastlog
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/initscript
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/lastlog
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
@@ -91,8 +93,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /sbin/*
 %attr(755,root,root) %{_bindir}/*
 
-%attr(755,root,root) %config /etc/rc.d/initscript
-%attr(640,root,root) /etc/log.d/*
+%attr(644,root,root) %config /etc/sysconfig/initscript
+%attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/*
 %config(noreplace) %verify(not size mtime md5) /var/run/*
@@ -106,7 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 - removed unused `lastb',
 - utpmdump changed to utmpx-dump, (patch)
 - changed prefix for initscript to /etc/rc.d instead /etc (patch)
-- added /etc/log.d/last (for logrotate) & /var/log/lastlog,
+- added /etc/logrotate.d/last (for logrotate) & /var/log/lastlog,
 - removed sgid bit from `wall' -- following Debian developers advise ;) 
 - %ghost /etc/initrunlvl,
 - added /var/run/utmpx,
