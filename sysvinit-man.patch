@@ -1,6 +1,6 @@
 diff -Nur sysvinit-2.76/man/halt.8 sysvinit-2.76.pld/man/halt.8
 --- sysvinit-2.76/man/halt.8	Tue Feb 24 23:30:15 1998
-+++ sysvinit-2.76.pld/man/halt.8	Sat May 22 11:27:28 1999
++++ sysvinit-2.76.pld/man/halt.8	Sun May 23 10:03:41 1999
 @@ -33,7 +33,7 @@
  .\"{{{  Description
  .SH DESCRIPTION
@@ -21,13 +21,13 @@ diff -Nur sysvinit-2.76/man/halt.8 sysvinit-2.76.pld/man/halt.8
  .IP \fB\-f\fP
 diff -Nur sysvinit-2.76/man/init.8 sysvinit-2.76.pld/man/init.8
 --- sysvinit-2.76/man/init.8	Tue May 19 10:27:19 1998
-+++ sysvinit-2.76.pld/man/init.8	Sat May 22 11:27:28 1999
++++ sysvinit-2.76.pld/man/init.8	Sun May 23 10:06:35 1999
 @@ -74,11 +74,11 @@
  are processed.
  .PP
  When starting a new process, \fBinit\fP first checks whether the file
 -\fI/etc/initscript\fP exists. If it does, it uses this script to
-+\fI/etc/rc.d/initscript\fP exists. If it does, it uses this script to
++\fI/etc/sysconfig/initscript\fP exists. If it does, it uses this script to
  start the process.
  .PP
  Each time a child terminates, \fBinit\fP records the fact and the reason
@@ -41,7 +41,7 @@ diff -Nur sysvinit-2.76/man/init.8 sysvinit-2.76.pld/man/init.8
  .nf
  /etc/inittab
 -/etc/initscript
-+/etc/rc.d/initscript
++/etc/sysconfig/initscript
  /dev/console
  /etc/ioctl.save
 -/var/run/utmp
@@ -53,23 +53,23 @@ diff -Nur sysvinit-2.76/man/init.8 sysvinit-2.76.pld/man/init.8
  .\"}}}
 diff -Nur sysvinit-2.76/man/initscript.5 sysvinit-2.76.pld/man/initscript.5
 --- sysvinit-2.76/man/initscript.5	Fri Jun 14 15:35:00 1996
-+++ sysvinit-2.76.pld/man/initscript.5	Sat May 22 11:30:13 1999
++++ sysvinit-2.76.pld/man/initscript.5	Sun May 23 10:05:32 1999
 @@ -2,15 +2,15 @@
  .SH NAME
  initscript \- script that executes inittab commands.
  .SH SYNOPSIS
 -/bin/sh /etc/initscript id runlevels action process
-+/bin/sh /etc/rc.d/initscript id runlevels action process
++/bin/sh /etc/sysconfig/initscript id runlevels action process
  .SH DESCRIPTION
 -When the shell script \fI/etc/initscript\fP is present, \fBinit\fP
-+When the shell script \fI/etc/rc.d/initscript\fP is present, \fBinit\fP
++When the shell script \fI/etc/sysconfig/initscript\fP is present, \fBinit\fP
  will use it to execute the commands from \fIinittab\fP.
  This script can be used to set things like \fBulimit\fP and
  \fBumask\fP default values for every process.
  .SH EXAMPLES
  This is a sample initscript, which might be installed on your
 -system as \fI/etc/initscript.sample\fP.
-+system as \fI/etc/rc.d/initscript.sample\fP.
++system as \fI/etc/sysconfig/initscript.sample\fP.
  .RS
  .sp
  .nf
@@ -78,7 +78,7 @@ diff -Nur sysvinit-2.76/man/initscript.5 sysvinit-2.76.pld/man/initscript.5
  #              wants to spawn like this:
  #
 -#              /bin/sh /etc/initscript <id> <level> <action> <process>
-+# /bin/sh /etc/rc.d/initscript <id> <level> <action> <process>
++# /bin/sh /etc/sysconfig/initscript <id> <level> <action> <process>
  #
  
    # Set umask to safe level, and enable core dumps.
@@ -87,13 +87,13 @@ diff -Nur sysvinit-2.76/man/initscript.5 sysvinit-2.76.pld/man/initscript.5
  .SH FILES
  /etc/inittab,
 -/etc/initscript.
-+/etc/rc.d/initscript.
++/etc/sysconfig/initscript.
  .SH AUTHOR
  Miquel van Smoorenburg ,<miquels@cistron.nl>
  .SH "SEE ALSO"
 diff -Nur sysvinit-2.76/man/last.1 sysvinit-2.76.pld/man/last.1
 --- sysvinit-2.76/man/last.1	Sun Mar 29 03:04:56 1998
-+++ sysvinit-2.76.pld/man/last.1	Sat May 22 11:27:28 1999
++++ sysvinit-2.76.pld/man/last.1	Sun May 23 10:03:41 1999
 @@ -1,10 +1,10 @@
  .\"{{{}}}
  .\"{{{  Title
@@ -160,7 +160,7 @@ diff -Nur sysvinit-2.76/man/last.1 sysvinit-2.76.pld/man/last.1
  .SH AUTHOR
 diff -Nur sysvinit-2.76/man/runlevel.8 sysvinit-2.76.pld/man/runlevel.8
 --- sysvinit-2.76/man/runlevel.8	Tue May 27 12:33:54 1997
-+++ sysvinit-2.76.pld/man/runlevel.8	Sat May 22 11:27:28 1999
++++ sysvinit-2.76.pld/man/runlevel.8	Sun May 23 10:03:41 1999
 @@ -3,20 +3,20 @@
  runlevel -- find the current and previous system runlevel.
  .SH SYNOPSIS
@@ -205,7 +205,7 @@ diff -Nur sysvinit-2.76/man/runlevel.8 sysvinit-2.76.pld/man/runlevel.8
  Miquel van Smoorenburg, miquels@cistron.nl
 diff -Nur sysvinit-2.76/man/shutdown.8 sysvinit-2.76.pld/man/shutdown.8
 --- sysvinit-2.76/man/shutdown.8	Mon Jun 22 12:43:59 1998
-+++ sysvinit-2.76.pld/man/shutdown.8	Sat May 22 11:27:28 1999
++++ sysvinit-2.76.pld/man/shutdown.8	Sun May 23 10:03:41 1999
 @@ -128,7 +128,7 @@
  argument (add this to the invocation of shutdown in /etc/inittab),
  it checks to see if the file \fI/etc/shutdown.allow\fP is present.
