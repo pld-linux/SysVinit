@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.84
-Release:	3
+Release:	4
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -97,8 +97,6 @@ echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 
-gzip -9nf doc/{Propaganda,Changelog,*.lsm}
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -123,14 +121,14 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/*.gz
+%doc doc/{Propaganda,Changelog,*.lsm}
 
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
 %attr(755,root,root) %{_bindir}/mesg
 %attr(755,root,root) %{_bindir}/utmpx-dump
-%attr(2555,root,tty) %{_bindir}/wall
+%attr(2755,root,tty) %{_bindir}/wall
 
 %attr(640,root,root) /etc/logrotate.d/sysvinit
 %ghost %{_sysconfdir}/initrunlvl
