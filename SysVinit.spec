@@ -28,6 +28,7 @@ Prereq:		shadow
 Requires:	login
 Requires:	logrotate
 Requires:	mingetty
+Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir		/sbin
@@ -88,7 +89,11 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
-touch $RPM_BUILD_ROOT{%{_sysconfdir}/ioctl.save,/var/log/{faillog,lastlog,wtmpx,btmpx}}
+> $RPM_BUILD_ROOT%{_sysconfdir}/ioctl.save
+> $RPM_BUILD_ROOT/var/log/faillog
+> $RPM_BUILD_ROOT/var/log/lastlog
+> $RPM_BUILD_ROOT/var/log/wtmpx
+> $RPM_BUILD_ROOT/var/log/btmpx
 
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
@@ -102,6 +107,19 @@ gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 groupadd -f -r -g 22 utmp
 
 %post
+touch %{_sysconfdir}/{initrunlvl,ioctl.save} \
+	/var/log/{{fail,last}log,{w,b}tmpx}
+chmod 000 %{_sysconfdir}/{initrunlvl,ioctl.save} \
+	/var/log/{{fail,last}log,{w,b}tmpx}
+chown root.root %{_sysconfdir}/{initrunlvl,ioctl.save} \
+	/var/log/{faillog,btmpx}
+chown root.utmp /var/log/{lastlog,wtmpx}
+chmod 644 %{_sysconfdir}/initrunlvl
+chmod 600 %{_sysconfdir}/ioctl.save
+chmod 640 /var/log/{faillog,btmpx}
+chmod 660 /var/log/lastlog
+chmod 664 /var/log/wtmpx
+
 %{_sbindir}/telinit u || :
 
 %postun
