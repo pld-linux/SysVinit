@@ -40,7 +40,7 @@ système démarre, il contrôle le lancement, l'exécution et l'arrêt de tous
 les autres programmes.
 
 %description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas  startu
+SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas startu
 systemu. Kontroluje start, pracê oraz zamykanie wszystkich innych
 programów.
 
