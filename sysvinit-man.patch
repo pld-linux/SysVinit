@@ -1,0 +1,217 @@
+diff -Nur sysvinit-2.76/man/halt.8 sysvinit-2.76.pld/man/halt.8
+--- sysvinit-2.76/man/halt.8	Tue Feb 24 23:30:15 1998
++++ sysvinit-2.76.pld/man/halt.8	Sat May 22 11:27:28 1999
+@@ -33,7 +33,7 @@
+ .\"{{{  Description
+ .SH DESCRIPTION
+ \fBHalt\fP notes that the system is being brought down in the file
+-\fB/var/log/wtmp\fP, and then either tells the kernel to halt, reboot or
++\fB/var/log/wtmpx\fP, and then either tells the kernel to halt, reboot or
+ poweroff the system. If \fBhalt\fP or \fBreboot\fP is called when the system is
+ \fInot\fP in runlevel \fB0\fP or \fB6\fP, 
+ \fBshutdown\fP(8) will be invoked instead (with the flag \fB-h\fP or \fB-r\fP).
+@@ -44,7 +44,7 @@
+ Don't sync before reboot or halt.
+ .IP \fB\-w\fP
+ Don't actually reboot or halt but only write the wtmp record
+-(in the \fB/var/log/wtmp\fP file).
++(in the \fB/var/log/wtmpx\fP file).
+ .IP \fB\-d\fP
+ Don't write the wtmp record. The \fB\-n\fP flag implies \fB\-d\fP.
+ .IP \fB\-f\fP
+diff -Nur sysvinit-2.76/man/init.8 sysvinit-2.76.pld/man/init.8
+--- sysvinit-2.76/man/init.8	Tue May 19 10:27:19 1998
++++ sysvinit-2.76.pld/man/init.8	Sat May 22 11:27:28 1999
+@@ -74,11 +74,11 @@
+ are processed.
+ .PP
+ When starting a new process, \fBinit\fP first checks whether the file
+-\fI/etc/initscript\fP exists. If it does, it uses this script to
++\fI/etc/rc.d/initscript\fP exists. If it does, it uses this script to
+ start the process.
+ .PP
+ Each time a child terminates, \fBinit\fP records the fact and the reason
+-it died in \fB/var/run/utmp\fP and \fB/var/log/wtmp\fP,
++it died in \fB/var/run/utmpx\fP and \fB/var/log/wtmpx\fP,
+ provided that these files exist.
+ .SH CHANGING RUNLEVELS
+ After it has spawned all of the processes specified, \fBinit\fP waits
+@@ -229,11 +229,11 @@
+ .SH FILES
+ .nf
+ /etc/inittab
+-/etc/initscript
++/etc/rc.d/initscript
+ /dev/console
+ /etc/ioctl.save
+-/var/run/utmp
+-/var/log/wtmp
++/var/run/utmpx
++/var/log/wtmpx
+ /dev/initctl
+ .fi
+ .\"}}}
+diff -Nur sysvinit-2.76/man/initscript.5 sysvinit-2.76.pld/man/initscript.5
+--- sysvinit-2.76/man/initscript.5	Fri Jun 14 15:35:00 1996
++++ sysvinit-2.76.pld/man/initscript.5	Sat May 22 11:30:13 1999
+@@ -2,15 +2,15 @@
+ .SH NAME
+ initscript \- script that executes inittab commands.
+ .SH SYNOPSIS
+-/bin/sh /etc/initscript id runlevels action process
++/bin/sh /etc/rc.d/initscript id runlevels action process
+ .SH DESCRIPTION
+-When the shell script \fI/etc/initscript\fP is present, \fBinit\fP
++When the shell script \fI/etc/rc.d/initscript\fP is present, \fBinit\fP
+ will use it to execute the commands from \fIinittab\fP.
+ This script can be used to set things like \fBulimit\fP and
+ \fBumask\fP default values for every process.
+ .SH EXAMPLES
+ This is a sample initscript, which might be installed on your
+-system as \fI/etc/initscript.sample\fP.
++system as \fI/etc/rc.d/initscript.sample\fP.
+ .RS
+ .sp
+ .nf
+@@ -20,7 +20,7 @@
+ # initscript   Executed by init(8) for every program it
+ #              wants to spawn like this:
+ #
+-#              /bin/sh /etc/initscript <id> <level> <action> <process>
++# /bin/sh /etc/rc.d/initscript <id> <level> <action> <process>
+ #
+ 
+   # Set umask to safe level, and enable core dumps.
+@@ -36,7 +36,7 @@
+ .RE
+ .SH FILES
+ /etc/inittab,
+-/etc/initscript.
++/etc/rc.d/initscript.
+ .SH AUTHOR
+ Miquel van Smoorenburg ,<miquels@cistron.nl>
+ .SH "SEE ALSO"
+diff -Nur sysvinit-2.76/man/last.1 sysvinit-2.76.pld/man/last.1
+--- sysvinit-2.76/man/last.1	Sun Mar 29 03:04:56 1998
++++ sysvinit-2.76.pld/man/last.1	Sat May 22 11:27:28 1999
+@@ -1,10 +1,10 @@
+ .\"{{{}}}
+ .\"{{{  Title
+-.TH LAST,LASTB 1 "Mar 28, 1998" "" "Linux System Administrator's Manual"
++.TH LAST 1 "Mar 28, 1998" "" "Linux System Administrator's Manual"
+ .\"}}}
+ .\"{{{  Name
+ .SH NAME
+-last, lastb \- show listing of last logged in users
++last \- show listing of last logged in users
+ .\"}}}
+ .\"{{{  Synopsis
+ .SH SYNOPSIS
+@@ -17,19 +17,11 @@
+ .RI [ name... ]
+ .RI [ tty... ]
+ .br
+-.B lastb
+-.RB [ \-R ]
+-.RB [ \-\fInum\fP ]
+-.RB "[ \-\fBn\fP \fInum\fP ]"
+-.RB "[ \-\fBf\fP \fIfile\fP ]"
+-.RB [ \-adox ]
+-.RI [ name... ]
+-.RI [ tty... ]
+ .\"}}}
+ .\"{{{  Description
+ .SH DESCRIPTION
+ .B Last
+-searches back through the file \fB/var/log/wtmp\fP (or the file
++searches back through the file \fB/var/log/wtmpx\fP (or the file
+ designated by the \fB\-f\fP flag) and displays a list of all
+ users logged in (and out) since that file was created.  Names of users
+ and tty's can be given, in which case \fBlast\fP will show only those entries
+@@ -45,8 +37,6 @@
+ Thus \fBlast reboot\fP will show a log of all reboots since the log file
+ was created.
+ .PP
+-\fBLastb\fP is the same as \fBlast\fP, except that by default it shows a log
+-of the file \fB/var/log/btmp\fP, which contains all the bad login attempts.
+ .\"}}}
+ .\"{{{  Options
+ .SH OPTIONS
+@@ -69,16 +59,15 @@
+ Display the system shutdown entries and run level changes.
+ .\"}}}
+ .SH NOTES
+-The files \fIwtmp\fP and \fIbtmp\fP might not be found. The system only
+-logs information in these files if they are present. This is a local
++The file \fIwtmpx\fP might not be found. The system only logs 
++information in these files if they are present. This is a local
+ configuration issue. If you want the files to be used, they can be
+ created with a simple \fBtouch\fP(1) command (for example, 
+-\fItouch /var/log/wtmp\fP).
++\fItouch /var/log/wtmpx\fP).
+ .\"{{{  Files
+ .SH FILES
+-/var/log/wtmp
++/var/log/wtmpx
+ .br
+-/var/log/btmp
+ .\"}}}
+ .\"{{{  Author
+ .SH AUTHOR
+diff -Nur sysvinit-2.76/man/runlevel.8 sysvinit-2.76.pld/man/runlevel.8
+--- sysvinit-2.76/man/runlevel.8	Tue May 27 12:33:54 1997
++++ sysvinit-2.76.pld/man/runlevel.8	Sat May 22 11:27:28 1999
+@@ -3,20 +3,20 @@
+ runlevel -- find the current and previous system runlevel.
+ .SH SYNOPSIS
+ .B runlevel 
+-.RI [ utmp ]
++.RI [ utmpx ]
+ .SH DESCRIPTION
+ .B Runlevel
+ reads the system
+-.I utmp
++.I utmpx
+ file (typically 
+-.IR /var/run/utmp )
++.IR /var/run/utmpx )
+ to locate the runlevel record, and then
+ prints the previous and current system runlevel on its standard output, 
+ separated by a single space. If there is no previous system
+ runlevel, the letter \fBN\fP will be printed instead.
+ .PP
+ If no
+-.I utmp
++.I utmpx
+ file exists, or if no runlevel record can be found,
+ .B runlevel
+ prints the word \fBunknown\fP and exits with an error.
+@@ -28,12 +28,12 @@
+ is also available in the environment variables \fBRUNLEVEL\fP and
+ \fBPREVLEVEL\fP.
+ .SH OPTIONS
+-.\"{{{ utmp
+-.IP \fIutmp\fP 
+-The name of the \fIutmp\fP file to read.
++.\"{{{ utmpx
++.IP \fIutmpx\fP 
++The name of the \fIutmpx\fP file to read.
+ .\"}}}
+ .SH SEE ALSO
+ .BR init (8),
+-.BR utmp (5)
++.BR utmpx (5)
+ .SH AUTHOR
+ Miquel van Smoorenburg, miquels@cistron.nl
+diff -Nur sysvinit-2.76/man/shutdown.8 sysvinit-2.76.pld/man/shutdown.8
+--- sysvinit-2.76/man/shutdown.8	Mon Jun 22 12:43:59 1998
++++ sysvinit-2.76.pld/man/shutdown.8	Sat May 22 11:27:28 1999
+@@ -128,7 +128,7 @@
+ argument (add this to the invocation of shutdown in /etc/inittab),
+ it checks to see if the file \fI/etc/shutdown.allow\fP is present.
+ It then compares the login names in that file with the list of people
+-that are logged in on a virtual console (from \fI/var/run/utmp\fP). Only
++that are logged in on a virtual console (from \fI/var/run/utmpx\fP). Only
+ if one of those authorized users \fBor root\fP is logged in, it will
+ proceed. Otherwise it will write the message
+ .sp 1
