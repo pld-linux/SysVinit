@@ -1,5 +1,5 @@
-/var/log/lastlog {
-}
+#/var/log/lastlog {
+#}
 
 /var/log/btmpx {
 }
