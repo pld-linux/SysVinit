@@ -1,8 +1,8 @@
-diff -urN sysvinit-2.78.org/src/Makefile sysvinit-2.78/src/Makefile
---- sysvinit-2.78.org/src/Makefile	Thu Mar  2 18:17:48 2000
-+++ sysvinit-2.78/src/Makefile	Thu Mar  2 18:18:08 2000
+diff -Nru sysvinit-2.85.orig/src/Makefile sysvinit-2.85/src/Makefile
+--- sysvinit-2.85.orig/src/Makefile	Tue Nov  6 12:58:16 2001
++++ sysvinit-2.85/src/Makefile	Thu Apr 24 12:05:06 2003
 @@ -8,8 +8,9 @@
- # Version:	@(#)Makefile  2.78  13-Nov-1999  miquels@cistron.nl
+ # Version:	@(#)Makefile  2.83-3  06-Nov-2001  miquels@cistron.nl
  #
  
 -CC	= cc
@@ -13,7 +13,7 @@ diff -urN sysvinit-2.78.org/src/Makefile sysvinit-2.78/src/Makefile
  LDFLAGS	= -s
  STATIC	=
  
-@@ -88,7 +89,8 @@
+@@ -89,7 +90,8 @@
  			runlevel shutdown $(ROOT)/sbin
  		# These are not installed by default
  ifeq ($(DEBIAN),)
@@ -23,22 +23,22 @@ diff -urN sysvinit-2.78.org/src/Makefile sysvinit-2.78/src/Makefile
  endif
  		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
  		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
-diff -urN sysvinit-2.78.org/src/paths.h sysvinit-2.78/src/paths.h
---- sysvinit-2.78.org/src/paths.h	Thu Mar  2 18:17:48 2000
-+++ sysvinit-2.78/src/paths.h	Thu Mar  2 18:18:08 2000
-@@ -28,7 +28,7 @@
+diff -Nru sysvinit-2.85.orig/src/paths.h sysvinit-2.85/src/paths.h
+--- sysvinit-2.85.orig/src/paths.h	Mon Apr 14 13:37:01 2003
++++ sysvinit-2.85/src/paths.h	Thu Apr 24 12:06:06 2003
+@@ -24,7 +24,7 @@
+ #define FORCEFSCK	"/forcefsck"		/* Force fsck on boot */
  #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
- #define IOSAVE		"/etc/ioctl.save"	/* termios settings for SU */
  #define SHELL		"/bin/sh"		/* Default shell */
 -#define INITSCRIPT	"/etc/initscript"	/* Initscript. */
 +#define INITSCRIPT	"/etc/rc.d/rc.init"	/* Initscript. */
+ #define PWRSTAT		"/etc/powerstatus"	/* COMPAT: SIGPWR reason (OK/BAD) */
+ 
  #if 0
- #define HALTSCRIPT1	"/etc/init.d/halt"	/* Called by "fast" shutdown */
- #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
-diff -urN sysvinit-2.78.org/src/utmpdump.c sysvinit-2.78/src/utmpdump.c
---- sysvinit-2.78.org/src/utmpdump.c	Thu Mar  2 18:17:48 2000
-+++ sysvinit-2.78/src/utmpdump.c	Thu Mar  2 18:18:08 2000
-@@ -263,14 +263,14 @@
+diff -Nru sysvinit-2.85.orig/src/utmpdump.c sysvinit-2.85/src/utmpdump.c
+--- sysvinit-2.85.orig/src/utmpdump.c	Tue Sep 12 23:14:24 2000
++++ sysvinit-2.85/src/utmpdump.c	Thu Apr 24 12:05:06 2003
+@@ -265,14 +265,14 @@
  	}
  
  	if (optind < argc) {

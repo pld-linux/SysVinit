@@ -1,16 +1,16 @@
-diff -Nru sysvinit-2.78/man/halt.8 sysvinit-2.78.new/man/halt.8
---- sysvinit-2.78/man/halt.8	Tue Aug 24 11:45:21 1999
-+++ sysvinit-2.78.new/man/halt.8	Sat Apr 15 20:39:20 2000
-@@ -33,7 +33,7 @@
+diff -Nru sysvinit-2.85.orig/man/halt.8 sysvinit-2.85/man/halt.8
+--- sysvinit-2.85.orig/man/halt.8	Wed Nov 21 22:11:22 2001
++++ sysvinit-2.85/man/halt.8	Thu Apr 24 12:08:24 2003
+@@ -35,7 +35,7 @@
  .\"{{{  Description
  .SH DESCRIPTION
  \fBHalt\fP notes that the system is being brought down in the file
 -\fI/var/log/wtmp\fP, and then either tells the kernel to halt, reboot or
 +\fI/var/log/wtmpx\fP, and then either tells the kernel to halt, reboot or
- poweroff the system. If \fBhalt\fP or \fBreboot\fP is called when the system is
- \fInot\fP in runlevel \fB0\fP or \fB6\fP, 
- \fBshutdown\fP(8) will be invoked instead (with the flag \fB-h\fP or \fB-r\fP).
-@@ -43,10 +43,10 @@
+ poweroff the system.
+ .PP
+ If \fBhalt\fP or \fBreboot\fP is called when the system is
+@@ -52,10 +52,10 @@
  .IP \fB\-n\fP
  Don't sync before reboot or halt.
  .IP \fB\-w\fP
@@ -24,7 +24,7 @@ diff -Nru sysvinit-2.78/man/halt.8 sysvinit-2.78.new/man/halt.8
  .IP \fB\-f\fP
  Force halt or reboot, don't call \fBshutdown\fP(8).
  .IP \fB\-i\fP
-@@ -65,7 +65,7 @@
+@@ -76,7 +76,7 @@
  never be called directly. From release 2.74 on \fBhalt\fP and \fBreboot\fP
  invoke \fBshutdown\fP(8) if the system is not in runlevel 0 or 6. This
  means that if \fBhalt\fP or \fBreboot\fP cannot find out the current
@@ -33,10 +33,10 @@ diff -Nru sysvinit-2.78/man/halt.8 sysvinit-2.78.new/man/halt.8
  correctly) \fBshutdown\fP will be called, which might not be what you want.
  Use the \fB-f\fP flag if you want to do a hard \fBhalt\fP or \fBreboot\fP.
  .PP
-diff -Nru sysvinit-2.78/man/init.8 sysvinit-2.78.new/man/init.8
---- sysvinit-2.78/man/init.8	Fri Feb 11 12:15:07 2000
-+++ sysvinit-2.78.new/man/init.8	Sat Apr 15 20:40:11 2000
-@@ -78,11 +78,11 @@
+diff -Nru sysvinit-2.85.orig/man/init.8 sysvinit-2.85/man/init.8
+--- sysvinit-2.85.orig/man/init.8	Fri Apr 18 23:05:03 2003
++++ sysvinit-2.85/man/init.8	Thu Apr 24 12:11:37 2003
+@@ -76,11 +76,11 @@
  are processed.
  .PP
  When starting a new process, \fBinit\fP first checks whether the file
@@ -50,14 +50,13 @@ diff -Nru sysvinit-2.78/man/init.8 sysvinit-2.78.new/man/init.8
  provided that these files exist.
  .SH CHANGING RUNLEVELS
  After it has spawned all of the processes specified, \fBinit\fP waits
-@@ -249,11 +249,11 @@
+@@ -240,10 +240,10 @@
  .SH FILES
  .nf
  /etc/inittab
 -/etc/initscript
 +/etc/sysconfig/initscript
  /dev/console
- /etc/ioctl.save
 -/var/run/utmp
 -/var/log/wtmp
 +/var/run/utmpx
@@ -65,16 +64,16 @@ diff -Nru sysvinit-2.78/man/init.8 sysvinit-2.78.new/man/init.8
  /dev/initctl
  .fi
  .\"}}}
-@@ -290,5 +290,5 @@
+@@ -280,5 +280,5 @@
  .BR kill (1),
  .BR inittab (5),
  .BR initscript (5),
 -.BR utmp (5)
 +.BR utmpx (5)
  .\"}}}
-diff -Nru sysvinit-2.78/man/initscript.5 sysvinit-2.78.new/man/initscript.5
---- sysvinit-2.78/man/initscript.5	Fri Dec 24 23:31:21 1999
-+++ sysvinit-2.78.new/man/initscript.5	Sat Apr 15 20:38:20 2000
+diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
+--- sysvinit-2.85.orig/man/initscript.5	Fri Dec 24 23:31:21 1999
++++ sysvinit-2.85/man/initscript.5	Thu Apr 24 12:08:24 2003
 @@ -2,15 +2,15 @@
  .SH NAME
  initscript \- script that executes inittab commands.
@@ -112,10 +111,10 @@ diff -Nru sysvinit-2.78/man/initscript.5 sysvinit-2.78.new/man/initscript.5
  .SH AUTHOR
  Miquel van Smoorenburg ,<miquels@cistron.nl>
  .SH "SEE ALSO"
-diff -Nru sysvinit-2.78/man/inittab.5 sysvinit-2.78.new/man/inittab.5
---- sysvinit-2.78/man/inittab.5	Tue May 19 10:17:37 1998
-+++ sysvinit-2.78.new/man/inittab.5	Sat Apr 15 20:40:31 2000
-@@ -46,8 +46,8 @@
+diff -Nru sysvinit-2.85.orig/man/inittab.5 sysvinit-2.85/man/inittab.5
+--- sysvinit-2.85.orig/man/inittab.5	Tue Dec  4 21:17:47 2001
++++ sysvinit-2.85/man/inittab.5	Thu Apr 24 12:08:24 2003
+@@ -47,8 +47,8 @@
  specifies the process to be executed.  If the process field starts with
  a `+' character, 
  .B init 
@@ -126,9 +125,9 @@ diff -Nru sysvinit-2.78/man/inittab.5 sysvinit-2.78.new/man/inittab.5
  a historic bug.
  .\"}}}
  .PP
-diff -Nru sysvinit-2.78/man/last.1 sysvinit-2.78.new/man/last.1
---- sysvinit-2.78/man/last.1	Thu Jul 29 12:50:34 1999
-+++ sysvinit-2.78.new/man/last.1	Sat Apr 15 20:38:20 2000
+diff -Nru sysvinit-2.85.orig/man/last.1 sysvinit-2.85/man/last.1
+--- sysvinit-2.85.orig/man/last.1	Thu Jul 29 12:50:34 1999
++++ sysvinit-2.85/man/last.1	Thu Apr 24 12:08:24 2003
 @@ -29,7 +29,7 @@
  .\"{{{  Description
  .SH DESCRIPTION
@@ -174,9 +173,9 @@ diff -Nru sysvinit-2.78/man/last.1 sysvinit-2.78.new/man/last.1
  .\"}}}
  .\"{{{  Author
  .SH AUTHOR
-diff -Nru sysvinit-2.78/man/runlevel.8 sysvinit-2.78.new/man/runlevel.8
---- sysvinit-2.78/man/runlevel.8	Tue May 27 12:33:54 1997
-+++ sysvinit-2.78.new/man/runlevel.8	Sat Apr 15 20:38:20 2000
+diff -Nru sysvinit-2.85.orig/man/runlevel.8 sysvinit-2.85/man/runlevel.8
+--- sysvinit-2.85.orig/man/runlevel.8	Tue May 27 12:33:54 1997
++++ sysvinit-2.85/man/runlevel.8	Thu Apr 24 12:08:24 2003
 @@ -3,20 +3,20 @@
  runlevel -- find the current and previous system runlevel.
  .SH SYNOPSIS
@@ -219,10 +218,10 @@ diff -Nru sysvinit-2.78/man/runlevel.8 sysvinit-2.78.new/man/runlevel.8
 +.BR utmpx (5)
  .SH AUTHOR
  Miquel van Smoorenburg, miquels@cistron.nl
-diff -Nru sysvinit-2.78/man/shutdown.8 sysvinit-2.78.new/man/shutdown.8
---- sysvinit-2.78/man/shutdown.8	Mon Jun 22 12:43:59 1998
-+++ sysvinit-2.78.new/man/shutdown.8	Sat Apr 15 20:38:20 2000
-@@ -128,7 +128,7 @@
+diff -Nru sysvinit-2.85.orig/man/shutdown.8 sysvinit-2.85/man/shutdown.8
+--- sysvinit-2.85.orig/man/shutdown.8	Tue Oct  2 23:27:50 2001
++++ sysvinit-2.85/man/shutdown.8	Thu Apr 24 12:08:24 2003
+@@ -127,7 +127,7 @@
  argument (add this to the invocation of shutdown in /etc/inittab),
  it checks to see if the file \fI/etc/shutdown.allow\fP is present.
  It then compares the login names in that file with the list of people
