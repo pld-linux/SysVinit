@@ -9,7 +9,7 @@ Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.85
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -30,14 +30,15 @@ Patch9:		sysvinit-pidof.patch
 Patch10:	sysvinit-log-signals.patch
 Patch11:	sysvinit-killall5.patch
 Patch12:	sysvinit-selinux.patch
-BuildRequires:	glibc-devel
 BuildRequires:	libselinux-devel
-PreReq:		shadow
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(post):	fileutils
+Requires(postun):	/usr/sbin/groupdel
 Requires:	/bin/awk
 Requires:	login
 Requires:	logrotate
 Requires:	mingetty
-Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -144,6 +145,14 @@ bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
+if [ -n "`/usr/bin/getgid utmp`" ]; then
+	if [ "`/usr/bin/getgid utmp`" != "22" ]; then
+		echo "Error: group utmp doesn't have gid=22. Correct this before installing SysVinit." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 22 -r -f utmp
+fi
 groupadd -f -r -g 22 utmp
 
 %post
@@ -159,7 +168,7 @@ chmod 660 /var/log/lastlog
 
 %postun
 if [ "$1" = "0" ]; then
-	groupdel utmp
+	/usr/sbin/groupdel utmp
 fi
 
 %files
