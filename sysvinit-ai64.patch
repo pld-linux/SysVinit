@@ -1,0 +1,44 @@
+--- sysvinit-2.78/src/md5.h.foo	Thu Jun  8 15:58:56 2000
++++ sysvinit-2.78/src/md5.h	Thu Jun  8 16:00:01 2000
+@@ -2,11 +2,11 @@
+ #define MD5_H
+ 
+ #include <features.h>
+-#if defined(__GLIBC__) && __GLIBC__ > 1
++#if defined(__GLIBC__) && __GLIBC__ > 1 && __GLIBC_MINOR__ > 0
+ # include <stdint.h>
+ typedef uint32_t uint32;
+ #else
+-# ifdef __alpha
++# if defined(__alpha__) || defined(__ia64__)
+ typedef unsigned int uint32;
+ # else
+ typedef unsigned long uint32;
+--- sysvinit-2.78/src/Makefile.foo	Thu Jun  8 16:04:18 2000
++++ sysvinit-2.78/src/Makefile	Thu Jun  8 16:04:38 2000
+@@ -25,6 +25,7 @@
+ BIN_GROUP	= root
+ BIN_COMBO	= $(BIN_OWNER).$(BIN_GROUP)
+ INSTALL		= install -o $(BIN_OWNER) -g $(BIN_GROUP)
++MANDIR		= /usr/share/man
+ 
+ # Additional libs for Gnu Libc
+ ifneq ($(wildcard /usr/lib/libcrypt.a),)
+@@ -104,13 +105,13 @@
+ 		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof; chown $(BIN_COMBO) pidof
+ 		cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
+ 		$(INSTALL) -m 644 initreq.h $(ROOT)/usr/include
+-		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/share/man/man8
+-		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/share/man/man5
++		$(INSTALL) -m 644 ../man/*.8 $(ROOT)$(MANDIR)/man8
++		$(INSTALL) -m 644 ../man/*.5 $(ROOT)$(MANDIR)/man5
+ ifeq ($(DEBIAN),)
+-		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)/usr/share/man/man1
++		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)$(MANDIR)/man1
+ endif
+ 		$(INSTALL) -m 644 ../man/last.1 ../man/lastb.1 ../man/mesg.1 \
+-			$(ROOT)/usr/share/man/man1
++			$(ROOT)$(MANDIR)/man1
+ 		#
+ 		# This part is skipped on debian systems, the
+ 		# debian.preinst script takes care of it.

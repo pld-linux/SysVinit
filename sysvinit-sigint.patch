@@ -1,0 +1,20 @@
+--- sysvinit-2.78/src/sulogin.c.sigint	Wed Apr 19 12:25:18 2000
++++ sysvinit-2.78/src/sulogin.c	Wed Apr 19 12:26:25 2000
+@@ -312,6 +312,8 @@
+ 	 *	Try to execute a shell.
+ 	 */
+ 	setenv("SHELL", sushell, 1);
++	signal(SIGINT, SIG_DFL);
++	signal(SIGTSTP, SIG_DFL);
+ 	execl(sushell, shell, NULL);
+ 	perror(sushell);
+ 
+@@ -358,6 +360,8 @@
+ 	/*
+ 	 *	See if we need to open an other tty device.
+ 	 */
++	signal(SIGINT, SIG_IGN);
++	signal(SIGTSTP, SIG_IGN);
+ 	if (optind < argc) tty = argv[optind];
+ 	if (tty) {
+ 		if ((fd = open(tty, O_RDWR)) >= 0) {
