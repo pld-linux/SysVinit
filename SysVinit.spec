@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	8
+Release:	9
 Copyright:	GPL
 Group:		Daemons
 Group(pl):	Serwery
@@ -57,7 +57,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/initscript
 
 #ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 
-mknod --mode=0600 $RPM_BUILD_ROOT/dev/initctl p 
+#mknod --mode=0600 $RPM_BUILD_ROOT/dev/initctl p 
 
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
@@ -90,11 +90,15 @@ rm -rf $RPM_BUILD_ROOT
 #%ghost /etc/*
 
 %attr(755,root,root) /usr/bin/*
-%attr(600,root,root) /dev/initctl
+#%attr(600,root,root) /dev/initctl
 %attr(640,root,root) /etc/initscript
 /usr/man/man[158]/*
 
 %changelog
+* Tue Apr 27 1999 Wojciech "Sas" Cieciwa <cieciwa@alpha.zarz.agh.edu.pl>
+  [2.74-9]
+- removed /dev/initctl, now this is part of dev package.
+
 * Tue Apr 20 1999 Artur Frysiak <wiget@pld.org.pl>
   [2.74-8]
 - compiled on rpm 3
