@@ -1,0 +1,13 @@
+--- sysvinit-2.85/src/Makefile~	2003-06-29 11:20:22.000000000 +0000
++++ sysvinit-2.85/src/Makefile	2003-06-29 11:21:34.000000000 +0000
+@@ -114,10 +114,3 @@
+ endif
+ 		$(INSTALL) -m 644 ../man/last.1 ../man/lastb.1 ../man/mesg.1 \
+ 			$(ROOT)$(MANDIR)/man1
+-		#
+-		# This part is skipped on debian systems, the
+-		# debian.preinst script takes care of it.
+-		@if [ ! -p /dev/initctl ]; then \
+-		 echo "Creating /dev/initctl"; \
+-		 rm -f /dev/initctl; \
+-		 mknod -m 600 /dev/initctl p; fi
