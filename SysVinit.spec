@@ -16,12 +16,12 @@ Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
 Patch4:		sysvinit-man.patch
+BuildRequires:	glibc-static
 Prereq:		shadow-utils
 Prereq:		make
 Requires:	logrotate
 Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
 
 %description
 The SysVinit package contains a group of processes that control the very
