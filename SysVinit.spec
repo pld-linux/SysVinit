@@ -17,6 +17,8 @@ Patch1:		sysvinit-man.patch
 Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
+%define		_sbindir	/sbin
+
 %description
 SysVinit is the first program started by the Linux kernel when the system
 boots, controlling the startup, running, and shutdown of all other
@@ -53,8 +55,8 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_prefix}/{bin,share/man/man{1,5,8}}
-install -d $RPM_BUILD_ROOT/{sbin,etc/{logrotate.d,sysconfig},var/log}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
+	$RPM_BUILD_ROOT/{etc/{logrotate.d,sysconfig},var/log}
 
 make install -C src \
 	ROOT=$RPM_BUILD_ROOT \
@@ -65,7 +67,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/initscript
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
-ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
+ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
 touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
 
@@ -81,6 +83,10 @@ echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
+%post
+touch /var/log/lastlog /var/log/wtmpx
+chmod 0640 /var/log/lastlog /var/log/wtmpx
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -88,15 +94,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz  
 
-%attr(755,root,root) /sbin/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
 
 %attr(644,root,root) %config /etc/sysconfig/initscript
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/lastlog
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/btmpx
-%config(noreplace) %verify(not size mtime md5) /var/log/wtmpx
+%attr(640,root,root) %ghost /var/log/lastlog
+%attr(640,root,root) %ghost /var/log/btmpx
+%ghost /var/log/wtmpx
 
 %{_mandir}/man[158]/*
 
