@@ -5,8 +5,8 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	1
-Copyright:	GPL
+Release:	4
+License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -27,9 +27,9 @@ first program started by the Linux kernel when the system boots. Init then
 controls the startup, running and shutdown of all other programs.
 
 %description -l de
-SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel 
-gestartet wird. Es steuert das Starten, Ausführen und Beenden aller
-anderen Programme.
+SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel
+gestartet wird. Es steuert das Starten, Ausführen und Beenden aller anderen
+Programme.
 
 %description -l fr
 SysVinit est le premier programme exécuté par le noyau de Linux lorsque le
@@ -37,14 +37,14 @@ système démarre, il contrôle le lancement, l'exécution et l'arrêt de tous
 les autres programmes.
 
 %description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas 
-startu systemu. Kontroluje start, pracê oraz zamykanie wszystkich
-innych programów.
+SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas  startu
+systemu. Kontroluje start, pracê oraz zamykanie wszystkich innych
+programów.
 
 %description -l tr
 SysVinit, sistem açýlýrken Linux çekirdeði tarafýndan çalýþtýrýlan ilk
-programdýr. Diðer programlarýn baþlamalarýný, çalýþmalarýný ve sonlanmalarýný
-saðlar/denetler.
+programdýr. Diðer programlarýn baþlamalarýný, çalýþmalarýný ve
+sonlanmalarýný saðlar/denetler.
 
 %prep
 %setup -q -n sysvinit-%{version}
