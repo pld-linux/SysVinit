@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.83
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -88,7 +88,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
-touch $RPM_BUILD_ROOT{%{_sysconfdir}/ioctl.save,/var/log/{lastlog,wtmpx,btmpx}}
+touch $RPM_BUILD_ROOT{%{_sysconfdir}/ioctl.save,/var/log/{faillog,lastlog,wtmpx,btmpx}}
 
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
@@ -126,6 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost %{_sysconfdir}/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
+%attr(640,root,root) %ghost /var/log/faillog
 %attr(660,root,utmp) %ghost /var/log/lastlog
 %attr(664,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
