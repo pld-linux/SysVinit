@@ -1,15 +1,14 @@
-diff -ru sysvinit-2.85/src/killall5.c sysvinit-2.85-fixed/src/killall5.c
---- sysvinit-2.85/src/killall5.c	2003-05-23 00:24:47.000000000 -0400
-+++ sysvinit-2.85-fixed/src/killall5.c	2003-05-23 00:23:57.000000000 -0400
-@@ -170,6 +170,7 @@
- 		n = p->next;
- 		if (p->fullname) free(p->fullname);
+--- sysvinit-2.86/src/killall5.c.orig	2004-12-26 23:07:15.505343096 +0100
++++ sysvinit-2.86/src/killall5.c	2004-12-26 23:20:43.017582576 +0100
+@@ -193,6 +193,7 @@
+ 		if (p->argv0) free(p->argv0);
+ 		if (p->argv1) free(p->argv1);
  		if (p->pathname) free(p->pathname);
 +		if (p->statname) free(p->statname);
  		free(p);
  	}
  	plist = NULL;
-@@ -187,7 +188,7 @@
+@@ -210,7 +211,7 @@
  		/* Open the status file. */
  		snprintf(path, sizeof(path), "/proc/%s/stat", d->d_name);
  
@@ -17,8 +16,8 @@ diff -ru sysvinit-2.85/src/killall5.c sysvinit-2.85-fixed/src/killall5.c
 +		/* Read statname from it. */
   		if ((fp = fopen(path, "r")) != NULL) {
  			buf[0] = 0;
- 			fgets(buf, 256, fp);
-@@ -200,7 +201,6 @@
+ 			fgets(buf, sizeof(buf), fp);
+@@ -223,11 +224,11 @@
  				/* Read program name. */
  				q = strrchr(buf, ')');
  				if (q == NULL) {
@@ -26,48 +25,39 @@ diff -ru sysvinit-2.85/src/killall5.c sysvinit-2.85-fixed/src/killall5.c
  					nsyslog(LOG_ERR,
  					"can't get program name from %s\n",
  						path);
-@@ -213,24 +213,21 @@
- 				while (*q != ' ') q++;
- 			}
- 			*q++ = 0;
--			while (*q == ' ') q++;
- 			p->statname = (char *)xmalloc(strlen(s)+1);
- 			strcpy(p->statname, s);
--
--			/* This could be replaced by getsid(pid) */
--			if (sscanf(q, "%*c %*d %*d %d", &p->sid) != 1) {
--				p->sid = 0;
+ 					free(p);
++					fclose(fp);
+ 					continue;
+ 				}
+ 				s++;
+@@ -242,20 +243,23 @@
+ 
+ 			/* Get session, startcode, endcode. */
+ 			startcode = endcode = 0;
+-			if (sscanf(q, 	"%*c %*d %*d %d %*d %*d %*u %*u "
++			if (sscanf(q, 	"%*c %*d %*d %*d %*d %*d %*u %*u "
+ 					"%*u %*u %*u %*u %*u %*d %*d "
+ 					"%*d %*d %*d %*d %*u %*u %*d "
+ 					"%*u %lu %lu",
+-					&p->sid, &startcode, &endcode) != 3) {
++					&startcode, &endcode) == 2) {
++				if (startcode == 0 && endcode == 0)
++					p->kernel = 1;
++			}
++			fclose(fp);
++			p->sid = getsid(pid);
++			if (p->sid < 0) {
+ 				p->sid = 0;
 -				nsyslog(LOG_ERR, "can't read sid from %s\n",
 -					path);
--				free(p);
--				continue;
--			}
- 			fclose(fp);
++				nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
++				free(p->statname);
+ 				free(p);
+ 				continue;
+ 			}
+-			if (startcode == 0 && endcode == 0)
+-				p->kernel = 1;
+-			fclose(fp);
  		} else {
  			/* Process disappeared.. */
  			free(p);
- 			continue;
- 		}
-+		p->sid = getsid(pid);
-+		if (p->sid < 0) {
-+			p->sid = 0;
-+			nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
-+			free(p);
-+			continue;
-+		}
- 
- 		/* Now read argv[0] */
- 		snprintf(path, sizeof(path), "/proc/%s/cmdline", d->d_name);
-@@ -553,11 +550,7 @@
- 	}
- 
- 	pid = getpid();
--	for (p = plist; p; p = p->next)
--		if (p->pid == pid) {
--			sid = p->sid;
--			break;
--		}
-+	sid = getsid(0);
- 
- 	/* Now kill all processes except our session. */
- 	for (p = plist; p; p = p->next)

@@ -1,10 +1,10 @@
---- sysvinit-2.78/src/shutdown.c.foo	Tue Aug 28 22:19:45 2001
-+++ sysvinit-2.78/src/shutdown.c	Tue Aug 28 22:22:02 2001
-@@ -201,6 +201,7 @@
-   }
+--- sysvinit-2.86/src/shutdown.c.orig	2004-07-30 13:59:04.000000000 +0200
++++ sysvinit-2.86/src/shutdown.c	2004-12-26 22:58:22.690343288 +0100
+@@ -324,6 +324,7 @@
+ 	}
  #endif
  
-+  unlink("/.autofsck");
-   /* script failed or not present: do it ourself. */
-   sleep(1); /* Give init the chance to collect zombies. */
-   setenv("PATH", "/bin:/sbin:/usr/bin:/usr/sbin", 1);
++	unlink("/.autofsck");
+ 	/* script failed or not present: do it ourself. */
+ 	sleep(1); /* Give init the chance to collect zombies. */
+ 

@@ -1,22 +1,25 @@
---- sysvinit-2.84/src/killall5.c.foo	2002-07-18 21:48:55.000000000 -0400
-+++ sysvinit-2.84/src/killall5.c	2002-07-18 22:00:14.000000000 -0400
-@@ -45,6 +45,7 @@
+--- sysvinit-2.86/src/killall5.c.orig	2004-07-30 14:16:23.000000000 +0200
++++ sysvinit-2.86/src/killall5.c	2004-12-26 23:05:17.284315424 +0100
+@@ -47,8 +47,9 @@
+ 
  /* Info about a process. */
- typedef struct _proc_
- {
-+  char *pathname;	/* full path to executable     	  */
-   char *fullname;	/* Name as found out from argv[0] */
-   char *basename;	/* Only the part after the last / */
-   char *statname;	/* the statname without braces    */
-@@ -165,6 +166,7 @@
- 	for (p = plist; n; p = n) {
+ typedef struct proc {
++	char *pathname;		/* full path to executable     	  */
+ 	char *argv0;		/* Name as found out from argv[0] */
+-	char *argv0base;	/* `basename argv[1]`		  */
++	char *argv0base;	/* `basename argv[0]`		  */
+ 	char *argv1;		/* Name as found out from argv[1] */
+ 	char *argv1base;	/* `basename argv[1]`		  */
+ 	char *statname;		/* the statname without braces    */
+@@ -191,6 +192,7 @@
  		n = p->next;
- 		if (p->fullname) free(p->fullname);
+ 		if (p->argv0) free(p->argv0);
+ 		if (p->argv1) free(p->argv1);
 +		if (p->pathname) free(p->pathname);
  		free(p);
  	}
  	plist = NULL;
-@@ -256,6 +258,8 @@
+@@ -309,6 +311,8 @@
  		if (stat(path, &st) == 0) {
  			p->dev = st.st_dev;
  			p->ino = st.st_ino;
@@ -25,13 +28,14 @@
  		}
  
  		/* Link it into the list. */
-@@ -360,6 +364,9 @@
- 			    strchr(p->fullname, ' ') ||
- 			    scripts_too)
- 				ok += (strcmp(p->statname, s) == 0);
-+		        
-+			if (prog[0] == '/' && p->pathname && strcmp(prog,p->pathname))
-+				ok = 0;
- 
- 			if (ok) add_pid_to_q(q, p);
+@@ -425,6 +429,10 @@
+ 		     strchr(p->argv0, ' '))) {
+ 			ok += (strcmp(p->statname, s) == 0);
  		}
++		        
++		if (prog[0] == '/' && p->pathname && strcmp(prog, p->pathname))
++			ok = 0;
++
+ 		if (ok) add_pid_to_q(q, p);
+ 	}
+ 

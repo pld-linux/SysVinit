@@ -1,35 +1,39 @@
-diff -Nru sysvinit-2.85.orig/src/Makefile sysvinit-2.85/src/Makefile
---- sysvinit-2.85.orig/src/Makefile	Tue Nov  6 12:58:16 2001
-+++ sysvinit-2.85/src/Makefile	Thu Apr 24 12:05:06 2003
-@@ -8,8 +8,9 @@
- # Version:	@(#)Makefile  2.83-3  06-Nov-2001  miquels@cistron.nl
+--- sysvinit-2.86/src/Makefile.orig	2004-06-09 14:47:45.000000000 +0200
++++ sysvinit-2.86/src/Makefile	2004-12-26 22:40:47.622737944 +0100
+@@ -9,7 +9,8 @@
  #
  
--CC	= cc
--CFLAGS	= -Wall -O2 -D_GNU_SOURCE
-+CC	 = gcc
-+OPTIMIZE = -O2
+ CC	= gcc
+-CFLAGS	= -Wall -O2 -fomit-frame-pointer -D_GNU_SOURCE
++OPTIMIZE = -O2 -fomit-frame-pointer
 +CFLAGS	= -Wall $(OPTIMIZE) -D_GNU_SOURCE
  LDFLAGS	= -s
  STATIC	=
  
-@@ -89,7 +90,8 @@
- 			runlevel shutdown $(ROOT)/sbin
- 		# These are not installed by default
- ifeq ($(DEBIAN),)
--		$(INSTALL) -m 555 utmpdump wall $(ROOT)/usr/bin
-+		$(INSTALL) -m 755 wall $(ROOT)/usr/bin
-+		$(INSTALL) -m 755 utmpdump  $(ROOT)/usr/bin/utmpx-dump
+@@ -26,7 +27,7 @@
+ ifeq ($(DISTRO),)
+ BIN	+= mountpoint
+ SBIN	+= sulogin bootlogd
+-USRBIN	+= utmpdump wall
++USRBIN	+= utmpx-dump wall
+ MAN1	+= mountpoint.1 wall.1
+ MAN8	+= sulogin.8 bootlogd.8
  endif
- 		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
- 		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
-diff -Nru sysvinit-2.85.orig/src/paths.h sysvinit-2.85/src/paths.h
---- sysvinit-2.85.orig/src/paths.h	Mon Apr 14 13:37:01 2003
-+++ sysvinit-2.85/src/paths.h	Thu Apr 24 12:06:06 2003
-@@ -24,7 +24,7 @@
- #define FORCEFSCK	"/forcefsck"		/* Force fsck on boot */
+@@ -71,7 +72,7 @@
+ mountpoint:	mountpoint.o
+ 		$(CC) $(LDFLAGS) -o $@ mountpoint.o
+ 
+-utmpdump:	utmpdump.o
++utmpx-dump:	utmpdump.o
+ 		$(CC) $(LDFLAGS) -o $@ utmpdump.o
+ 
+ runlevel:	runlevel.o
+--- sysvinit-2.86/src/paths.h.orig	2004-06-09 14:47:45.000000000 +0200
++++ sysvinit-2.86/src/paths.h	2004-12-26 22:41:21.122645184 +0100
+@@ -25,7 +25,7 @@
  #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
  #define SHELL		"/bin/sh"		/* Default shell */
+ #define SULOGIN		"/sbin/sulogin"		/* Sulogin */
 -#define INITSCRIPT	"/etc/initscript"	/* Initscript. */
 +#define INITSCRIPT	"/etc/rc.d/rc.init"	/* Initscript. */
  #define PWRSTAT		"/etc/powerstatus"	/* COMPAT: SIGPWR reason (OK/BAD) */
