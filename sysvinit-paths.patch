@@ -23,18 +23,6 @@ diff -urN sysvinit-2.78.org/src/Makefile sysvinit-2.78/src/Makefile
  endif
  		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
  		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
-diff -urN sysvinit-2.78.org/src/last.c sysvinit-2.78/src/last.c
---- sysvinit-2.78.org/src/last.c	Thu Mar  2 18:17:48 2000
-+++ sysvinit-2.78/src/last.c	Thu Mar  2 18:18:08 2000
-@@ -236,7 +236,7 @@
-  *	Try to be smart about the location of the BTMP file
-  */
- #ifndef BTMP_FILE
--#define BTMP_FILE getbtmp()
-+#define BTMP_FILE "/var/log/btmpx"
- char *getbtmp()
- {
- 	static char btmp[128];
 diff -urN sysvinit-2.78.org/src/paths.h sysvinit-2.78/src/paths.h
 --- sysvinit-2.78.org/src/paths.h	Thu Mar  2 18:17:48 2000
 +++ sysvinit-2.78/src/paths.h	Thu Mar  2 18:18:08 2000
