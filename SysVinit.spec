@@ -113,9 +113,9 @@ sonlanmalarýný saðlar/denetler.
 
 %build
 %{__make} -C src \
+	CC="%{__cc}" \
 	LCRYPT="-lcrypt" \
-	OPTIMIZE="%{rpmcflags}" \
-	CC=%{__cc}
+	OPTIMIZE="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
