@@ -53,7 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{sbin,etc,dev,var/run,usr/{bin,man/man{1,5,8}}}
 
 make -C src ROOT=$RPM_BUILD_ROOT BIN_OWNER=`id -u` BIN_GROUP=`id -g` install
-install %SOURCE1 $RPM_BUILD_ROOT/etc/initscript
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/initscript
 
 #ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 
@@ -92,7 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /usr/bin/*
 %attr(600,root,root) /dev/initctl
 %attr(640,root,root) /etc/initscript
-%attr(644,root, man) /usr/man/man[158]/*
+/usr/man/man[158]/*
 
 %changelog
 * Tue Feb  9 1999 Micha³ Kuratczyk <kurkens@polbox.com>
