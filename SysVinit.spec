@@ -23,15 +23,15 @@ Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
 BuildRequires:	glibc-devel
-Prereq:		/bin/awk
-Prereq:		shadow
+PreReq:		shadow
+Requires:	/bin/awk
 Requires:	login
 Requires:	logrotate
 Requires:	mingetty
 Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sbindir		/sbin
+%define		_sbindir	/sbin
 
 %description
 The SysVinit package contains a group of processes that control the
@@ -103,6 +103,9 @@ bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 
 gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %pre
 groupadd -f -r -g 22 utmp
 
@@ -121,9 +124,6 @@ chmod 660 /var/log/lastlog
 if [ "$1" = "0" ]; then
 	groupdel utmp
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
