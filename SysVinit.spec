@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	2d
+Release:	6d
 Copyright:	GPL
 Group:		Daemons
 Group(pl):	Demony
@@ -74,12 +74,15 @@ echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/reboot.8
 echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/poweroff.8
 
-bzip2 -9 $RPM_BUILD_ROOT/usr/man/{man1/*,man5/*,man8/*} \
+gzip -9nf $RPM_BUILD_ROOT/usr/man/{man1/*,man5/*,man8/*} \
 doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/Propaganda.bz2 debian/changelog.bz2 doc/sysvinit-%{version}.lsm.bz2  
+%doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz  
 
 %attr(755,root,root) /sbin/*
 
@@ -89,10 +92,12 @@ doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm
 %attr(600,root,root) /dev/initctl
 %attr(644,root, man) /usr/man/man[158]/*
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %changelog
+* Tue Feb  9 1999 Micha³ Kuratczyk <kurkens@polbox.com>
+  [2.74-6d]
+- gzipping instead bzipping
+- cosmetic changes
+
 * Fri Jun 12 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
   [2.74-5d]
 - build against glibc-2.1,
