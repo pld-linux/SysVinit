@@ -92,7 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 
 #%ghost /etc/*
 
-%attr(755,root,root) /usr/bin/*
+%attr(755,root,root) %{_bindir}/*
 #%attr(600,root,root) /dev/initctl
 %attr(640,root,root) /etc/initscript
 %{_mandir}/man[158]/*
@@ -137,7 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 * Thu Sep 11 1997 Christian 'Dr. Disk' Hechelmann <drdisk@ds9.au.s.shuttle.de>
 - /etc/initrunlvl gets linked to /tmp/init-root/var/run/initrunlvl which is
   just plain wrong..
-- /usr/bin/utmpdump was missing in the files section, although it was
+- %{_bindir}/utmpdump was missing in the files section, although it was
   explicitly patched into PROGS.
 - added attr's to the files section.
 - various small fixes.
