@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	12
+Release:	14
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -55,7 +55,7 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_prefix}/{bin,share/man/man{1,5,8}}
-install -d $RPM_BUILD_ROOT/{sbin,etc/{logrotate.d,sysconfig},var/{run,log}}
+install -d $RPM_BUILD_ROOT/{sbin,etc/{logrotate.d,sysconfig},var/log}
 
 make install -C src \
 	ROOT=$RPM_BUILD_ROOT \
@@ -69,7 +69,6 @@ ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
 touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
-touch $RPM_BUILD_ROOT/var/run/utmpx
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -96,8 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(644,root,root) %config /etc/sysconfig/initscript
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/*
-%config(noreplace) %verify(not size mtime md5) /var/run/*
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/lastlog
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/btmpx
+%config(noreplace) %verify(not size mtime md5) /var/log/wtmpx
 
 %{_mandir}/man[158]/*
 
@@ -110,7 +110,6 @@ rm -rf $RPM_BUILD_ROOT
 - added /etc/logrotate.d/sysvinit (for logrotate) & /var/log/lastlog,
 - removed sgid bit from `wall' -- following Debian developers advise ;) 
 - %ghost /etc/initrunlvl,
-- added /var/run/utmpx,
 - added /var/log/{btmpx,wtmpx} -- removed from sysklogd package,
 - fixed all patches.
 
