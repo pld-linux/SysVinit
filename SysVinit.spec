@@ -24,6 +24,7 @@ Patch3:		sysvinit-wtmp.patch
 Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
+Patch7:		sysvinit-initctl.patch
 BuildRequires:	glibc-devel
 PreReq:		shadow
 Requires:	/bin/awk
@@ -94,6 +95,7 @@ sonlanmalarýný saðlar/denetler.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
