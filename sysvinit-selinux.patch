@@ -1,26 +1,6 @@
---- sysvinit-2.85/src/Makefile.selinux	2003-12-18 10:59:15.000000000 -0500
-+++ sysvinit-2.85/src/Makefile	2003-12-18 10:59:15.000000000 -0500
-@@ -32,7 +32,7 @@
- all:		$(PROGS)
- 
- init:		init.o init_utmp.o
--		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o
-+		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o -lselinux
- 
- halt:		halt.o ifdown.o hddown.o utmp.o reboot.h
- 		$(CC) $(LDFLAGS) -o $@ halt.o ifdown.o hddown.o utmp.o
-@@ -62,7 +62,7 @@
- 		$(CC) $(LDFLAGS) -o $@ bootlogd.o
- 
- init.o:		init.c init.h set.h reboot.h
--		$(CC) -c $(CFLAGS) init.c
-+		$(CC) -c $(CFLAGS) -DWITH_SELINUX init.c
- 
- utmp.o:		utmp.c init.h
- 		$(CC) -c $(CFLAGS) utmp.c
---- sysvinit-2.85/src/init.c.selinux	2003-12-18 10:59:15.000000000 -0500
-+++ sysvinit-2.85/src/init.c	2003-12-18 11:01:06.000000000 -0500
-@@ -78,6 +78,81 @@
+--- sysvinit-2.85/src/init.c.selinux	2004-02-10 14:34:18.454593535 -0500
++++ sysvinit-2.85/src/init.c	2004-02-10 14:37:27.947014932 -0500
+@@ -78,6 +78,87 @@
  			sigemptyset(&sa.sa_mask); \
  			sigaction(sig, &sa, NULL); \
  		} while(0)
@@ -69,9 +49,15 @@
 +  snprintf(policy_file,sizeof(policy_file),"%s.%d",SELINUXPOLICY,policy_version);
 +  fd = open(policy_file, O_RDONLY);
 +  if (fd < 0) {
-+    log(L_VB,  "Can't open '%s':  %s\n",
-+	    policy_file, strerror(errno));
-+    goto UMOUNT;
++    /* Check previous version to see if old policy is available
++     */
++    snprintf(policy_file,sizeof(policy_file),"%s.%d",SELINUXPOLICY,policy_version-1);
++    fd = open(policy_file, O_RDONLY);
++    if (fd < 0) {
++      log(L_VB,  "Can't open '%s.%d':  %s\n",
++	  SELINUXPOLICY,policy_version,strerror(errno));
++      goto UMOUNT;
++    }
 +  }
 +  
 +  if (fstat(fd, &sb) < 0) {
@@ -102,7 +88,7 @@
  
  /* Version information */
  char *Version = "@(#) init " VERSION "  " DATE "  miquels@cistron.nl";
-@@ -2576,6 +2651,20 @@
+@@ -2576,6 +2657,20 @@
  		maxproclen += strlen(argv[f]) + 1;
  	}
  
@@ -123,8 +109,8 @@
  	/* Start booting. */
  	argv0 = argv[0];
  	argv[1] = NULL;
---- sysvinit-2.85/src/killall5.c.selinux	2003-12-18 10:59:15.000000000 -0500
-+++ sysvinit-2.85/src/killall5.c	2003-12-22 17:25:56.959018239 -0500
+--- sysvinit-2.85/src/killall5.c.selinux	2004-02-10 14:34:18.440595129 -0500
++++ sysvinit-2.85/src/killall5.c	2004-02-10 14:34:18.557581807 -0500
 @@ -144,8 +144,11 @@
  
  /*
@@ -179,3 +165,23 @@
  		kill(-1, SIGCONT);
  		exit(1);
  	}
+--- sysvinit-2.85/src/Makefile.selinux	2004-02-10 14:34:18.413598203 -0500
++++ sysvinit-2.85/src/Makefile	2004-02-10 14:34:18.552582377 -0500
+@@ -32,7 +32,7 @@
+ all:		$(PROGS)
+ 
+ init:		init.o init_utmp.o
+-		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o
++		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o -lselinux
+ 
+ halt:		halt.o ifdown.o hddown.o utmp.o reboot.h
+ 		$(CC) $(LDFLAGS) -o $@ halt.o ifdown.o hddown.o utmp.o
+@@ -62,7 +62,7 @@
+ 		$(CC) $(LDFLAGS) -o $@ bootlogd.o
+ 
+ init.o:		init.c init.h set.h reboot.h
+-		$(CC) -c $(CFLAGS) init.c
++		$(CC) -c $(CFLAGS) -DWITH_SELINUX init.c
+ 
+ utmp.o:		utmp.c init.h
+ 		$(CC) -c $(CFLAGS) utmp.c
