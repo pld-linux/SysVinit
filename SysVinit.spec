@@ -23,7 +23,6 @@ Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
 BuildRequires:	glibc-devel
 Prereq:		shadow
-Prereq:		make
 Prereq:		/bin/awk
 Requires:	logrotate
 Requires:	mingetty
