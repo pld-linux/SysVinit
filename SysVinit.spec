@@ -10,8 +10,7 @@ Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
-Source1:	sysvinit-initscript
-Source2:	sysvinit.logrotate
+Source1:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-man.patch
 Patch2:		sysvinit-bequiet.patch
@@ -65,8 +64,7 @@ make install -C src \
 	BIN_OWNER=`id -u` \
 	BIN_GROUP=`id -g`
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/initscript
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
