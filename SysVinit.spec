@@ -28,7 +28,6 @@ Prereq:		shadow
 Requires:	login
 Requires:	logrotate
 Requires:	mingetty
-Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir		/sbin
@@ -107,19 +106,6 @@ gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 groupadd -f -r -g 22 utmp
 
 %post
-touch %{_sysconfdir}/{initrunlvl,ioctl.save} \
-	/var/log/{{fail,last}log,{w,b}tmpx}
-chmod 000 %{_sysconfdir}/{initrunlvl,ioctl.save} \
-	/var/log/{{fail,last}log,{w,b}tmpx}
-chown root.root %{_sysconfdir}/{initrunlvl,ioctl.save} \
-	/var/log/{faillog,btmpx}
-chown root.utmp /var/log/{lastlog,wtmpx}
-chmod 644 %{_sysconfdir}/initrunlvl
-chmod 600 %{_sysconfdir}/ioctl.save
-chmod 640 /var/log/{faillog,btmpx}
-chmod 660 /var/log/lastlog
-chmod 664 /var/log/wtmpx
-
 %{_sbindir}/telinit u || :
 
 %postun
@@ -141,7 +127,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(2555,root,tty) %{_bindir}/wall
 
-%attr(640,root,root) /etc/logrotate.d/*
+%attr(640,root,root) /etc/logrotate.d/sysvinit
 %ghost %{_sysconfdir}/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
 %attr(640,root,root) %ghost /var/log/faillog
