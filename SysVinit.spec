@@ -59,7 +59,7 @@ sonlanmalarýný saðlar/denetler.
 %patch4 -p1
 
 %build
-make -C src OPTIMIZE="$RPM_OPT_FLAGS"
+%{__make} -C src OPTIMIZE="$RPM_OPT_FLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -67,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},/sbin,%{_mandir}/man{1,5,8}} \
 	$RPM_BUILD_ROOT/{etc/{logrotate.d,sysconfig},var/log}
 
-make install -C src \
+%{__make} install -C src \
 	ROOT=$RPM_BUILD_ROOT \
 	BIN_OWNER=`id -u` \
 	BIN_GROUP=`id -g`
