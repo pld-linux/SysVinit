@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.83
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -131,7 +131,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %ghost /var/log/btmpx
 
 %{_mandir}/man[158]/*
-%lang(da) %{_mandir}/da/man[158]/*
 %lang(de) %{_mandir}/de/man[158]/*
 %lang(es) %{_mandir}/es/man[158]/*
 %lang(fi) %{_mandir}/fi/man[158]/*
