@@ -1,0 +1,75 @@
+diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
+--- sysvinit-2.76/src/Makefile	Wed Sep  2 14:04:07 1998
++++ sysvinit-2.76.pld/src/Makefile	Sun May 23 10:03:41 1999
+@@ -8,8 +8,9 @@
+ # Version:	@(#)Makefile  2.75  30-Jul-1998  miquels@cistron.nl
+ #
+ 
+-CC	= cc
+-CFLAGS	= -Wall -O2 -D_GNU_SOURCE
++CC	 = gcc
++OPTIMIZE = -O2
++CFLAGS	= -Wall $(OPTIMIZE) -D_GNU_SOURCE
+ LDFLAGS	= -s
+ #CFLAGS	= -Wall -g -pg -D_GNU_SOURCE
+ #LDFLAGS	= -pg
+@@ -89,7 +90,8 @@
+ 			runlevel shutdown $(ROOT)/sbin
+ 		# These are not installed by default
+ ifeq ($(DEBIAN),)
+-		$(INSTALL) -m 555 utmpdump wall $(ROOT)/usr/bin
++		$(INSTALL) -m 755 wall $(ROOT)/usr/bin
++		$(INSTALL) -m 755 utmpdump  $(ROOT)/usr/bin/utmpx-dump
+ endif
+ 		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
+ 		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
+@@ -97,15 +99,15 @@
+ 		cd $(ROOT)/sbin; ln -sf halt poweroff; chown $(BIN_COMBO) poweroff
+ 		cd $(ROOT)/sbin; ln -sf init telinit; chown $(BIN_COMBO) telinit
+ 		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof; chown $(BIN_COMBO) pidof
+-		cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
++		# cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
+ 		$(INSTALL) -m 644 initreq.h $(ROOT)/usr/include
+-		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/man/man8
+-		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/man/man5
++		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/share/man/man8
++		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/share/man/man5
+ ifeq ($(DEBIAN),)
+-		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)/usr/man/man1
++		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)/usr/share/man/man1
+ endif
+-		$(INSTALL) -m 644 ../man/last.1 ../man/lastb.1 ../man/mesg.1 \
+-			$(ROOT)/usr/man/man1
++		$(INSTALL) -m 644 ../man/last.1 ../man/mesg.1 \
++			$(ROOT)/usr/share/man/man1
+ 		#
+ 		# This part is skipped on debian systems, the
+ 		# debian.preinst script takes care of it.
+diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
+--- sysvinit-2.76/src/paths.h	Wed Nov 26 15:23:12 1997
++++ sysvinit-2.76.pld/src/paths.h	Sun May 23 10:04:37 1999
+@@ -28,7 +28,7 @@
+ #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
+ #define IOSAVE		"/etc/ioctl.save"	/* termios settings for SU */
+ #define SHELL		"/bin/sh"		/* Default shell */
+-#define INITSCRIPT	"/etc/initscript"	/* Initscript. */
++#define INITSCRIPT	"/etc/sysconfig/initscript"	/* Initscript. */
+ #if 0
+ #define HALTSCRIPT1	"/etc/init.d/halt"	/* Called by "fast" shutdown */
+ #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
+diff -Nur sysvinit-2.76/src/utmpdump.c sysvinit-2.76.pld/src/utmpdump.c
+--- sysvinit-2.76/src/utmpdump.c	Tue Aug 13 11:57:12 1996
++++ sysvinit-2.76.pld/src/utmpdump.c	Sun May 23 10:03:41 1999
+@@ -48,10 +48,10 @@
+ 
+   for(f = 1; f < argc; f++) {
+ 	if (strcmp(argv[f], "-") == 0) {
+-		printf("Utmp dump of stdin\n");
++		printf("Utmpx dump of stdin\n");
+ 		dump(stdin);
+ 	} else if ((fp = fopen(argv[f], "r")) != NULL) {
+-		printf("Utmp dump of %s\n", argv[f]);
++		printf("Utmpx dump of %s\n", argv[f]);
+ 		dump(fp);
+ 		fclose(fp);
+ 	} else
