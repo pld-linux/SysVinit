@@ -1,3 +1,4 @@
+%bcond_with	preconfigured
 Summary:	System V initialization program
 Summary(de):	System V-Intialisierungsprogramm
 Summary(es):	Programa de inicialización System V
@@ -38,8 +39,10 @@ Requires(post):	fileutils
 Requires(postun):	/usr/sbin/groupdel
 Requires:	/bin/awk
 Requires:	login
+%if %{with preconfigured}
 Requires:	logrotate
 Requires:	mingetty
+%endif
 Requires:	libselinux >= 1.14
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
