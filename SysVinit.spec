@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	6d
+Release:	7
 Copyright:	GPL
 Group:		Daemons
 Group(pl):	Demony
@@ -50,9 +50,8 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-for I in sbin usr/bin usr/man/man{1,5,8} etc var/run dev; do
-	install -d $RPM_BUILD_ROOT/$I
-done
+install -d $RPM_BUILD_ROOT/{sbin,etc,dev,var/run,usr/{bin,man/man{1,5,8}}}
+
 make -C src ROOT=$RPM_BUILD_ROOT BIN_OWNER=`id -u` BIN_GROUP=`id -g` install
 install %SOURCE1 $RPM_BUILD_ROOT/etc/initscript
 
@@ -77,7 +76,7 @@ echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT/usr/man/man8/poweroff.8
 
 gzip -9nf $RPM_BUILD_ROOT/usr/man/{man1/*,man5/*,man8/*} \
-doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
+	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %clean
 rm -rf $RPM_BUILD_ROOT
