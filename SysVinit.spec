@@ -4,8 +4,8 @@ Summary(fr):	Programme d'initialisation Sys V.
 Summary(pl):	Program inicjalizuj±cy w Systemie V 
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
-Version:	2.76
-Release:	14
+Version:	2.77
+Release:	2
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -14,20 +14,18 @@ Source1:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-man.patch
 Patch2:		sysvinit-bequiet.patch
+Patch3:		sysvinit-sigpwr.patch
+Patch4:		sysvinit-securelevel-security.patch
 Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
 %define		_sbindir	/sbin
 
 %description
-SysVinit is the first program started by the Linux kernel when the system
-boots, controlling the startup, running, and shutdown of all other
-programs.
-
-%description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas 
-startu systemu. Kontroluje start, pracê oraz zamykanie wszystkich
-innych programów.
+The SysVinit package contains a group of processes that control the very
+basic functions of your system. SysVinit includes the init program, the
+first program started by the Linux kernel when the system boots. Init then
+controls the startup, running and shutdown of all other programs.
 
 %description -l de
 SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel 
@@ -38,6 +36,11 @@ anderen Programme.
 SysVinit est le premier programme exécuté par le noyau de Linux lorsque le
 système démarre, il contrôle le lancement, l'exécution et l'arrêt de tous
 les autres programmes.
+
+%description -l pl
+SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas 
+startu systemu. Kontroluje start, pracê oraz zamykanie wszystkich
+innych programów.
 
 %description -l tr
 SysVinit, sistem açýlýrken Linux çekirdeði tarafýndan çalýþtýrýlan ilk
@@ -84,24 +87,28 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %post
-touch /var/log/lastlog /var/log/wtmpx
-chmod 0640 /var/log/lastlog /var/log/wtmpx
+touch /var/log/{lastlog,wtmpx,btmpx}
+chmod 0644 /var/log/lastlog /var/log/wtmpx
+chmod 0640 /var/log/btmpx
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz  
+%doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz
 
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/last
+%attr(755,root,root) %{_bindir}/lastb
+%attr(755,root,root) %{_bindir}/mesg
+%attr(755,root,root) %{_bindir}/utmpx-dump
+%attr(2555,root,tty) %{_bindir}/wall
 
-%attr(644,root,root) %config /etc/sysconfig/initscript
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
-%attr(640,root,root) %ghost /var/log/lastlog
-%attr(640,root,root) %ghost /var/log/btmpx
+%ghost /var/log/lastlog
 %ghost /var/log/wtmpx
+%attr(640,root,root) %ghost /var/log/btmpx
 
-%{_mandir}/man[158]/*
+%{_mandir}/man*/*
