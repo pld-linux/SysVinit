@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.77
-Release:	6
+Release:	7
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -16,6 +16,7 @@ Patch1:		sysvinit-man.patch
 Patch2:		sysvinit-bequiet.patch
 Patch3:		sysvinit-sigpwr.patch
 Patch4:		sysvinit-md5-bigendian.patch
+Patch5:		sysvinit-wtmpx.patch
 Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
@@ -54,6 +55,7 @@ saðlar/denetler.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 make -C src OPTIMIZE="$RPM_OPT_FLAGS"
