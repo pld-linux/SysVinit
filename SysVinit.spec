@@ -98,7 +98,8 @@ sonlanmalarýný saðlar/denetler.
 %patch7 -p1
 
 %build
-%{__make} -C src LCRYPT="-lcrypt" \
+%{__make} -C src \
+	LCRYPT="-lcrypt" \
 	OPTIMIZE="%{rpmcflags}"
 
 %install
@@ -137,8 +138,8 @@ groupadd -f -r -g 22 utmp
 %post
 touch %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
 chmod 000 %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
-chown root.root %{_sysconfdir}/ioctl.save /var/log/faillog
-chown root.utmp /var/log/lastlog
+chown root:root %{_sysconfdir}/ioctl.save /var/log/faillog
+chown root:utmp /var/log/lastlog
 chmod 600 %{_sysconfdir}/ioctl.save
 chmod 640 /var/log/faillog
 chmod 660 /var/log/lastlog
