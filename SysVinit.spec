@@ -16,6 +16,9 @@ Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
 Patch4:		sysvinit-man.patch
+Patch5:		sysvinit-sigint.patch
+Patch6:		sysvinit-ai64.patch
+Patch7:		sysvinit-halt.patch
 BuildRequires:	glibc-static
 Prereq:		shadow-utils
 Prereq:		make
@@ -58,6 +61,9 @@ sonlanmalarýný saðlar/denetler.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
 
 %build
 %{__make} -C src OPTIMIZE="$RPM_OPT_FLAGS"
