@@ -8,7 +8,7 @@ Version:	2.76
 Release:	9
 Copyright:	GPL
 Group:		Base
-Group(pl):	Bazowe
+Group(pl):	Podstawowe
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
 Patch0:		sysvinit-optimize.patch
