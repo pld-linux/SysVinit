@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	11
+Release:	12
 License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -19,6 +19,7 @@ Patch4:		sysvinit-man.patch
 BuildRequires:	glibc-static
 Prereq:		shadow-utils
 Prereq:		make
+Prereq:		awk
 Requires:	logrotate
 Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
