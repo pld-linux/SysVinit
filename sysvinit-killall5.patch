@@ -1,0 +1,73 @@
+diff -ru sysvinit-2.85/src/killall5.c sysvinit-2.85-fixed/src/killall5.c
+--- sysvinit-2.85/src/killall5.c	2003-05-23 00:24:47.000000000 -0400
++++ sysvinit-2.85-fixed/src/killall5.c	2003-05-23 00:23:57.000000000 -0400
+@@ -170,6 +170,7 @@
+ 		n = p->next;
+ 		if (p->fullname) free(p->fullname);
+ 		if (p->pathname) free(p->pathname);
++		if (p->statname) free(p->statname);
+ 		free(p);
+ 	}
+ 	plist = NULL;
+@@ -187,7 +188,7 @@
+ 		/* Open the status file. */
+ 		snprintf(path, sizeof(path), "/proc/%s/stat", d->d_name);
+ 
+-		/* Read SID & statname from it. */
++		/* Read statname from it. */
+  		if ((fp = fopen(path, "r")) != NULL) {
+ 			buf[0] = 0;
+ 			fgets(buf, 256, fp);
+@@ -200,7 +201,6 @@
+ 				/* Read program name. */
+ 				q = strrchr(buf, ')');
+ 				if (q == NULL) {
+-					p->sid = 0;
+ 					nsyslog(LOG_ERR,
+ 					"can't get program name from %s\n",
+ 						path);
+@@ -213,24 +213,21 @@
+ 				while (*q != ' ') q++;
+ 			}
+ 			*q++ = 0;
+-			while (*q == ' ') q++;
+ 			p->statname = (char *)xmalloc(strlen(s)+1);
+ 			strcpy(p->statname, s);
+-
+-			/* This could be replaced by getsid(pid) */
+-			if (sscanf(q, "%*c %*d %*d %d", &p->sid) != 1) {
+-				p->sid = 0;
+-				nsyslog(LOG_ERR, "can't read sid from %s\n",
+-					path);
+-				free(p);
+-				continue;
+-			}
+ 			fclose(fp);
+ 		} else {
+ 			/* Process disappeared.. */
+ 			free(p);
+ 			continue;
+ 		}
++		p->sid = getsid(pid);
++		if (p->sid < 0) {
++			p->sid = 0;
++			nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
++			free(p);
++			continue;
++		}
+ 
+ 		/* Now read argv[0] */
+ 		snprintf(path, sizeof(path), "/proc/%s/cmdline", d->d_name);
+@@ -553,11 +550,7 @@
+ 	}
+ 
+ 	pid = getpid();
+-	for (p = plist; p; p = p->next)
+-		if (p->pid == pid) {
+-			sid = p->sid;
+-			break;
+-		}
++	sid = getsid(0);
+ 
+ 	/* Now kill all processes except our session. */
+ 	for (p = plist; p; p = p->next)

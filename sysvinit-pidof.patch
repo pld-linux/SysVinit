@@ -1,0 +1,37 @@
+--- sysvinit-2.84/src/killall5.c.foo	2002-07-18 21:48:55.000000000 -0400
++++ sysvinit-2.84/src/killall5.c	2002-07-18 22:00:14.000000000 -0400
+@@ -45,6 +45,7 @@
+ /* Info about a process. */
+ typedef struct _proc_
+ {
++  char *pathname;	/* full path to executable     	  */
+   char *fullname;	/* Name as found out from argv[0] */
+   char *basename;	/* Only the part after the last / */
+   char *statname;	/* the statname without braces    */
+@@ -165,6 +166,7 @@
+ 	for (p = plist; n; p = n) {
+ 		n = p->next;
+ 		if (p->fullname) free(p->fullname);
++		if (p->pathname) free(p->pathname);
+ 		free(p);
+ 	}
+ 	plist = NULL;
+@@ -256,6 +258,8 @@
+ 		if (stat(path, &st) == 0) {
+ 			p->dev = st.st_dev;
+ 			p->ino = st.st_ino;
++			p->pathname = (char *)xmalloc(PATH_MAX);
++			readlink(path, p->pathname, PATH_MAX);
+ 		}
+ 
+ 		/* Link it into the list. */
+@@ -360,6 +364,9 @@
+ 			    strchr(p->fullname, ' ') ||
+ 			    scripts_too)
+ 				ok += (strcmp(p->statname, s) == 0);
++		        
++			if (prog[0] == '/' && p->pathname && strcmp(prog,p->pathname))
++				ok = 0;
+ 
+ 			if (ok) add_pid_to_q(q, p);
+ 		}
