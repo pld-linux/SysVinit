@@ -10,7 +10,8 @@ Copyright:	GPL
 Group:		Daemons
 Group(pl):	Demony
 URL:		ftp://ftp.cistron.nl/pub/people/miquels/software
-Source:		sysvinit-%{version}.tar.gz
+Source0:	sysvinit-%{version}.tar.gz
+Source1:	sysvinit-initscript
 Patch:		sysvinit-optimize.patch
 Buildroot:	/tmp/%{name}-%{version}-root
 
@@ -53,6 +54,7 @@ for I in sbin usr/bin usr/man/man{1,5,8} etc var/run dev; do
 	install -d $RPM_BUILD_ROOT/$I
 done
 make -C src ROOT=$RPM_BUILD_ROOT BIN_OWNER=`id -u` BIN_GROUP=`id -g` install
+install %SOURCE1 $RPM_BUILD_ROOT/etc/initscript
 
 #ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 
@@ -90,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /usr/bin/*
 %attr(600,root,root) /dev/initctl
+%attr(640,root,root) /etc/initscript
 %attr(644,root, man) /usr/man/man[158]/*
 
 %changelog
