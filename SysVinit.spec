@@ -34,8 +34,10 @@ Patch8:		sysvinit-pidof.patch
 Patch9:		sysvinit-killall5.patch
 # based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
 Patch10:	sysvinit-selinux.patch
-%{?with_selinux:BuildRequires:	libselinux-devel >= 1.18}
+%if %{with selinux}
+BuildRequires:	libselinux-devel >= 1.18
 BuildRequires:	libsepol-devel
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
