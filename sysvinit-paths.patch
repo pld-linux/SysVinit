@@ -1,6 +1,6 @@
 diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
 --- sysvinit-2.76/src/Makefile	Wed Sep  2 14:04:07 1998
-+++ sysvinit-2.76.pld/src/Makefile	Sun May 23 10:03:41 1999
++++ sysvinit-2.76.pld/src/Makefile	Sun May 23 15:39:08 1999
 @@ -8,8 +8,9 @@
  # Version:	@(#)Makefile  2.75  30-Jul-1998  miquels@cistron.nl
  #
@@ -28,7 +28,7 @@ diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
  		cd $(ROOT)/sbin; ln -sf init telinit; chown $(BIN_COMBO) telinit
  		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof; chown $(BIN_COMBO) pidof
 -		cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
-+		# cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
++		 cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
  		$(INSTALL) -m 644 initreq.h $(ROOT)/usr/include
 -		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/man/man8
 -		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/man/man5
@@ -45,9 +45,21 @@ diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
  		#
  		# This part is skipped on debian systems, the
  		# debian.preinst script takes care of it.
+diff -Nur sysvinit-2.76/src/last.c sysvinit-2.76.pld/src/last.c
+--- sysvinit-2.76/src/last.c	Fri May 29 15:02:58 1998
++++ sysvinit-2.76.pld/src/last.c	Sun May 23 15:35:34 1999
+@@ -234,7 +234,7 @@
+  *	Try to be smart about the location of the BTMP file
+  */
+ #ifndef BTMP_FILE
+-#define BTMP_FILE getbtmp()
++#define BTMP_FILE "/var/log/btmpx"
+ char *getbtmp()
+ {
+ 	static char btmp[128];
 diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
 --- sysvinit-2.76/src/paths.h	Wed Nov 26 15:23:12 1997
-+++ sysvinit-2.76.pld/src/paths.h	Sun May 23 10:04:37 1999
++++ sysvinit-2.76.pld/src/paths.h	Sun May 23 15:23:48 1999
 @@ -28,7 +28,7 @@
  #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
  #define IOSAVE		"/etc/ioctl.save"	/* termios settings for SU */
@@ -59,7 +71,7 @@ diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
  #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
 diff -Nur sysvinit-2.76/src/utmpdump.c sysvinit-2.76.pld/src/utmpdump.c
 --- sysvinit-2.76/src/utmpdump.c	Tue Aug 13 11:57:12 1996
-+++ sysvinit-2.76.pld/src/utmpdump.c	Sun May 23 10:03:41 1999
++++ sysvinit-2.76.pld/src/utmpdump.c	Sun May 23 15:23:48 1999
 @@ -48,10 +48,10 @@
  
    for(f = 1; f < argc; f++) {
