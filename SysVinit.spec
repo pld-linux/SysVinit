@@ -16,7 +16,7 @@ Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
 Prereq:		fileutils
-Prereq:		utempter
+Prereq:		shadow
 Requires:	logrotate
 Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -89,6 +89,10 @@ echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
+%pre
+%{_sbindir}/groupadd -f -r -g 60 utmp
+%{_bindir}/update-db
+
 %post
 if [ -f /var/log/wtmp ]; then
 	mv -f /var/log/wtmp /var/log/wtmp.rpmsave
@@ -97,6 +101,10 @@ touch /var/log/{lastlog,wtmpx,btmpx}
 chmod 0644 /var/log/lastlog /var/log/wtmpx
 chmod 0640 /var/log/btmpx
 chgrp utmp /var/log/wtmpx
+
+%postun
+%{_sbindir}/groupdel utmp
+%{_bindir}/update-db
 
 %clean
 rm -rf $RPM_BUILD_ROOT
