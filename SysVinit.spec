@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	7
+Release:	8
 Copyright:	GPL
 Group:		Daemons
 Group(pl):	Serwery
@@ -95,6 +95,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/man/man[158]/*
 
 %changelog
+* Tue Apr 20 1999 Artur Frysiak <wiget@pld.org.pl>
+  [2.74-8]
+- compiled on rpm 3
+
 * Tue Feb  9 1999 Micha³ Kuratczyk <kurkens@polbox.com>
   [2.74-6d]
 - gzipping instead bzipping
