@@ -1,14 +1,10 @@
 /var/log/lastlog {
-    weekly
-    rotate 1
 }
+
 /var/log/btmpx {
-    weekly
-    rotate 1
 }
+
 /var/log/wtmpx {
-    weekly
-    rotate 1
     postrotate
 		/bin/chmod 644 /var/log/wtmpx
     endscript
