@@ -19,7 +19,7 @@ Patch4:		sysvinit-man.patch
 BuildRequires:	glibc-static
 Prereq:		shadow-utils
 Prereq:		make
-Prereq:		awk
+Prereq:		/bin/awk
 Requires:	logrotate
 Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
