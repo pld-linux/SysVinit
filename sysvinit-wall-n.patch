@@ -1,0 +1,36 @@
+--- sysvinit-2.78/man/wall.1.foo	Wed Jan 31 15:42:53 2001
++++ sysvinit-2.78/man/wall.1	Wed Jan 31 15:46:18 2001
+@@ -3,6 +3,7 @@
+ wall -- send a message to everybody's terminal.
+ .SH SYNOPSIS
+ .B wall
++.RB [ \-n ]
+ .RB [ " message " ]
+ .SH DESCRIPTION
+ .B Wall
+@@ -11,7 +12,12 @@
+ it can be sent to \fIwall\fP's standard input. When using the standard input
+ from a terminal, the message should be terminated with the \fBEOF\fP key
+ (usually Control-D).
++.SH OPTIONS
++.IP \fB\-n\fn
++Suppresses the normal banner, changing it to "Remote broadcast message"
++This option is only available to root, and is used by rpc.walld.
+ .SH SEE ALSO
+-mesg(1).
++mesg(1),
++rpc.rwalld(8).
+ .SH AUTHOR
+ Miquel van Smoorenburg, miquels@cistron.nl
+--- sysvinit-2.78/src/wall.c.foo	Wed Jan 31 15:41:33 2001
++++ sysvinit-2.78/src/wall.c	Wed Jan 31 15:40:40 2001
+@@ -42,7 +42,8 @@
+ 			 *	Undocumented option for suppressing
+ 			 *	banner from rpc.rwalld.
+ 			 */
+-			remote = 1;
++			if (getuid() == 0)
++		  		remote = 1;
+ 			break;
+ 		default:
+ 			fprintf(stderr, "usage: wall [message]\n");
