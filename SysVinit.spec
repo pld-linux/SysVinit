@@ -41,8 +41,8 @@ Requires:	/bin/awk
 Requires:	login
 %if %{with preconfigured}
 Requires:	logrotate
-Requires:	mingetty
 %endif
+Requires:	mingetty
 Requires:	libselinux >= 1.14
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
