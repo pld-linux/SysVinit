@@ -16,13 +16,11 @@ Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
 Patch4:		sysvinit-man.patch
-Prereq:		fileutils
-Prereq:		shadow
+Prereq:		shadow-utils
 Requires:	logrotate
 Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sbindir	/sbin
 
 %description
 The SysVinit package contains a group of processes that control the very
@@ -64,7 +62,7 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
+install -d $RPM_BUILD_ROOT{%{_bindir},/sbin,%{_mandir}/man{1,5,8}} \
 	$RPM_BUILD_ROOT/{etc/{logrotate.d,sysconfig},var/log}
 
 make install -C src \
@@ -75,7 +73,7 @@ make install -C src \
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
-ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
+ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
 touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
 
@@ -92,21 +90,27 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %pre
-%{_sbindir}/groupadd -f -r -g 60 utmp
-%{_bindir}/update-db
+groupadd -f -r -g 60 utmp
+update-db
 
 %post
 if [ -f /var/log/wtmp ]; then
 	mv -f /var/log/wtmp /var/log/wtmp.rpmsave
 fi
-touch /var/log/{lastlog,wtmpx,btmpx}
+
+for i in lastlog wtmpx btmpx; do 
+	if [ ! -f /var/log/$i ]; then 
+		>/var/log/$i 
+	fi
+done
+
 chmod 0644 /var/log/lastlog /var/log/wtmpx
 chmod 0640 /var/log/btmpx
 chgrp utmp /var/log/wtmpx
 
 %postun
-%{_sbindir}/groupdel utmp
-%{_bindir}/update-db
+groupdel utmp
+update-db
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -115,7 +119,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz
 
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) /sbin/*
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
 %attr(755,root,root) %{_bindir}/mesg
