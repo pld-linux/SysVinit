@@ -1,0 +1,12 @@
+diff -ur sysvinit-2.78/src/init.c sysvinit-2.78-/src/init.c
+--- sysvinit-2.78/src/init.c	Wed Jun 13 14:24:54 2001
++++ sysvinit-2.78-/src/init.c	Wed Jun 13 14:24:11 2001
+@@ -690,7 +690,7 @@
+ 		(void) tcgetattr(fd, &tty);
+ 
+ 		tty.c_cflag &= CBAUD|CBAUDEX|CSIZE|CSTOPB|PARENB|PARODD;
+-		tty.c_cflag |= HUPCL|CLOCAL;
++		tty.c_cflag |= HUPCL|CLOCAL|CREAD;
+ 
+ 		tty.c_cc[VINTR]  = 3;	/* ctrl('c') */
+ 		tty.c_cc[VQUIT]  = 28;	/* ctrl('\\') */
