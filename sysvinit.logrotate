@@ -1,0 +1,11 @@
+/var/log/lastlog {
+    weekly
+    rotatate 1
+}
+/var/log/btmpx {
+    weekly
+    rotatate 1
+}
+/var/log/wtmpx {
+    weekly
+    rotatate 1
