@@ -4,8 +4,8 @@ Summary(fr):	Programme d'initialisation Sys V
 Summary(pl):	Program inicjalizuj±cy w Systemie V 
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
-Version:	2.78
-Release:	24
+Version:	2.81
+Release:	1
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -17,15 +17,8 @@ Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmp.patch
 Patch4:		sysvinit-man.patch
-Patch5:		sysvinit-sigint.patch
-Patch6:		sysvinit-ai64.patch
-Patch7:		sysvinit-halt.patch
-Patch8:		sysvinit-blowfish.patch
-Patch9:		sysvinit-notty.patch
-Patch10:	sysvinit-wall-n.patch
-Patch11:	sysvinit-owl-bound-format.patch
-Patch12:	sysvinit-cread.patch
-Patch13:	sysvinit-umask.patch
+Patch5:		sysvinit-halt.patch
+Patch6:		sysvinit-blowfish.patch
 BuildRequires:	glibc-devel
 Prereq:		shadow
 Prereq:		make
@@ -34,6 +27,8 @@ Requires:	logrotate
 Requires:	mingetty
 Requires:	login
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_sbindir		/sbin
 
 %description
 The SysVinit package contains a group of processes that control the
@@ -71,13 +66,6 @@ sonlanmalarýný saðlar/denetler.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
@@ -109,13 +97,13 @@ echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
-gzip -9nf doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
+gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 
 %pre
 groupadd -f -r -g 22 utmp
 
 %post
-/sbin/telinit u || :
+%{_sbindir}/telinit u || :
 
 %postun
 if [ "$1" = "0" ]; then
@@ -127,9 +115,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz
+%doc doc/*.gz
 
-%attr(755,root,root) /sbin/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
 %attr(755,root,root) %{_bindir}/mesg
