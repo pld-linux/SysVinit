@@ -18,6 +18,7 @@ Patch3:		sysvinit-wtmpx.patch
 Prereq:		fileutils
 Prereq:		utempter
 Requires:	logrotate
+Requires:	mingetty
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
