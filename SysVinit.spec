@@ -1,11 +1,11 @@
 Summary:	System V initialization program
 Summary(de):	System V-Intialisierungsprogramm
 Summary(fr):	Programme d'initialisation Sys V
-Summary(pl):	Program inicjalizuj±cy w Systemie V 
+Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.83
-Release:	1
+Release:	2
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -22,11 +22,11 @@ Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
 BuildRequires:	glibc-devel
-Prereq:		shadow
 Prereq:		/bin/awk
+Prereq:		shadow
+Requires:	login
 Requires:	logrotate
 Requires:	mingetty
-Requires:	login
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir		/sbin
