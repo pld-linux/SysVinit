@@ -1,11 +1,10 @@
 #/var/log/lastlog {
+#	don't rotate!
 #}
 
 /var/log/btmpx {
 }
 
 /var/log/wtmpx {
-    postrotate
-		/bin/chmod 644 /var/log/wtmpx
-    endscript
+	create 660 root utmp 
 }
