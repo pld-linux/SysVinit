@@ -1,8 +1,8 @@
-diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
---- sysvinit-2.76/src/Makefile	Wed Sep  2 14:04:07 1998
-+++ sysvinit-2.76.pld/src/Makefile	Sun May 23 15:39:08 1999
+diff -urN sysvinit-2.78.org/src/Makefile sysvinit-2.78/src/Makefile
+--- sysvinit-2.78.org/src/Makefile	Thu Mar  2 18:17:48 2000
++++ sysvinit-2.78/src/Makefile	Thu Mar  2 18:18:08 2000
 @@ -8,8 +8,9 @@
- # Version:	@(#)Makefile  2.75  30-Jul-1998  miquels@cistron.nl
+ # Version:	@(#)Makefile  2.78  13-Nov-1999  miquels@cistron.nl
  #
  
 -CC	= cc
@@ -11,9 +11,9 @@ diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
 +OPTIMIZE = -O2
 +CFLAGS	= -Wall $(OPTIMIZE) -D_GNU_SOURCE
  LDFLAGS	= -s
- #CFLAGS	= -Wall -g -pg -D_GNU_SOURCE
- #LDFLAGS	= -pg
-@@ -89,7 +90,8 @@
+ STATIC	=
+ 
+@@ -88,7 +89,8 @@
  			runlevel shutdown $(ROOT)/sbin
  		# These are not installed by default
  ifeq ($(DEBIAN),)
@@ -23,32 +23,10 @@ diff -Nur sysvinit-2.76/src/Makefile sysvinit-2.76.pld/src/Makefile
  endif
  		# $(INSTALL) -m 755 etc/initscript.sample $(ROOT)/etc
  		$(INSTALL) -m 755 mesg last $(ROOT)/usr/bin
-@@ -97,15 +99,15 @@
- 		cd $(ROOT)/sbin; ln -sf halt poweroff; chown $(BIN_COMBO) poweroff
- 		cd $(ROOT)/sbin; ln -sf init telinit; chown $(BIN_COMBO) telinit
- 		cd $(ROOT)/bin; ln -sf ../sbin/killall5 pidof; chown $(BIN_COMBO) pidof
--		cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
-+		 cd $(ROOT)/usr/bin; ln -sf last lastb; chown $(BIN_COMBO) lastb
- 		$(INSTALL) -m 644 initreq.h $(ROOT)/usr/include
--		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/man/man8
--		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/man/man5
-+		$(INSTALL) -m 644 ../man/*.8 $(ROOT)/usr/share/man/man8
-+		$(INSTALL) -m 644 ../man/*.5 $(ROOT)/usr/share/man/man5
- ifeq ($(DEBIAN),)
--		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)/usr/man/man1
-+		$(INSTALL) -m 644 ../man/wall.1 $(ROOT)/usr/share/man/man1
- endif
--		$(INSTALL) -m 644 ../man/last.1 ../man/lastb.1 ../man/mesg.1 \
--			$(ROOT)/usr/man/man1
-+		$(INSTALL) -m 644 ../man/last.1 ../man/mesg.1 \
-+			$(ROOT)/usr/share/man/man1
- 		#
- 		# This part is skipped on debian systems, the
- 		# debian.preinst script takes care of it.
-diff -Nur sysvinit-2.76/src/last.c sysvinit-2.76.pld/src/last.c
---- sysvinit-2.76/src/last.c	Fri May 29 15:02:58 1998
-+++ sysvinit-2.76.pld/src/last.c	Sun May 23 15:35:34 1999
-@@ -234,7 +234,7 @@
+diff -urN sysvinit-2.78.org/src/last.c sysvinit-2.78/src/last.c
+--- sysvinit-2.78.org/src/last.c	Thu Mar  2 18:17:48 2000
++++ sysvinit-2.78/src/last.c	Thu Mar  2 18:18:08 2000
+@@ -236,7 +236,7 @@
   *	Try to be smart about the location of the BTMP file
   */
  #ifndef BTMP_FILE
@@ -57,9 +35,9 @@ diff -Nur sysvinit-2.76/src/last.c sysvinit-2.76.pld/src/last.c
  char *getbtmp()
  {
  	static char btmp[128];
-diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
---- sysvinit-2.76/src/paths.h	Wed Nov 26 15:23:12 1997
-+++ sysvinit-2.76.pld/src/paths.h	Sun May 23 15:23:48 1999
+diff -urN sysvinit-2.78.org/src/paths.h sysvinit-2.78/src/paths.h
+--- sysvinit-2.78.org/src/paths.h	Thu Mar  2 18:17:48 2000
++++ sysvinit-2.78/src/paths.h	Thu Mar  2 18:18:08 2000
 @@ -28,7 +28,7 @@
  #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
  #define IOSAVE		"/etc/ioctl.save"	/* termios settings for SU */
@@ -69,9 +47,9 @@ diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
  #if 0
  #define HALTSCRIPT1	"/etc/init.d/halt"	/* Called by "fast" shutdown */
  #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
-diff -Nur sysvinit-2.77/src/utmpdump.c sysvinit-2.77.new/src/utmpdump.c
---- sysvinit-2.76/src/utmpdump.c	Sun Dec 27 17:32:04 1998
-+++ sysvinit-2.76/src.new/utmpdump.c	Wed Sep  1 10:16:16 1999
+diff -urN sysvinit-2.78.org/src/utmpdump.c sysvinit-2.78/src/utmpdump.c
+--- sysvinit-2.78.org/src/utmpdump.c	Thu Mar  2 18:17:48 2000
++++ sysvinit-2.78/src/utmpdump.c	Thu Mar  2 18:18:08 2000
 @@ -263,14 +263,14 @@
  	}
  
