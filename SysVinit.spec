@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	22
+Release:	23
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -23,6 +23,7 @@ Patch7:		sysvinit-halt.patch
 Patch8:		sysvinit-blowfish.patch
 Patch9:		sysvinit-notty.patch
 Patch10:	sysvinit-wall-n.patch
+Patch11:	sysvinit-owl-bound-format.patch
 BuildRequires:	glibc-devel
 Prereq:		shadow
 Prereq:		make
@@ -72,6 +73,7 @@ sonlanmalarýný saðlar/denetler.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
@@ -107,6 +109,9 @@ gzip -9nf doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm
 
 %pre
 groupadd -f -r -g 22 utmp
+
+%post
+/sbin/telinit u || :
 
 %postun
 if [ "$1" = "0" ]; then
