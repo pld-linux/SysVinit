@@ -5,14 +5,15 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	9
+Release:	10
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
-Patch0:		sysvinit-optimize.patch
-Patch1:		sysvinit-FHS2.patch
+Source2:	sysvinit.syslog
+Patch0:		sysvinit-misc.patch
+Patch1:		sysvinit-man.patch
 Requires:	/dev/initctl
 Buildroot:	/tmp/%{name}-%{version}-root
 
@@ -52,23 +53,22 @@ make -C src OPTIMIZE="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{sbin,etc,dev,var/run,usr/{bin,share/man/man{1,5,8}}}
+install -d $RPM_BUILD_ROOT%{_prefix}/{bin,share/man/man{1,5,8}}
+install -d $RPM_BUILD_ROOT/{sbin,etc/{log.d,rc.d},var/{run,log}}
 
 make install -C src \
 	ROOT=$RPM_BUILD_ROOT \
 	BIN_OWNER=`id -u` \
 	BIN_GROUP=`id -g`
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/initscript
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/initscript
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/log.d/lastlog
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
-
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
-# man pages cleaning & compressing ;)
-
-rm -f $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
-
-echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
+:> $RPM_BUILD_ROOT/var/log/lastlog
+:> $RPM_BUILD_ROOT/var/run/utmpx
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -89,15 +89,29 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/Propaganda.gz debian/changelog.gz doc/sysvinit-%{version}.lsm.gz  
 
 %attr(755,root,root) /sbin/*
-
-#%ghost /etc/*
-
 %attr(755,root,root) %{_bindir}/*
-#%attr(600,root,root) /dev/initctl
-%attr(640,root,root) /etc/initscript
+
+%config /etc/rc.d/initscript
+%attr(640,root,root) /etc/log.d/*
+%ghost /etc/initrunlvl
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/*
+%config(noreplace) %verify(not size mtime md5) /var/run/*
+
 %{_mandir}/man[158]/*
 
 %changelog
+* Sat May 22 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
+  [2.76-10]
+- (u,w)tmp changed to (w,u)tmpx -- Unix98 comliant (patch),
+- removed unused `lastb',
+- utpmdump changed to utmpx-dump, (patch)
+- changed prefix for initscript to /etc/rc.d instead /etc (patch)
+- added /etc/log.d/last (for logrotate) & /var/log/lastlog,
+- removed sgid bit from `wall' -- following Debian developers advise ;) 
+- %ghost /etc/initrunlvl,
+- added /var/run/utmpx,
+- fixed all patches.
+
 * Tue May 11 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.74-9]
 - now package is FHS 2.0 compliant.
@@ -121,30 +135,5 @@ rm -rf $RPM_BUILD_ROOT
 - changed prmissions of binaries to 711,
 - removed a suid bit from wall,
 - moved %changelog at the end of spec.
-- added a Chris Evans's <chris@ferret.lmh.ox.ac.uk> patches.
-
-* Thu May 07 1998 Prospector System <bugs@redhat.com>
-- translations modified for de, fr, tr
-
-* Wed Apr 08 1998 Cristian Gafton <gafton@redhat.com>
-- upgraded to 2.74
-- fixed the package source url... (yeah, it was wrong !)
-
-* Wed Oct 1 1997 Cristian Gafton <gafton@redhat.com>
-- fixed the MD5 check in sulogin (128 hash bits encoded with base64 gives
-  22 bytes, not 24...). Fix in -md5.patch
-
-* Thu Sep 11 1997 Christian 'Dr. Disk' Hechelmann <drdisk@ds9.au.s.shuttle.de>
-- /etc/initrunlvl gets linked to /tmp/init-root/var/run/initrunlvl which is
-  just plain wrong..
-- %{_bindir}/utmpdump was missing in the files section, although it was
-  explicitly patched into PROGS.
-- added attr's to the files section.
-- various small fixes.
-
-* Tue Jun 17 1997 Erik Troan <ewt@redhat.com>
-- updated to 2.71
-- built against glibc 2.0.4
-
-* Fri Feb 07 1997 Michael K. Johnson <johnsonm@redhat.com>
-- Added sulogin.8 man page to file list.
+- added a Chris Evans's <chris@ferret.lmh.ox.ac.uk> patches,
+- start at RH spec file.
