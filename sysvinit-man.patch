@@ -1,16 +1,15 @@
-diff -Nru sysvinit-2.78/man/halt.8 sysvinit-2.78.new/man/halt.8
---- sysvinit-2.78/man/halt.8	Tue Aug 24 11:45:21 1999
-+++ sysvinit-2.78.new/man/halt.8	Sat Apr 15 20:39:20 2000
-@@ -33,7 +33,7 @@
+--- sysvinit-2.84/man/halt.8.orig	Wed Nov 21 22:11:22 2001
++++ sysvinit-2.84/man/halt.8	Sat Dec  1 18:12:32 2001
+@@ -35,7 +35,7 @@
  .\"{{{  Description
  .SH DESCRIPTION
  \fBHalt\fP notes that the system is being brought down in the file
 -\fI/var/log/wtmp\fP, and then either tells the kernel to halt, reboot or
 +\fI/var/log/wtmpx\fP, and then either tells the kernel to halt, reboot or
- poweroff the system. If \fBhalt\fP or \fBreboot\fP is called when the system is
- \fInot\fP in runlevel \fB0\fP or \fB6\fP, 
- \fBshutdown\fP(8) will be invoked instead (with the flag \fB-h\fP or \fB-r\fP).
-@@ -43,10 +43,10 @@
+ poweroff the system.
+ .PP
+ If \fBhalt\fP or \fBreboot\fP is called when the system is
+@@ -52,10 +52,10 @@
  .IP \fB\-n\fP
  Don't sync before reboot or halt.
  .IP \fB\-w\fP
@@ -24,7 +23,7 @@ diff -Nru sysvinit-2.78/man/halt.8 sysvinit-2.78.new/man/halt.8
  .IP \fB\-f\fP
  Force halt or reboot, don't call \fBshutdown\fP(8).
  .IP \fB\-i\fP
-@@ -65,7 +65,7 @@
+@@ -76,7 +76,7 @@
  never be called directly. From release 2.74 on \fBhalt\fP and \fBreboot\fP
  invoke \fBshutdown\fP(8) if the system is not in runlevel 0 or 6. This
  means that if \fBhalt\fP or \fBreboot\fP cannot find out the current
