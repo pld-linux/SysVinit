@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.77
-Release:	3
+Release:	4
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -92,6 +92,7 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 touch /var/log/{lastlog,wtmpx,btmpx}
 chmod 0644 /var/log/lastlog /var/log/wtmpx
 chmod 0640 /var/log/btmpx
+chgrp utmp /var/log/wtmpx
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -110,7 +111,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
 %ghost /var/log/lastlog
-%ghost /var/log/wtmpx
+%attr(660,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
 
 %{_mandir}/man*/*
