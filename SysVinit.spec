@@ -9,8 +9,7 @@ Release:	14
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
-URL:		ftp://ftp.cistron.nl/pub/people/miquels/software/
-Source0:	sysvinit-%{version}.tar.gz
+Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
 Source2:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
