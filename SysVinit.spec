@@ -1,4 +1,8 @@
+#
+# Conditional build:
 %bcond_with	preconfigured
+%bcond_without	selinux		# build without SELinux support
+#
 Summary:	System V initialization program
 Summary(de):	System V-Intialisierungsprogramm
 Summary(es):	Programa de inicialización System V
@@ -10,7 +14,7 @@ Summary(tr):	System V baþlatma programý
 Summary(uk):	ðÒÏÇÒÁÍÉ, ÝÏ ËÅÒÕÀÔØ ÂÁÚÏ×ÉÍÉ ÓÉÓÔÅÍÎÉÍÉ ÐÒÏÃÅÓÁÍÉ
 Name:		SysVinit
 Version:	2.85
-Release:	8
+Release:	9
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -32,7 +36,7 @@ Patch10:	sysvinit-log-signals.patch
 Patch11:	sysvinit-killall5.patch
 # based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
 Patch12:	sysvinit-selinux.patch
-BuildRequires:	libselinux-devel >= 1.14
+%{?with_selinux:BuildRequires:	libselinux-devel >= 1.14}
 BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -44,7 +48,7 @@ Requires:	login
 Requires:	logrotate
 %endif
 Requires:	mingetty
-Requires:	libselinux >= 1.14
+%{?with_selinux:Requires:	libselinux >= 1.14}
 Provides:	group(utmp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -114,7 +118,7 @@ sonlanmalarýný saðlar/denetler.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
+%{?with_selinux:%patch12 -p1}
 
 %build
 %{__make} -C src \
