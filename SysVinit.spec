@@ -8,7 +8,7 @@ Version:	2.76
 Release:	7
 Copyright:	GPL
 Group:		Daemons
-Group(pl):	Demony
+Group(pl):	Serwery
 URL:		ftp://ftp.cistron.nl/pub/people/miquels/software
 Source0:	sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
