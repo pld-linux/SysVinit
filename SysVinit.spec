@@ -21,7 +21,7 @@ Patch5:		sysvinit-sigint.patch
 Patch6:		sysvinit-ai64.patch
 Patch7:		sysvinit-halt.patch
 Patch8:		sysvinit-blowfish.patch
-BuildRequires:	glibc-static
+BuildRequires:	glibc-devel
 Prereq:		shadow
 Prereq:		make
 Prereq:		/bin/awk
@@ -70,7 +70,8 @@ sonlanmalarýný saðlar/denetler.
 %patch8 -p1
 
 %build
-%{__make} -C src OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O}"
+%{__make} -C src LCRYPT="-lcrypt" \
+	OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
