@@ -71,7 +71,7 @@ sonlanmalarýný saðlar/denetler.
 
 %build
 %{__make} -C src LCRYPT="-lcrypt" \
-	OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O}"
+	OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O0}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
