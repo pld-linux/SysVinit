@@ -1,17 +1,18 @@
---- sysvinit-2.85/src/init.c.selinux	2004-06-09 15:28:47.478406720 -0400
-+++ sysvinit-2.85/src/init.c	2004-06-09 15:29:03.208015456 -0400
-@@ -48,6 +48,10 @@
+--- sysvinit-2.85/src/init.c.selinux	2004-08-11 17:48:23.000000000 -0400
++++ sysvinit-2.85/src/init.c	2004-08-12 06:25:30.166271148 -0400
+@@ -48,6 +48,11 @@
  #include <stdarg.h>
  #include <sys/syslog.h>
  #include <sys/time.h>
 +#include <sys/mman.h>
 +#include <selinux/selinux.h>
++#include <sepol/sepol.h>
 +#include <sys/mount.h>
 +
  
  #ifdef __i386__
  #  if (__GLIBC__ >= 2)
-@@ -103,6 +107,7 @@
+@@ -103,6 +108,7 @@
  int dfl_level = 0;		/* Default runlevel */
  sig_atomic_t got_cont = 0;	/* Set if we received the SIGCONT signal */
  sig_atomic_t got_signals;	/* Set if we received a signal. */
@@ -19,7 +20,7 @@
  int emerg_shell = 0;		/* Start emergency shell? */
  int wrote_wtmp_reboot = 1;	/* Set when we wrote the reboot record */
  int wrote_utmp_reboot = 1;	/* Set when we wrote the reboot record */
-@@ -187,6 +192,130 @@
+@@ -187,6 +193,146 @@
  	{NULL,0}
  };
  
@@ -29,12 +30,11 @@
 +static int load_policy(int *enforce) 
 +{
 +	int fd=-1,ret=-1;
-+	int rc=0;
++	int rc=0, orig_enforce;
 +	struct stat sb;
 +	void *map;
 +	char policy_file[PATH_MAX];
 +	int policy_version=0;
-+	extern char *selinux_mnt;
 +	FILE *cfg;
 +	char buf[4096];
 +	int seconfig = -2;
@@ -62,25 +62,25 @@
 +	
 +	if (mount("none", SELINUXMNT, "selinuxfs", 0, 0) < 0) {
 +		if (errno == ENODEV) {
-+			log(L_VB, "SELinux not supported by kernel: %s\n",SELINUXMNT,strerror(errno));
++			initlog(L_VB, "SELinux not supported by kernel: %s\n",strerror(errno));
 +			*enforce = 0;
 +		} else {
-+			log(L_VB, "Failed to mount %s: %s\n",SELINUXMNT,strerror(errno));
++			initlog(L_VB, "Failed to mount %s: %s\n",SELINUXMNT,strerror(errno));
 +		}
 +		return ret;
 +	}
 +
-+	selinux_mnt = SELINUXMNT; /* set manually since we mounted it */
++	set_selinuxmnt(SELINUXMNT); /* set manually since we mounted it */
 +
 +	policy_version=security_policyvers();
 +	if (policy_version < 0) {
-+		log(L_VB,  "Can't get policy version: %s\n", strerror(errno));
++		initlog(L_VB,  "Can't get policy version: %s\n", strerror(errno));
 +		goto UMOUNT;
 +	}
 +  
-+	rc = security_getenforce();
++	orig_enforce = rc = security_getenforce();
 +	if (rc < 0) {
-+		log(L_VB,  "Can't get SELinux enforcement flag: %s\n", strerror(errno));
++		initlog(L_VB,  "Can't get SELinux enforcement flag: %s\n", strerror(errno));
 +		goto UMOUNT;
 +	}
 +	if (enforcing >= 0) {
@@ -92,7 +92,7 @@
 +		if (rc < 0) {
 +			rc = security_setenforce(0);
 +			if (rc < 0) {
-+				log(L_VB, "Can't disable SELinux: %s\n", strerror(errno));
++				initlog(L_VB, "Can't disable SELinux: %s\n", strerror(errno));
 +				goto UMOUNT;
 +			}
 +		}
@@ -100,10 +100,12 @@
 +		goto UMOUNT;
 +	} else if (seconfig >= 0) {
 +		*enforce = seconfig;
-+		rc = security_setenforce(seconfig);
-+		if (rc < 0) {
-+			log(L_VB, "Can't set SELinux enforcement flag: %s\n", strerror(errno));
-+			goto UMOUNT;
++		if (orig_enforce != *enforce) {
++			rc = security_setenforce(seconfig);
++			if (rc < 0) {
++				initlog(L_VB, "Can't set SELinux enforcement flag: %s\n", strerror(errno));
++				goto UMOUNT;
++			}
 +		}
 +	}
 +
@@ -115,28 +117,43 @@
 +		snprintf(policy_file,sizeof(policy_file),"%s.%d",selinux_binary_policy_path(),policy_version-1);
 +		fd = open(policy_file, O_RDONLY);
 +		if (fd < 0) {
-+			log(L_VB,  "Can't open '%s.%d':  %s\n",
++			initlog(L_VB,  "Can't open '%s.%d':  %s\n",
 +			    selinux_binary_policy_path(),policy_version,strerror(errno));
 +			goto UMOUNT;
 +		}
 +	}
 +  
 +	if (fstat(fd, &sb) < 0) {
-+		log(L_VB, "Can't stat '%s':  %s\n",
++		initlog(L_VB, "Can't stat '%s':  %s\n",
 +		    policy_file, strerror(errno));
 +		goto UMOUNT;
 +	}
 +  
-+	map = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
++	map = mmap(NULL, sb.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 +	if (map == MAP_FAILED) {
-+		log(L_VB,  "Can't map '%s':  %s\n",
++		initlog(L_VB,  "Can't map '%s':  %s\n",
 +		    policy_file, strerror(errno));
 +		goto UMOUNT;
 +	}
-+	log(L_VB, "Loading security policy\n");
++
++
++	/* Set booleans based on a booleans configuration file. */
++	ret = sepol_genbools(map, sb.st_size, selinux_booleans_path());
++	if (ret < 0) {
++		if (errno == ENOENT || errno == EINVAL) {
++			/* No booleans file or stale booleans in the file; non-fatal. */
++			initlog(L_VB,"Warning!  Error while setting booleans:  %s\n"
++			    , strerror(errno));
++		} else {
++			initlog(L_VB,"Error while setting booleans:  %s\n", 
++			    strerror(errno));
++			goto UMOUNT;
++		}
++	}
++	initlog(L_VB, "Loading security policy\n");
 +	ret=security_load_policy(map, sb.st_size);
 +	if (ret < 0) {
-+		log(L_VB, "security_load_policy failed\n");
++		initlog(L_VB, "security_load_policy failed\n");
 +	}
 +
 +UMOUNT:
@@ -150,7 +167,7 @@
  /*
   *	Sleep a number of seconds.
   *
-@@ -2513,6 +2642,7 @@
+@@ -2513,6 +2658,7 @@
  	char			*p;
  	int			f;
  	int			isinit;
@@ -158,7 +175,7 @@
  
  	/* Get my own name */
  	if ((p = strrchr(argv[0], '/')) != NULL)
-@@ -2576,6 +2706,20 @@
+@@ -2576,6 +2722,20 @@
  		maxproclen += strlen(argv[f]) + 1;
  	}
  
@@ -169,8 +186,8 @@
 +	  } else {
 +	    if (enforce > 0) {
 +	      /* SELinux in enforcing mode but load_policy failed */
-+	      /* At this point, we probably can't open /dev/console, so log() won't work */
-+	      printf("Enforcing mode requested but no policy loaded. Halting now.\n");
++	      /* At this point, we probably can't open /dev/console, so initlog() won't work */
++		    fprintf(stderr,"Enforcing mode requested but no policy loaded. Halting now.\n");
 +	      exit(1);
 +	    }
 +	  }
@@ -209,9 +226,9 @@
  	execl(sushell, shell, NULL);
  	perror(sushell);
  
---- sysvinit-2.85/src/killall5.c.selinux	2004-06-09 15:28:47.362424352 -0400
-+++ sysvinit-2.85/src/killall5.c	2004-06-09 15:28:47.525399576 -0400
-@@ -144,8 +144,11 @@
+--- sysvinit-2.86/src/killall5.c.orig	2004-12-26 23:22:03.520344296 +0100
++++ sysvinit-2.86/src/killall5.c	2004-12-26 23:27:39.693238248 +0100
+@@ -166,8 +166,11 @@
  
  /*
   *	Read the proc filesystem.
@@ -222,32 +239,27 @@
 -int readproc()
 +int readproc(int needSid)
  {
- 	DIR *dir;
- 	struct dirent *d;
-@@ -221,12 +224,16 @@
+ 	DIR		*dir;
+ 	FILE		*fp;
+@@ -252,6 +255,7 @@
+ 					p->kernel = 1;
+ 			}
+ 			fclose(fp);
++			if (needSid) {
+ 			p->sid = getsid(pid);
+ 			if (p->sid < 0) {
+ 				p->sid = 0;
+@@ -260,6 +264,9 @@
+ 				free(p);
+ 				continue;
+ 			}
++			} else {
++				p->sid = 0;
++			}
+ 		} else {
+ 			/* Process disappeared.. */
  			free(p);
- 			continue;
- 		}
--		p->sid = getsid(pid);
--		if (p->sid < 0) {
--			p->sid = 0;
--			nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
--			free(p);
--			continue;
-+		if (needSid) {
-+		  p->sid = getsid(pid);
-+		  if (p->sid < 0) {
-+		    p->sid = 0;
-+		    nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
-+		    free(p);
-+		    continue;
-+		  }
-+		} else {
-+		    p->sid = 0;
- 		}
- 
- 		/* Now read argv[0] */
-@@ -463,7 +470,7 @@
+@@ -531,7 +538,7 @@
  	argv += optind;
  
  	/* Print out process-ID's one by one. */
@@ -256,43 +268,43 @@
  	for(f = 0; f < argc; f++) {
  		if ((q = pidof(argv[f])) != NULL) {
  			spid = 0;
-@@ -544,7 +551,7 @@
- 	stopped = 1;
+@@ -612,7 +619,7 @@
+ 	sent_sigstop = 1;
  
- 	/* Find out our own 'sid'. */
+ 	/* Read /proc filesystem */
 -	if (readproc() < 0) {
 +	if (readproc(1) < 0) {
  		kill(-1, SIGCONT);
  		exit(1);
  	}
---- sysvinit-2.85/src/Makefile.orig	2004-07-15 21:46:46.587736210 +0000
-+++ sysvinit-2.85/src/Makefile	2004-07-15 21:50:39.413905233 +0000
-@@ -36,7 +36,7 @@
- all:		$(PROGS)
+--- sysvinit-2.86/src/Makefile.orig	2004-12-26 23:22:03.472351592 +0100
++++ sysvinit-2.86/src/Makefile	2004-12-26 23:28:26.488124344 +0100
+@@ -58,7 +58,7 @@
+ all:		$(BIN) $(SBIN) $(USRBIN)
  
  init:		init.o init_utmp.o
 -		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o
-+		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o -lselinux
++		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o -lsepol -lselinux
  
  halt:		halt.o ifdown.o hddown.o utmp.o reboot.h
  		$(CC) $(LDFLAGS) -o $@ halt.o ifdown.o hddown.o utmp.o
-@@ -54,7 +54,7 @@
+@@ -79,7 +79,7 @@
  		$(CC) $(LDFLAGS) -o $@ runlevel.o
  
  sulogin:	sulogin.o md5_broken.o md5_crypt_broken.o arc4random.o bcrypt.o blowfish.o
 -		$(CC) $(LDFLAGS) $(STATIC) -o $@ $^ $(LCRYPT)
-+		$(CC) $(LDFLAGS) $(STATIC) -o $@ $^ $(LCRYPT) -lselinux
++		$(CC) $(LDFLAGS) $(STATIC) -DWITH_SELINUX -o $@ $^ $(LCRYPT) -lselinux
  
  wall:		dowall.o wall.o
  		$(CC) $(LDFLAGS) -o $@ dowall.o wall.o
-@@ -65,8 +65,11 @@
+@@ -90,8 +90,11 @@
  bootlogd:	bootlogd.o
- 		$(CC) $(LDFLAGS) -o $@ bootlogd.o
+ 		$(CC) $(LDFLAGS) -o $@ bootlogd.o -lutil
  
 +sulogin.o:	sulogin.c 
 +		$(CC) -c $(CFLAGS) -DWITH_SELINUX sulogin.c
 +
- init.o:		init.c init.h set.h reboot.h
+ init.o:		init.c init.h set.h reboot.h initreq.h
 -		$(CC) -c $(CFLAGS) init.c
 +		$(CC) -c $(CFLAGS) -DWITH_SELINUX init.c
  
