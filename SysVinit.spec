@@ -9,14 +9,14 @@ Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.85
-Release:	3
+Release:	4
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
-# Source0-md5: 8a2d8f1ed5a2909da04132fefa44905e
+# Source0-md5:	8a2d8f1ed5a2909da04132fefa44905e
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
-# Source2-md5: 9ae8a63a4685368fae19707f95475cca
+# Source2-md5:	9ae8a63a4685368fae19707f95475cca
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
@@ -25,7 +25,13 @@ Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
 Patch6:		sysvinit-blowfish.patch
 Patch7:		sysvinit-initctl.patch
+Patch8:		sysvinit-autofsck.patch
+Patch9:		sysvinit-pidof.patch
+Patch10:	sysvinit-log-signals.patch
+Patch11:	sysvinit-killall5.patch
+Patch12:	sysvinit-selinux.patch
 BuildRequires:	glibc-devel
+BuildRequires:	libselinux-devel
 PreReq:		shadow
 Requires:	/bin/awk
 Requires:	login
@@ -96,6 +102,11 @@ sonlanmalarЩnЩ saПlar/denetler.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
 
 %build
 %{__make} -C src \
