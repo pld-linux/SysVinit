@@ -153,7 +153,6 @@ if [ -n "`/usr/bin/getgid utmp`" ]; then
 else
 	/usr/sbin/groupadd -g 22 -r -f utmp
 fi
-groupadd -f -r -g 22 utmp
 
 %post
 touch %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
