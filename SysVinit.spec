@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.83
-Release:	3
+Release:	4
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
@@ -14,6 +14,7 @@ Group(pl):	Podstawowe
 Group(pt_BR):	Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit.logrotate
+Source2:	sysvinit-non-english-man-pages.tar.bz2
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
@@ -89,14 +90,11 @@ ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
 touch $RPM_BUILD_ROOT{%{_sysconfdir}/ioctl.save,/var/log/{lastlog,wtmpx,btmpx}}
 
-rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
-rm -f $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
-rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
-
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
+bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 
 gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 
@@ -133,3 +131,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %ghost /var/log/btmpx
 
 %{_mandir}/man[158]/*
+%lang(da) %{_mandir}/da/man[158]/*
+%lang(de) %{_mandir}/de/man[158]/*
+%lang(es) %{_mandir}/es/man[158]/*
+%lang(fi) %{_mandir}/fi/man[158]/*
+%lang(fr) %{_mandir}/fr/man[158]/*
+%lang(hu) %{_mandir}/hu/man[158]/*
+%lang(id) %{_mandir}/id/man[158]/*
+%lang(it) %{_mandir}/it/man[158]/*
+%lang(ja) %{_mandir}/ja/man[158]/*
+%lang(ko) %{_mandir}/ko/man[158]/*
+%lang(pl) %{_mandir}/pl/man[158]/*
