@@ -100,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue May 11 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.74-9]
-- now package is FHS 2.0 compiliat.
+- now package is FHS 2.0 compliat.
 
 * Tue Apr 27 1999 Wojciech "Sas" Cieciwa <cieciwa@alpha.zarz.agh.edu.pl>
 - removed /dev/initctl, now this is part of dev package.
