@@ -65,7 +65,7 @@ diff -Nur sysvinit-2.76/src/paths.h sysvinit-2.76.pld/src/paths.h
  #define IOSAVE		"/etc/ioctl.save"	/* termios settings for SU */
  #define SHELL		"/bin/sh"		/* Default shell */
 -#define INITSCRIPT	"/etc/initscript"	/* Initscript. */
-+#define INITSCRIPT	"/etc/rc.d/initscript"	/* Initscript. */
++#define INITSCRIPT	"/etc/rc.d/rc.init"	/* Initscript. */
  #if 0
  #define HALTSCRIPT1	"/etc/init.d/halt"	/* Called by "fast" shutdown */
  #define HALTSCRIPT2	"/etc/rc.d/rc.0"	/* Called by "fast" shutdown */
