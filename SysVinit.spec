@@ -91,7 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /sbin/*
 %attr(755,root,root) %{_bindir}/*
 
-%config /etc/rc.d/initscript
+%attr(755,root,root) %config /etc/rc.d/initscript
 %attr(640,root,root) /etc/log.d/*
 %ghost /etc/initrunlvl
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /var/log/*
