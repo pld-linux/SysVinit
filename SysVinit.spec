@@ -5,9 +5,10 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	18
+Release:	19
 License:	GPL
 Group:		Base
+Group(de):	Gründsätzlich
 Group(pl):	Podstawowe
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit.logrotate
@@ -21,7 +22,7 @@ Patch6:		sysvinit-ai64.patch
 Patch7:		sysvinit-halt.patch
 Patch8:		sysvinit-blowfish.patch
 BuildRequires:	glibc-static
-Prereq:		shadow-utils
+Prereq:		shadow
 Prereq:		make
 Prereq:		/bin/awk
 Requires:	logrotate
@@ -69,7 +70,7 @@ sonlanmalarýný saðlar/denetler.
 %patch8 -p1
 
 %build
-%{__make} -C src OPTIMIZE="$RPM_OPT_FLAGS"
+%{__make} -C src OPTIMIZE="%{!?debug:$RPM_OPT_FLAGS}%{?debug:-g -O}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -98,8 +99,7 @@ echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
-	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
+gzip -9nf doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %pre
 groupadd -f -r -g 22 utmp
