@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	15
+Release:	16
 License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
