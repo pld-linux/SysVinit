@@ -5,7 +5,7 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.78
-Release:	10
+Release:	11
 License:	GPL
 Group:		Base
 Group(pl):	Podstawowe
@@ -92,7 +92,7 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %pre
-groupadd -f -r -g 60 utmp
+groupadd -f -r -g 22 utmp
 
 %postun
 groupdel utmp
