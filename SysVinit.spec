@@ -33,6 +33,7 @@ Patch11:	sysvinit-killall5.patch
 # based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
 Patch12:	sysvinit-selinux.patch
 BuildRequires:	libselinux-devel >= 1.14
+BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(post):	fileutils
@@ -44,6 +45,7 @@ Requires:	logrotate
 %endif
 Requires:	mingetty
 Requires:	libselinux >= 1.14
+Provides:	group(utmp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -152,12 +154,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -n "`/usr/bin/getgid utmp`" ]; then
-	if [ "`/usr/bin/getgid utmp`" != "22" ]; then
+	if [ "`/usr/bin/getgid utmp`" != 22 ]; then
 		echo "Error: group utmp doesn't have gid=22. Correct this before installing SysVinit." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 22 -r -f utmp
+	/usr/sbin/groupadd -g 22 utmp 1>&2
 fi
 
 %post
@@ -173,7 +175,7 @@ chmod 660 /var/log/lastlog
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/groupdel utmp
+	%groupremove utmp
 fi
 
 %files
