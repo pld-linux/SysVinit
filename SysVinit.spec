@@ -112,13 +112,15 @@ echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 gzip -9nf doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %pre
-GROUP=utmp; GID=22; %groupadd
+groupadd -f -r -g 22 utmp
 
 %post
 /sbin/telinit u || :
 
 %postun
-GROUP=utmp; %groupdel
+if [ "$1" = "0" ]; then
+	groupdel utmp
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
