@@ -75,7 +75,7 @@ sonlanmalarýný saðlar/denetler.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
-	$RPM_BUILD_ROOT/{etc/{logrotate.d,sysconfig},var/log}
+	$RPM_BUILD_ROOT{%{_sysconfdir},/etc/logrotate.d,/var/log}
 
 %{__make} install -C src \
 	ROOT=$RPM_BUILD_ROOT \
@@ -87,16 +87,16 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
-touch $RPM_BUILD_ROOT{/var/log/{lastlog,wtmpx,btmpx},%{_sysconfdir}/ioctl.save}
+touch $RPM_BUILD_ROOT{%{_sysconfdir}/ioctl.save,/var/log/{lastlog,wtmpx,btmpx}}
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
-rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 
+echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
+echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
-echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
-echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
 gzip -9nf doc/{Propaganda,Changelog,*.lsm}
 
@@ -132,4 +132,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(660,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
 
-%{_mandir}/man*/*
+%{_mandir}/man[158]/*
