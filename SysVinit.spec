@@ -15,6 +15,7 @@ Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmpx.patch
+Patch4:		sysvinit-man.patch
 Prereq:		fileutils
 Prereq:		shadow
 Requires:	logrotate
@@ -55,6 +56,7 @@ sonlanmalarýný saðlar/denetler.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 make -C src OPTIMIZE="$RPM_OPT_FLAGS"
