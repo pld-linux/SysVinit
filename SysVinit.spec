@@ -66,19 +66,19 @@ ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
 # man pages cleaning & compressing ;)
 
-rm -f $RPM_BUILD_ROOT/usr/share/man/man1/lastb.1
+rm -f $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
-echo .so last.1 > $RPM_BUILD_ROOT/usr/share/man/man1/lastb.1
+echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
-rm -f $RPM_BUILD_ROOT/usr/share/man/man8/poweroff.8
-rm -f $RPM_BUILD_ROOT/usr/share/man/man8/telinit.8
-rm -f $RPM_BUILD_ROOT/usr/share/man/man8/reboot.8
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/reboot.8
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/telinit.8
-echo .so halt.8 > $RPM_BUILD_ROOT/usr/share/man/man8/poweroff.8
+echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
+echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
+echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 
-gzip -9nf $RPM_BUILD_ROOT/usr/share/man/man*/* \
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
 
 %clean
@@ -95,7 +95,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /usr/bin/*
 #%attr(600,root,root) /dev/initctl
 %attr(640,root,root) /etc/initscript
-/usr/share/man/man[158]/*
+%{_mandir}/man[158]/*
 
 %changelog
 * Tue May 11 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
