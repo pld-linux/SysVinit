@@ -108,8 +108,8 @@
  
 +#ifdef WITH_SELINUX
 +  	if (getenv("SELINUX_INIT") == NULL) {
-+	  putenv("SELINUX_INIT=YES");
 +	  int enforce=0;
++	  putenv("SELINUX_INIT=YES");
 +	  if (load_policy(&enforce) == 0 ) {
 +	    execv(myname, argv);
 +	  } else {
