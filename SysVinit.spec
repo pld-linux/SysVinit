@@ -114,7 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost /etc/initrunlvl
-%ghost /var/log/lastlog
+%attr(660,root,utmp) %ghost /var/log/lastlog
 %attr(660,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
 
