@@ -9,7 +9,9 @@ Release:	1
 License:	GPL
 Group:		Base
 Group(de):	Gründsätzlich
+Group(es):	Base
 Group(pl):	Podstawowe
+Group(pt_BR):	Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
@@ -48,7 +50,7 @@ lorsque le système démarre, il contrôle le lancement, l'exécution et
 l'arrêt de tous les autres programmes.
 
 %description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j±dro, podczas
+SysVinit jest pierwszym programem uruchamianym przez j±dro podczas
 startu systemu. Kontroluje start, pracê oraz zamykanie wszystkich
 innych programów.
 
@@ -73,7 +75,7 @@ sonlanmalarýný saðlar/denetler.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},/sbin,%{_mandir}/man{1,5,8}} \
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
 	$RPM_BUILD_ROOT/{etc/{logrotate.d,sysconfig},var/log}
 
 %{__make} install -C src \
@@ -84,9 +86,9 @@ install -d $RPM_BUILD_ROOT{%{_bindir},/sbin,%{_mandir}/man{1,5,8}} \
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
-ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
+ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
-touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
+touch $RPM_BUILD_ROOT{/var/log/{lastlog,wtmpx,btmpx},%{_sysconfdir}/ioctl.save}
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -126,6 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(640,root,root) /etc/logrotate.d/*
 %ghost %{_sysconfdir}/initrunlvl
+%attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
 %attr(660,root,utmp) %ghost /var/log/lastlog
 %attr(660,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
