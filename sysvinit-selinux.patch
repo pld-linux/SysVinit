@@ -1,116 +1,216 @@
---- sysvinit-2.85/src/init.c.selinux	2004-02-10 14:34:18.454593535 -0500
-+++ sysvinit-2.85/src/init.c	2004-02-10 14:37:27.947014932 -0500
-@@ -78,6 +78,87 @@
- 			sigemptyset(&sa.sa_mask); \
- 			sigaction(sig, &sa, NULL); \
- 		} while(0)
-+#ifdef WITH_SELINUX
+--- sysvinit-2.85/src/init.c.selinux	2004-06-09 15:28:47.478406720 -0400
++++ sysvinit-2.85/src/init.c	2004-06-09 15:29:03.208015456 -0400
+@@ -48,6 +48,10 @@
+ #include <stdarg.h>
+ #include <sys/syslog.h>
+ #include <sys/time.h>
 +#include <sys/mman.h>
 +#include <selinux/selinux.h>
 +#include <sys/mount.h>
 +
+ 
+ #ifdef __i386__
+ #  if (__GLIBC__ >= 2)
+@@ -103,6 +107,7 @@
+ int dfl_level = 0;		/* Default runlevel */
+ sig_atomic_t got_cont = 0;	/* Set if we received the SIGCONT signal */
+ sig_atomic_t got_signals;	/* Set if we received a signal. */
++int enforcing = -1;		/* SELinux enforcing mode */
+ int emerg_shell = 0;		/* Start emergency shell? */
+ int wrote_wtmp_reboot = 1;	/* Set when we wrote the reboot record */
+ int wrote_utmp_reboot = 1;	/* Set when we wrote the reboot record */
+@@ -187,6 +192,130 @@
+ 	{NULL,0}
+ };
+ 
++/* Mount point for selinuxfs. */
++#define SELINUXMNT "/selinux/"
++
 +static int load_policy(int *enforce) 
 +{
-+  int fd=-1,ret=-1;
-+  int rc=0;
-+  struct stat sb;
-+  void *map;
-+  char policy_file[PATH_MAX];
-+  int policy_version=0;
-+  extern char *selinux_mnt;
++	int fd=-1,ret=-1;
++	int rc=0;
++	struct stat sb;
++	void *map;
++	char policy_file[PATH_MAX];
++	int policy_version=0;
++	extern char *selinux_mnt;
++	FILE *cfg;
++	char buf[4096];
++	int seconfig = -2;
++	
++	selinux_getenforcemode(&seconfig);
 +
-+  log(L_VB, "Loading security policy\n");
-+  if (mount("none", SELINUXMNT, "selinuxfs", 0, 0) < 0) {
-+    if (errno == ENODEV) {
-+      log(L_VB, "SELinux not supported by kernel: %s\n",SELINUXMNT,strerror(errno));
-+    } 
-+    else {
-+      log(L_VB, "Failed to mount %s: %s\n",SELINUXMNT,strerror(errno));
-+      return ret;
-+    }
-+    return ret; /* Never gets here */
-+  }
++	mount("none", "/proc", "proc", 0, 0);
++	cfg = fopen("/proc/cmdline","r");
++	if (cfg) {
++		char *tmp;
++		if (fgets(buf,4096,cfg) && (tmp = strstr(buf,"enforcing="))) {
++			if (tmp == buf || isspace(*(tmp-1))) {
++				enforcing=atoi(tmp+10);
++			}
++		}
++		fclose(cfg);
++	}
++#define MNT_DETACH 2
++	umount2("/proc",MNT_DETACH);
++	
++	if (enforcing >=0)
++		*enforce = enforcing;
++	else if (seconfig == 1)
++		*enforce = 1;
++	
++	if (mount("none", SELINUXMNT, "selinuxfs", 0, 0) < 0) {
++		if (errno == ENODEV) {
++			log(L_VB, "SELinux not supported by kernel: %s\n",SELINUXMNT,strerror(errno));
++			*enforce = 0;
++		} else {
++			log(L_VB, "Failed to mount %s: %s\n",SELINUXMNT,strerror(errno));
++		}
++		return ret;
++	}
 +
-+  selinux_mnt = SELINUXMNT; /* set manually since we mounted it */
++	selinux_mnt = SELINUXMNT; /* set manually since we mounted it */
 +
-+  policy_version=security_policyvers();
-+  if (policy_version < 0) {
-+    log(L_VB,  "Can't get policy version: %s\n", strerror(errno));
-+    goto UMOUNT;
-+  }
++	policy_version=security_policyvers();
++	if (policy_version < 0) {
++		log(L_VB,  "Can't get policy version: %s\n", strerror(errno));
++		goto UMOUNT;
++	}
 +  
-+  rc=security_getenforce();
-+  if (rc < 0) {
-+    log(L_VB,  "Can't get SELinux enforcement flag: %s\n", strerror(errno));
-+    goto UMOUNT;
-+  } 
-+  *enforce=rc;
++	rc = security_getenforce();
++	if (rc < 0) {
++		log(L_VB,  "Can't get SELinux enforcement flag: %s\n", strerror(errno));
++		goto UMOUNT;
++	}
++	if (enforcing >= 0) {
++		*enforce = enforcing;
++	} else if (seconfig == -1) {
++		*enforce = 0;
++		rc = security_disable();
++		if (rc == 0) umount(SELINUXMNT);
++		if (rc < 0) {
++			rc = security_setenforce(0);
++			if (rc < 0) {
++				log(L_VB, "Can't disable SELinux: %s\n", strerror(errno));
++				goto UMOUNT;
++			}
++		}
++		ret = 0;
++		goto UMOUNT;
++	} else if (seconfig >= 0) {
++		*enforce = seconfig;
++		rc = security_setenforce(seconfig);
++		if (rc < 0) {
++			log(L_VB, "Can't set SELinux enforcement flag: %s\n", strerror(errno));
++			goto UMOUNT;
++		}
++	}
 +
-+  snprintf(policy_file,sizeof(policy_file),"%s.%d",SELINUXPOLICY,policy_version);
-+  fd = open(policy_file, O_RDONLY);
-+  if (fd < 0) {
-+    /* Check previous version to see if old policy is available
-+     */
-+    snprintf(policy_file,sizeof(policy_file),"%s.%d",SELINUXPOLICY,policy_version-1);
-+    fd = open(policy_file, O_RDONLY);
-+    if (fd < 0) {
-+      log(L_VB,  "Can't open '%s.%d':  %s\n",
-+	  SELINUXPOLICY,policy_version,strerror(errno));
-+      goto UMOUNT;
-+    }
-+  }
++	snprintf(policy_file,sizeof(policy_file),"%s.%d",selinux_binary_policy_path(),policy_version);
++	fd = open(policy_file, O_RDONLY);
++	if (fd < 0) {
++		/* Check previous version to see if old policy is available
++		 */
++		snprintf(policy_file,sizeof(policy_file),"%s.%d",selinux_binary_policy_path(),policy_version-1);
++		fd = open(policy_file, O_RDONLY);
++		if (fd < 0) {
++			log(L_VB,  "Can't open '%s.%d':  %s\n",
++			    selinux_binary_policy_path(),policy_version,strerror(errno));
++			goto UMOUNT;
++		}
++	}
 +  
-+  if (fstat(fd, &sb) < 0) {
-+    log(L_VB, "Can't stat '%s':  %s\n",
-+	    policy_file, strerror(errno));
-+    goto UMOUNT;
-+  }
++	if (fstat(fd, &sb) < 0) {
++		log(L_VB, "Can't stat '%s':  %s\n",
++		    policy_file, strerror(errno));
++		goto UMOUNT;
++	}
 +  
-+  map = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
-+  if (map == MAP_FAILED) {
-+    log(L_VB,  "Can't map '%s':  %s\n",
-+	    policy_file, strerror(errno));
-+    goto UMOUNT;
-+  }
-+  ret=security_load_policy(map, sb.st_size);
-+  if (ret < 0) {
-+    log(L_VB, "security_load_policy failed\n");
-+  }
++	map = mmap(NULL, sb.st_size, PROT_READ, MAP_SHARED, fd, 0);
++	if (map == MAP_FAILED) {
++		log(L_VB,  "Can't map '%s':  %s\n",
++		    policy_file, strerror(errno));
++		goto UMOUNT;
++	}
++	log(L_VB, "Loading security policy\n");
++	ret=security_load_policy(map, sb.st_size);
++	if (ret < 0) {
++		log(L_VB, "security_load_policy failed\n");
++	}
 +
-+ UMOUNT:
-+  /*umount(SELINUXMNT); */
-+  if ( fd >= 0) {
-+    close(fd);
-+  }
-+  return(ret);
++UMOUNT:
++	/*umount(SELINUXMNT); */
++	if ( fd >= 0) {
++		close(fd);
++	}
++	return(ret);
 +}
-+#endif
++
+ /*
+  *	Sleep a number of seconds.
+  *
+@@ -2513,6 +2642,7 @@
+ 	char			*p;
+ 	int			f;
+ 	int			isinit;
++	int			enforce = 0;
  
- /* Version information */
- char *Version = "@(#) init " VERSION "  " DATE "  miquels@cistron.nl";
-@@ -2576,6 +2657,20 @@
+ 	/* Get my own name */
+ 	if ((p = strrchr(argv[0], '/')) != NULL)
+@@ -2576,6 +2706,20 @@
  		maxproclen += strlen(argv[f]) + 1;
  	}
  
-+#ifdef WITH_SELINUX
 +  	if (getenv("SELINUX_INIT") == NULL) {
-+	  int enforce=0;
 +	  putenv("SELINUX_INIT=YES");
 +	  if (load_policy(&enforce) == 0 ) {
 +	    execv(myname, argv);
 +	  } else {
-+	    if (enforce) 
++	    if (enforce > 0) {
 +	      /* SELinux in enforcing mode but load_policy failed */
++	      /* At this point, we probably can't open /dev/console, so log() won't work */
++	      printf("Enforcing mode requested but no policy loaded. Halting now.\n");
 +	      exit(1);
++	    }
 +	  }
 +	}
-+#endif
 +  
  	/* Start booting. */
  	argv0 = argv[0];
  	argv[1] = NULL;
---- sysvinit-2.85/src/killall5.c.selinux	2004-02-10 14:34:18.440595129 -0500
-+++ sysvinit-2.85/src/killall5.c	2004-02-10 14:34:18.557581807 -0500
+--- sysvinit-2.85/src/sulogin.c.orig	2004-07-15 21:46:46.585783085 +0000
++++ sysvinit-2.85/src/sulogin.c	2004-07-15 21:49:43.413905919 +0000
+@@ -29,6 +29,10 @@
+ #endif
+ #include "md5.h"
+ #include "blowfish.h"
++#ifdef WITH_SELINUX
++#include <selinux/selinux.h>
++#include <selinux/get_context_list.h>
++#endif
+ 
+ #define CHECK_DES	1
+ #define CHECK_MD5	1
+@@ -358,6 +362,16 @@
+ 	signal(SIGINT, SIG_DFL);
+ 	signal(SIGTSTP, SIG_DFL);
+ 	signal(SIGQUIT, SIG_DFL);
++#ifdef WITH_SELINUX
++	if (is_selinux_enabled > 0) {
++	  security_context_t* contextlist=NULL;
++	  if (get_ordered_context_list("root", 0, &contextlist) > 0) {
++	    if (setexeccon(contextlist[0]) != 0) 
++	      fprintf(stderr, "setexeccon faile\n");
++	    freeconary(contextlist);
++	  }
++	}
++#endif
+ 	execl(sushell, shell, NULL);
+ 	perror(sushell);
+ 
+--- sysvinit-2.85/src/killall5.c.selinux	2004-06-09 15:28:47.362424352 -0400
++++ sysvinit-2.85/src/killall5.c	2004-06-09 15:28:47.525399576 -0400
 @@ -144,8 +144,11 @@
  
  /*
@@ -165,9 +265,9 @@
  		kill(-1, SIGCONT);
  		exit(1);
  	}
---- sysvinit-2.85/src/Makefile.selinux	2004-02-10 14:34:18.413598203 -0500
-+++ sysvinit-2.85/src/Makefile	2004-02-10 14:34:18.552582377 -0500
-@@ -32,7 +32,7 @@
+--- sysvinit-2.85/src/Makefile.orig	2004-07-15 21:46:46.587736210 +0000
++++ sysvinit-2.85/src/Makefile	2004-07-15 21:50:39.413905233 +0000
+@@ -36,7 +36,7 @@
  all:		$(PROGS)
  
  init:		init.o init_utmp.o
@@ -176,9 +276,22 @@
  
  halt:		halt.o ifdown.o hddown.o utmp.o reboot.h
  		$(CC) $(LDFLAGS) -o $@ halt.o ifdown.o hddown.o utmp.o
-@@ -62,7 +62,7 @@
+@@ -54,7 +54,7 @@
+ 		$(CC) $(LDFLAGS) -o $@ runlevel.o
+ 
+ sulogin:	sulogin.o md5_broken.o md5_crypt_broken.o arc4random.o bcrypt.o blowfish.o
+-		$(CC) $(LDFLAGS) $(STATIC) -o $@ $^ $(LCRYPT)
++		$(CC) $(LDFLAGS) $(STATIC) -o $@ $^ $(LCRYPT) -lselinux
+ 
+ wall:		dowall.o wall.o
+ 		$(CC) $(LDFLAGS) -o $@ dowall.o wall.o
+@@ -65,8 +65,11 @@
+ bootlogd:	bootlogd.o
  		$(CC) $(LDFLAGS) -o $@ bootlogd.o
  
++sulogin.o:	sulogin.c 
++		$(CC) -c $(CFLAGS) -DWITH_SELINUX sulogin.c
++
  init.o:		init.c init.h set.h reboot.h
 -		$(CC) -c $(CFLAGS) init.c
 +		$(CC) -c $(CFLAGS) -DWITH_SELINUX init.c
