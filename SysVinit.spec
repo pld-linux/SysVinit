@@ -8,10 +8,6 @@ Version:	2.84
 Release:	3
 License:	GPL
 Group:		Base
-Group(de):	Gründsätzlich
-Group(es):	Base
-Group(pl):	Podstawowe
-Group(pt_BR):	Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
