@@ -5,17 +5,16 @@ Summary(pl):	Program inicjalizuj±cy w Systemie V
 Summary(tr):	System V baþlatma programý
 Name:		SysVinit
 Version:	2.76
-Release:	11
+Release:	12
 Copyright:	GPL
 Group:		Base
 Group(pl):	Podstawowe
 URL:		ftp://ftp.cistron.nl/pub/people/miquels/software/
 Source0:	sysvinit-%{version}.tar.gz
 Source1:	sysvinit-initscript
-Source2:	sysvinit.syslog
+Source2:	sysvinit.logrotate
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-man.patch
-Requires:	/dev/initctl
 Requires:	logrotate
 Buildroot:	/tmp/%{name}-%{version}-root
 
@@ -64,13 +63,13 @@ make install -C src \
 	BIN_GROUP=`id -g`
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/initscript
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/lastlog
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT/etc
 ln -sf killall5 $RPM_BUILD_ROOT/sbin/pidof
 
-:> $RPM_BUILD_ROOT/var/log/lastlog
-:> $RPM_BUILD_ROOT/var/run/utmpx
+touch $RPM_BUILD_ROOT/var/log/{lastlog,wtmpx,btmpx}
+touch $RPM_BUILD_ROOT/var/run/utmpx
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -79,6 +78,7 @@ rm -f $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
+echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	doc/Propaganda debian/changelog doc/sysvinit-%{version}.lsm  
@@ -105,13 +105,13 @@ rm -rf $RPM_BUILD_ROOT
 * Sat May 22 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
   [2.76-10]
 - (u,w)tmp changed to (w,u)tmpx -- Unix98 comliant (patch),
-- removed unused `lastb',
 - utpmdump changed to utmpx-dump, (patch)
 - changed prefix for initscript to /etc/rc.d instead /etc (patch)
-- added /etc/logrotate.d/last (for logrotate) & /var/log/lastlog,
+- added /etc/logrotate.d/sysvinit (for logrotate) & /var/log/lastlog,
 - removed sgid bit from `wall' -- following Debian developers advise ;) 
 - %ghost /etc/initrunlvl,
 - added /var/run/utmpx,
+- added /var/log/{btmpx,wtmpx} -- removed from sysklogd package,
 - fixed all patches.
 
 * Tue May 11 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
