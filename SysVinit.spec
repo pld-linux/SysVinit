@@ -95,7 +95,7 @@ rm -f $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 rm -f $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
-echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
+echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 
