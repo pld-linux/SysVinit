@@ -9,4 +9,7 @@
 /var/log/wtmpx {
     weekly
     rotate 1
+    postrotate
+		/bin/chmod 644 /var/log/wtmpx
+    endscript
 }
