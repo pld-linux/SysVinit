@@ -38,7 +38,7 @@ Patch10:	sysvinit-selinux.patch
 BuildRequires:	libselinux-devel >= 1.18
 BuildRequires:	libsepol-devel
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(post):	fileutils
@@ -159,14 +159,7 @@ bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid utmp`" ]; then
-	if [ "`/usr/bin/getgid utmp`" != 22 ]; then
-		echo "Error: group utmp doesn't have gid=22. Correct this before installing SysVinit." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 22 utmp 1>&2
-fi
+%groupadd -g 22 utmp
 
 %post
 touch %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
