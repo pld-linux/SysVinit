@@ -218,7 +218,7 @@
 +	  security_context_t* contextlist=NULL;
 +	  if (get_ordered_context_list("root", 0, &contextlist) > 0) {
 +	    if (setexeccon(contextlist[0]) != 0) 
-+	      fprintf(stderr, "setexeccon faile\n");
++	      fprintf(stderr, "setexeccon failed\n");
 +	    freeconary(contextlist);
 +	  }
 +	}
