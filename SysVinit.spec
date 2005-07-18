@@ -14,7 +14,7 @@ Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -162,7 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %groupadd -g 22 utmp
 
 %post
-touch %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
+touch %{_sysconfdir}/ioctl.save /var/log/{{fail,last}log,btmpx}
 chmod 000 %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
 chown root:root %{_sysconfdir}/ioctl.save /var/log/faillog
 chown root:utmp /var/log/lastlog
