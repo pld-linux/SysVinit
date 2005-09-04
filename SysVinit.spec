@@ -14,7 +14,7 @@ Summary(tr):	System V baþlatma programý
 Summary(uk):	ðÒÏÇÒÁÍÉ, ÝÏ ËÅÒÕÀÔØ ÂÁÚÏ×ÉÍÉ ÓÉÓÔÅÍÎÉÍÉ ÐÒÏÃÅÓÁÍÉ
 Name:		SysVinit
 Version:	2.86
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch8:		sysvinit-pidof.patch
 Patch9:		sysvinit-killall5.patch
 # based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
 Patch10:	sysvinit-selinux.patch
+Patch11:	sysvinit-nopowerstates-single.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.18
 BuildRequires:	libsepol-devel
@@ -120,6 +121,7 @@ sonlanmalarýný saðlar/denetler.
 %patch8 -p1
 %patch9 -p1
 %{?with_selinux:%patch10 -p1}
+%patch11 -p1
 
 %build
 %{__make} -C src \
