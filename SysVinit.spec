@@ -14,7 +14,7 @@ Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	5
+Release:	6
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -51,6 +51,7 @@ Requires:	logrotate
 %endif
 Requires:	mingetty
 %{?with_selinux:Requires:	libselinux >= 1.18}
+Obsoletes:	vserver-SysVinit
 Provides:	group(utmp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
