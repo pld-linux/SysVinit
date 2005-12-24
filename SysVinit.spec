@@ -14,7 +14,7 @@ Summary(tr):	System V başlatma programı
 Summary(uk):	ğÒÏÇÒÁÍÉ, İÏ ËÅÒÕÀÔØ ÂÁÚÏ×ÉÍÉ ÓÉÓÔÅÍÎÉÍÉ ĞÒÏÃÅÓÁÍÉ
 Name:		SysVinit
 Version:	2.86
-Release:	6
+Release:	6.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -32,12 +32,10 @@ Patch6:		sysvinit-blowfish.patch
 Patch7:		sysvinit-autofsck.patch
 Patch8:		sysvinit-pidof.patch
 Patch9:		sysvinit-killall5.patch
-# based on http://www.nsa.gov/selinux/patches/sysvinit-selinux.patch.gz
 Patch10:	sysvinit-selinux.patch
 Patch11:	sysvinit-nopowerstates-single.patch
 %if %{with selinux}
-BuildRequires:	libselinux-devel >= 1.18
-BuildRequires:	libsepol-devel
+BuildRequires:	libselinux-devel >= 1.28
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(pre):	/usr/bin/getgid
