@@ -39,7 +39,6 @@ diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
  	/* Start booting. */
  	argv0 = argv[0];
  	argv[1] = NULL;
-Tylko w sysvinit-2.86/src: init.c.orig
 diff -ur sysvinit-2.86.org/src/Makefile sysvinit-2.86/src/Makefile
 --- sysvinit-2.86.org/src/Makefile	2005-12-24 23:21:59.000000000 +0100
 +++ sysvinit-2.86/src/Makefile	2005-12-24 23:23:14.000000000 +0100
@@ -61,7 +60,6 @@ diff -ur sysvinit-2.86.org/src/Makefile sysvinit-2.86/src/Makefile
  
  wall:		dowall.o wall.o
  		$(CC) $(LDFLAGS) -o $@ dowall.o wall.o
-Tylko w sysvinit-2.86.org/src: Makefile.orig
 diff -ur sysvinit-2.86.org/src/sulogin.c sysvinit-2.86/src/sulogin.c
 --- sysvinit-2.86.org/src/sulogin.c	2005-12-24 23:21:59.000000000 +0100
 +++ sysvinit-2.86/src/sulogin.c	2005-12-24 23:23:33.000000000 +0100
@@ -95,4 +93,3 @@ diff -ur sysvinit-2.86.org/src/sulogin.c sysvinit-2.86/src/sulogin.c
  	execl(sushell, shell, NULL);
  	perror(sushell);
  
-Tylko w sysvinit-2.86.org/src: sulogin.c.orig
