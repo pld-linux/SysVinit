@@ -6,5 +6,6 @@
 }
 
 /var/log/wtmpx {
-	create 664 root utmp 
+	create 664 root utmp
+	monthly
 }
