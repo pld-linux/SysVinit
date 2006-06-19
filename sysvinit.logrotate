@@ -5,7 +5,7 @@
 /var/log/btmpx {
 }
 
-/var/log/wtmpx {
-	create 664 root utmp
-	monthly
-}
+#/var/log/wtmpx {
+#	create 664 root utmp
+#	monthly
+#}
