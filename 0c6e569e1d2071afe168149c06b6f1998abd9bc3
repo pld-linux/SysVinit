@@ -1,0 +1,2 @@
+- create btmpx in %post since pwdutils requires this file to be created
+  to use it (wont create it itself)
