@@ -14,7 +14,7 @@ Summary(tr):	System V baЧlatma programЩ
 Summary(uk):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	6.1
+Release:	7
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
