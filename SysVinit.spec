@@ -14,7 +14,7 @@ Summary(tr):	System V baþlatma programý
 Summary(uk):	ðÒÏÇÒÁÍÉ, ÝÏ ËÅÒÕÀÔØ ÂÁÚÏ×ÉÍÉ ÓÉÓÔÅÍÎÉÍÉ ÐÒÏÃÅÓÁÍÉ
 Name:		SysVinit
 Version:	2.86
-Release:	8
+Release:	9
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -132,7 +132,7 @@ sonlanmalarýný saðlar/denetler.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/bin,%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
-	$RPM_BUILD_ROOT{%{_includedir},%{_sysconfdir},/etc/logrotate.d,/var/log}
+	$RPM_BUILD_ROOT{%{_includedir},%{_sysconfdir},/etc/logrotate.d,/var/{log,run}}
 
 %{__make} install -C src \
 	ROOT=$RPM_BUILD_ROOT \
@@ -144,6 +144,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
+> $RPM_BUILD_ROOT/var/run/initrunlvl
 > $RPM_BUILD_ROOT%{_sysconfdir}/ioctl.save
 > $RPM_BUILD_ROOT/var/log/faillog
 > $RPM_BUILD_ROOT/var/log/lastlog
@@ -193,6 +194,7 @@ fi
 
 %attr(640,root,root) /etc/logrotate.d/sysvinit
 %ghost %{_sysconfdir}/initrunlvl
+%ghost /var/run/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
 %attr(640,root,root) %ghost /var/log/faillog
 %attr(660,root,utmp) %ghost /var/log/lastlog
