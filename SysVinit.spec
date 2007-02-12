@@ -4,14 +4,14 @@
 %bcond_without	selinux		# build without SELinux support
 #
 Summary:	System V initialization program
-Summary(de.UTF-8):   System V-Intialisierungsprogramm
-Summary(es.UTF-8):   Programa de inicialización System V
-Summary(fr.UTF-8):   Programme d'initialisation Sys V
-Summary(pl.UTF-8):   Program inicjalizujący w Systemie V
-Summary(pt_BR.UTF-8):   Programa de inicialização System V
-Summary(ru.UTF-8):   Программы, управляющие базовыми системными процессами
-Summary(tr.UTF-8):   System V başlatma programı
-Summary(uk.UTF-8):   Програми, що керують базовими системними процесами
+Summary(de.UTF-8):	System V-Intialisierungsprogramm
+Summary(es.UTF-8):	Programa de inicialización System V
+Summary(fr.UTF-8):	Programme d'initialisation Sys V
+Summary(pl.UTF-8):	Program inicjalizujący w Systemie V
+Summary(pt_BR.UTF-8):	Programa de inicialização System V
+Summary(ru.UTF-8):	Программы, управляющие базовыми системными процессами
+Summary(tr.UTF-8):	System V başlatma programı
+Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
 Release:	9
