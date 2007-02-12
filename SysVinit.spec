@@ -4,14 +4,14 @@
 %bcond_without	selinux		# build without SELinux support
 #
 Summary:	System V initialization program
-Summary(de):	System V-Intialisierungsprogramm
-Summary(es):	Programa de inicializaciСn System V
-Summary(fr):	Programme d'initialisation Sys V
-Summary(pl):	Program inicjalizuj╠cy w Systemie V
-Summary(pt_BR):	Programa de inicializaГЦo System V
-Summary(ru):	Программы, управляющие базовыми системными процессами
-Summary(tr):	System V baЧlatma programЩ
-Summary(uk):	Програми, що керують базовими системними процесами
+Summary(de.UTF-8):   System V-Intialisierungsprogramm
+Summary(es.UTF-8):   Programa de inicializaciцЁn System V
+Summary(fr.UTF-8):   Programme d'initialisation Sys V
+Summary(pl.UTF-8):   Program inicjalizujд┘cy w Systemie V
+Summary(pt_BR.UTF-8):   Programa de inicializaц╖цёo System V
+Summary(ru.UTF-8):   п÷я─п╬пЁя─п╟п╪п╪я▀, я┐п©я─п╟п╡п╩я▐я▌я┴п╦п╣ п╠п╟п╥п╬п╡я▀п╪п╦ я│п╦я│я┌п╣п╪п╫я▀п╪п╦ п©я─п╬я├п╣я│я│п╟п╪п╦
+Summary(tr.UTF-8):   System V baе÷latma programд╠
+Summary(uk.UTF-8):   п÷я─п╬пЁя─п╟п╪п╦, я┴п╬ п╨п╣я─я┐я▌я┌я▄ п╠п╟п╥п╬п╡п╦п╪п╦ я│п╦я│я┌п╣п╪п╫п╦п╪п╦ п©я─п╬я├п╣я│п╟п╪п╦
 Name:		SysVinit
 Version:	2.86
 Release:	9
@@ -64,48 +64,48 @@ program, the first program started by the Linux kernel when the system
 boots. Init then controls the startup, running and shutdown of all
 other programs.
 
-%description -l de
+%description -l de.UTF-8
 SysVinit ist das erste Programm, das beim Systemstart vom Linux-Kernel
-gestartet wird. Es steuert das Starten, AusfЭhren und Beenden aller
+gestartet wird. Es steuert das Starten, Ausfц╪hren und Beenden aller
 anderen Programme.
 
-%description -l es
+%description -l es.UTF-8
 SysVinit es el primer programa ejecutado por el kernel Linux cuando se
 inicia el sistema. Controla arranque, funcionamiento y cierre de todos
 los otros programas.
 
-%description -l fr
-SysVinit est le premier programme exИcutИ par le noyau de Linux
-lorsque le systХme dИmarre, il contrТle le lancement, l'exИcution et
-l'arrЙt de tous les autres programmes.
+%description -l fr.UTF-8
+SysVinit est le premier programme exц╘cutц╘ par le noyau de Linux
+lorsque le systц╗me dц╘marre, il contrц╢le le lancement, l'exц╘cution et
+l'arrц╙t de tous les autres programmes.
 
-%description -l pl
-SysVinit jest pierwszym programem uruchamianym przez j╠dro podczas
-startu systemu. Kontroluje start, pracЙ oraz zamykanie wszystkich
-innych programСw.
+%description -l pl.UTF-8
+SysVinit jest pierwszym programem uruchamianym przez jд┘dro podczas
+startu systemu. Kontroluje start, pracд≥ oraz zamykanie wszystkich
+innych programцЁw.
 
-%description -l pt_BR
-SysVinit И o primeiro programa executado pelo kernel Linux quando o
-sistema И inicializado. Controla inicializaГЦo, funcionamento e
-finalizaГЦo de todos os outros programas.
+%description -l pt_BR.UTF-8
+SysVinit ц╘ o primeiro programa executado pelo kernel Linux quando o
+sistema ц╘ inicializado. Controla inicializaц╖цёo, funcionamento e
+finalizaц╖цёo de todos os outros programas.
 
-%description -l ru
-Пакет SysVinit содержит группу процессов, которые управляют самыми
-базовыми функциями вашей системы. SysVinit включает программу init,
-самую первую программу, которая запускается ядром Linux при загрузке
-системы. После этого init управляет запуском, исполнением и остановом
-всех остальных программ.
+%description -l ru.UTF-8
+п÷п╟п╨п╣я┌ SysVinit я│п╬п╢п╣я─п╤п╦я┌ пЁя─я┐п©п©я┐ п©я─п╬я├п╣я│я│п╬п╡, п╨п╬я┌п╬я─я▀п╣ я┐п©я─п╟п╡п╩я▐я▌я┌ я│п╟п╪я▀п╪п╦
+п╠п╟п╥п╬п╡я▀п╪п╦ я└я┐п╫п╨я├п╦я▐п╪п╦ п╡п╟я┬п╣п╧ я│п╦я│я┌п╣п╪я▀. SysVinit п╡п╨п╩я▌я┤п╟п╣я┌ п©я─п╬пЁя─п╟п╪п╪я┐ init,
+я│п╟п╪я┐я▌ п©п╣я─п╡я┐я▌ п©я─п╬пЁя─п╟п╪п╪я┐, п╨п╬я┌п╬я─п╟я▐ п╥п╟п©я┐я│п╨п╟п╣я┌я│я▐ я▐п╢я─п╬п╪ Linux п©я─п╦ п╥п╟пЁя─я┐п╥п╨п╣
+я│п╦я│я┌п╣п╪я▀. п÷п╬я│п╩п╣ я█я┌п╬пЁп╬ init я┐п©я─п╟п╡п╩я▐п╣я┌ п╥п╟п©я┐я│п╨п╬п╪, п╦я│п©п╬п╩п╫п╣п╫п╦п╣п╪ п╦ п╬я│я┌п╟п╫п╬п╡п╬п╪
+п╡я│п╣я┘ п╬я│я┌п╟п╩я▄п╫я▀я┘ п©я─п╬пЁя─п╟п╪п╪.
 
-%description -l tr
-SysVinit, sistem aГЩlЩrken Linux ГekirdeПi tarafЩndan ГalЩЧtЩrЩlan ilk
-programdЩr. DiПer programlarЩn baЧlamalarЩnЩ, ГalЩЧmalarЩnЩ ve
-sonlanmalarЩnЩ saПlar/denetler.
+%description -l tr.UTF-8
+SysVinit, sistem aц╖д╠lд╠rken Linux ц╖ekirdeд÷i tarafд╠ndan ц╖alд╠е÷tд╠rд╠lan ilk
+programdд╠r. Diд÷er programlarд╠n baе÷lamalarд╠nд╠, ц╖alд╠е÷malarд╠nд╠ ve
+sonlanmalarд╠nд╠ saд÷lar/denetler.
 
-%description -l uk
-Пакет SysVinit м╕стить групу процес╕в, котр╕ керують самими базовими
-функц╕ями вашо╖ системи. SysVinit м╕стить програму init, першу
-програму, яку запуска╓ ядро Linux п╕д час загрузки системи. П╕сля
-цього init керу╓ запуском, виконанням та зупинкою вс╕х ╕нших програм.
+%description -l uk.UTF-8
+п÷п╟п╨п╣я┌ SysVinit п╪я√я│я┌п╦я┌я▄ пЁя─я┐п©я┐ п©я─п╬я├п╣я│я√п╡, п╨п╬я┌я─я√ п╨п╣я─я┐я▌я┌я▄ я│п╟п╪п╦п╪п╦ п╠п╟п╥п╬п╡п╦п╪п╦
+я└я┐п╫п╨я├я√я▐п╪п╦ п╡п╟я┬п╬я≈ я│п╦я│я┌п╣п╪п╦. SysVinit п╪я√я│я┌п╦я┌я▄ п©я─п╬пЁя─п╟п╪я┐ init, п©п╣я─я┬я┐
+п©я─п╬пЁя─п╟п╪я┐, я▐п╨я┐ п╥п╟п©я┐я│п╨п╟я■ я▐п╢я─п╬ Linux п©я√п╢ я┤п╟я│ п╥п╟пЁя─я┐п╥п╨п╦ я│п╦я│я┌п╣п╪п╦. п÷я√я│п╩я▐
+я├я▄п╬пЁп╬ init п╨п╣я─я┐я■ п╥п╟п©я┐я│п╨п╬п╪, п╡п╦п╨п╬п╫п╟п╫п╫я▐п╪ я┌п╟ п╥я┐п©п╦п╫п╨п╬я▌ п╡я│я√я┘ я√п╫я┬п╦я┘ п©я─п╬пЁя─п╟п╪.
 
 %prep
 %setup -q -n sysvinit-%{version}
