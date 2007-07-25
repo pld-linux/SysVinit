@@ -156,6 +156,8 @@ echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
+rm -f $RPM_BUILD_ROOT%{_includedir}/initreq.h
+rm -f $RPM_BUILD_ROOT%{_mandir}/README.sysvinit-non-english-man-pages
 
 %clean
 rm -rf $RPM_BUILD_ROOT
