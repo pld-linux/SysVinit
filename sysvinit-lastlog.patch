@@ -1,0 +1,888 @@
+diff -urN sysvinit-2.86/man/intl/cs/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/cs/man8/lastlog.8
+--- sysvinit-2.86/man/intl/cs/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/cs/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,40 @@
++.\"	@(#)lastlog.8	3.3	08:24:58	29 Sep 1993 (National Guard Release)
++.\"	$Id$
++.\"
++.TH LASTLOG 8
++.SH JMÉNO
++lastlog \- prozkoumá soubor lastlog
++.SH SYNTAXE
++.B lastlog
++.RB [ \-u
++.IR přihlašovací\-jméno ]
++.RB [ \-t
++.IR dny ]
++.SH POPIS
++\fBlastlog\fR setřídí a zobrazí obsah souboru
++\fI/var/log/lastlog\fR,
++který obsahuje záznamy o přihlašování a odhlašování uživatelů v systému.
++Zobrazí se \fBpřihlašovací jméno\fR, \fBjméno terminálu\fR a \fBčas posledního
++přihlašení\fR.
++Standardně (tj. bez dalších voleb) lastlog zobrazí záznamy setříděné
++podle čísla UID.
++Použití přepínače \fB\-u \fIpřihlašovací\-jméno\fR
++způsobí, že bude vytištěn pouze poslední záznam o přihlášení příslušného uživatele.
++Zadáním \fB\-t \fIdny\fR se zobrazí pouze
++ta přihlášení, které jsou dřívější než zadané \fIdny\fR.
++Parametr \fB\-t\fR překryje případný parametr \fB\-u\fR.
++.PP
++Pokud se uživatel ještě nikdy nepřihlásil, zobrazí se zpráva \fB"**Never logged in**"\fR (Nikdy nepřihlášen)
++místo jména terminálu a času.
++.SH SOUBORY
++/var/log/lastlog \- soubor se záznamy o přihlášení a odhlášení
++.SH NÁMITKY
++Velké rozdíly v UID číslech jsou způsobeny tím, že lastlog program běžel dlouho bez
++výstupu na obrazovku (např. mmdf=800 a poslední uid=170, program se bude
++jevit jako s uid 171\-799).
++.SH AUTOŘI
++Julianne Frances Haugh (jfh@austin.ibm.com)
++.br
++Phillip Street
++.SH PŘELOŽIL
++Ondřej Pavlíček (mox@post.cz).
+diff -urN sysvinit-2.86/man/intl/fr/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/fr/man8/lastlog.8
+--- sysvinit-2.86/man/intl/fr/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/fr/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,66 @@
++.\"     Title: lastlog
++.\"    Author: 
++.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
++.\"      Date: 30/07/2006
++.\"    Manual: Commandes de gestion du système
++.\"    Source: Commandes de gestion du système
++.\"
++.TH "LASTLOG" "8" "30/07/2006" "Commandes de gestion du systèm" "Commandes de gestion du systèm"
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.SH "NOM"
++lastlog \- signaler les connexions les plus récentes de tous les utilisateurs ou d'un utilisateur donné
++.SH "SYNOPSIS"
++.HP 8
++\fBlastlog\fR [\fIoptions\fR]
++.SH "DESCRIPTION"
++.PP
++\fBLastlog\fR
++affiche le contenu du journal des dernières connexions (\fI/var/log/lastlog\fR). Les champs
++\fIUtilisateur\fR,
++\fIPort\fR, date de
++\fIDernière\fR
++connexion sont affichés. Par défaut (aucune option de spécifiée), les entrées de laslog sont affichées triées par ordre d'apparition dans
++\fI/etc/passwd\fR.
++.SH "OPTIONS"
++.PP
++Les options disponibles pour la commande
++\fBlastlog\fR
++sont\ :
++.TP 3n
++\fB\-b\fR, \fB\-\-before\fR \fIJOURS\fR
++N'affiche que les entrées du fichier lastlog plus anciennes que
++\fIJOURS\fR.
++.TP 3n
++\fB\-h\fR, \fB\-\-help\fR
++Afficher un message d'aide et quitter.
++.TP 3n
++\fB\-t\fR, \fB\-\-time\fR \fIJOURS\fR
++Affiche les entrées du fichier lastlog plus récentes que
++\fIJOURS\fR.
++.TP 3n
++\fB\-u\fR, \fB\-\-user\fR \fIIDENTIFIANT\fR
++N'affiche que les entrées correspondant à l'utilisateur
++\fIIDENTIFIANT\fR.
++.TP 3n
++L'utilisation de l'option \fB\-t\fR supplante l'option \fB\-u\fR.
++.PP
++Dans le cas où l'utilisateur ne s'est jamais connecté, le message \(Fo\ \fI**Never logged in**\fR\ \(Fc (\(Fo\ \fI**Jamais connecté**\fR\ \(Fc) est affiché à la place des champs
++\fIPort\fR
++et date de
++\fIDernière\fR
++connexion.
++.SH "NOTE"
++.PP
++Le fichier
++\fIlastlog\fR
++est une base de données qui contient des informations concernant la dernière connexion de chaque utilisateur. Vous n'avez pas à faire de rotation (avec rotate) sur ce fichier. C'est un fichier \(Fo\ creux\ \(Fc, donc sa taille sur le disque est bien plus petite que celle affichée par \(Fo\ \fBls \-l\fR\ \(Fc (qui peut indiquer un très gros fichier si vous avez des utilisateurs avec des UID élevés). Vous pouvez afficher sa taille réelle avec \(Fo\ \fBls \-s\fR\ \(Fc.
++.SH "FICHIERS"
++.TP 3n
++\fI/var/log/lastlog\fR
++Base de données de l'heure des connexions précédentes des utilisateurs.
++.SH "AVERTISSEMENTS"
++.PP
++S'il y a des trous importants dans les valeurs des UID, lastlog s'exécutera plus lentement, sans affichage à l'écran (par exemple, s'il n'y a pas d'entrée pour les utilisateurs ayant un UID compris entre 170 et 800 dans base de données lastlog, le programme lastlog semblera bloqué comme s'il traitait les entrées correspondant aux UID 171 à 799).
+diff -urN sysvinit-2.86/man/intl/hu/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/hu/man8/lastlog.8
+--- sysvinit-2.86/man/intl/hu/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/hu/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,68 @@
++.\" Copyright 1992, Phillip Street and Julianne Frances Haugh
++.\" All rights reserved.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\" 3. Neither the name of Julianne F. Haugh nor the names of its contributors
++.\"    may be used to endorse or promote products derived from this software
++.\"    without specific prior written permission.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY JULIE HAUGH AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL JULIE HAUGH OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"
++.\"	@(#)lastlog.8	3.3	08:24:58	29 Sep 1993 (National Guard Release)
++.\"	$Id$
++.\"
++.TH LASTLOG 8
++.SH NÉV
++lastlog \- a lastlog fájl vizsgálata
++.SH ÁTTEKINTÉS
++.B lastlog
++.RB [ -u
++.IR uid ]
++.RB [ -t
++.IR napok száma ]
++.SH LEÍRÁS
++
++A \fBlastlog\fR formázza és olvashatóan megjeleníti a
++\fB/var/log/lastlog\fR tartalmát. A listában szerepel a \fBlogin-név\fR, a
++\fBterminál (port) azonosítója\fR és a felhasználó \fBlegutolsó
++belépésének ideje\fR.  Paraméterek nélkül meghívva a
++felhasználó-azonosítók (UID) alapján sorbarendezve jelennek meg az
++értékek. A \fB-u \fIlogin-név\fR opció megadása esetén csak a megadott
++felhasználó utolsó belépésének ideje jelenik meg. A \fB-t \fInapok
++száma\fR opció megadásával csak a megadott számú napon belüli belépési
++idők jelennek meg. A \fB-r\fR opció felülírja a \fB-u\fR opciót.
++.PP
++Ha a felhasználó még soha nem lépett be, akkor a terminál és az idő
++helyett a \fB**Never logged in**\fR felirat jelenik meg.
++.SH FÁJLOK
++/var/log/lastlog \- a felhasználók legutóbbi belépéseit tartalmazza
++.SH MEGJEGYZÉS
++Ha a felhasználói azonosító számok (UID-k) között nagyobb üres tartományok
++vannak, akkor a lastlog futásakor megtörténhet, hogy hosszabb ideig
++nem jelenik meg semmi a képernyőn (pl ha a 170-es és a 800-as azonosítójú
++felhasználók között nincs több azonosító, akkor a 171 és 799 közötti
++számok kiértékelése alatt a képernyőn nem változik semmi).
++.SH SZERZŐK
++Julianne Frances Haugh (jfh@tab.com)
++.br
++Phillip Street
++.SH MAGYAR FORDÍTÁS
++Hermann Benedek (bence@intercom.hu)
++
+diff -urN sysvinit-2.86/man/intl/it/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/it/man8/lastlog.8
+--- sysvinit-2.86/man/intl/it/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/it/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,76 @@
++.\" This file was generated with po4a. Translate the source file.
++.\" 
++.\"$Id$
++.\" Copyright 1992, Phillip Street and Julianne Frances Haugh
++.\" All rights reserved.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\" 3. Neither the name of Julianne F. Haugh nor the names of its contributors
++.\"    may be used to endorse or promote products derived from this software
++.\"    without specific prior written permission.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY JULIE HAUGH AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL JULIE HAUGH OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"	@(#)lastlog.8	3.3	08:24:58	29 Sep 1993 (National Guard Release)
++.TH LASTLOG 8   
++.SH NOME
++lastlog \- esamina il file degli ultimi accessi
++.SH SINTASSI
++.TP 8
++\fBlastlog\fP [\fBopzioni\fP]
++.SH DESCRIZIONE
++.PP
++\fBlastlog\fP mostra il log degli ultimi accessi, contenuto nel file 
++\fI/var/log/lastlog\fP. Le informazioni mostrate sono il \fBnome utente\fP, la 
++\fBporta\fP, e la \fBdata dell'ultimo accesso\fP. Il comportamento predefinito 
++(nessuna opzione specificata) è di mostrare i record di ultimo accesso per 
++tutti gli utenti, nell'ordine in cui compaiono in \fB/etc/passwd\fP.
++.SH OPZIONI
++.TP
++Il comando \fBlastlog\fP accetta le seguenti opzioni:
++.IP "\fB\-h\fP, \fB\-\-help\fP"
++Mostra un messaggio di aiuto ed esce.
++.IP "\fB\-t\fP, \fB\-\-time\fP \fIGIORNI\fP"
++Mostra solo i record di ultimo accesso più recenti di un numero di 
++\fIGIORNI\fP.
++.IP "\fB\-u\fP, \fB\-\-user\fP \fILOGIN\fP"
++Mostra il record di ultimo accesso per l'utente specificato da \fILOGIN\fP.
++.TP
++L'opzione \fB\-t\fP ha la precedenza sull'uso di \fB\-u\fP.
++.PP
++Se l'utente non ha mai effettuato accessi al sistema viene mostrato, al 
++posto della porta e della data, il messaggio \fB"**Nessun accesso 
++effettuato**"\fP.
++.SH FILE
++\fI/var/log/lastlog\fP	\- file di log degli ultimi accessi
++.SH AVVISI/CAVEAT
++Se ci sono dei grossi scarti tra i valori di UID, il programma lastlog può 
++restare in esecuzione per un tempo prolungato senza produrre output sullo 
++schermo (ad es. se mmdf=800 e l'ultimo UID vale 170, il programma sembrerà 
++bloccato come se esaminasse gli UID tra 171 e 799).
++.SH AUTORI
++Julianne Frances Haugh (jockgrrl@ix.netcom.com)
++.br
++Phillip Street
++.SH TRADUZIONE
++.nf
++Isabella Ruocco <isacher@nettaxi.com>, 1999
++Giuseppe Sacco <eppesuig@debian.org>, 2005
++Danilo Piazzalunga <danilopiazza@libero.it>, 2005
++.fi
+diff -urN sysvinit-2.86/man/intl/ja/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/ja/man8/lastlog.8
+--- sysvinit-2.86/man/intl/ja/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/ja/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,80 @@
++.\"$Id$
++.\" Copyright 1992, Phillip Street and Julianne Frances Haugh
++.\" All rights reserved.
++.\"
++.\" Redistribution and use in source and binary forms, with or without
++.\" modification, are permitted provided that the following conditions
++.\" are met:
++.\" 1. Redistributions of source code must retain the above copyright
++.\"    notice, this list of conditions and the following disclaimer.
++.\" 2. Redistributions in binary form must reproduce the above copyright
++.\"    notice, this list of conditions and the following disclaimer in the
++.\"    documentation and/or other materials provided with the distribution.
++.\" 3. Neither the name of Julianne F. Haugh nor the names of its contributors
++.\"    may be used to endorse or promote products derived from this software
++.\"    without specific prior written permission.
++.\"
++.\" THIS SOFTWARE IS PROVIDED BY JULIE HAUGH AND CONTRIBUTORS ``AS IS'' AND
++.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++.\" ARE DISCLAIMED.  IN NO EVENT SHALL JULIE HAUGH OR CONTRIBUTORS BE LIABLE
++.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++.\" SUCH DAMAGE.
++.\"	@(#)lastlog.8	3.3	08:24:58	29 Sep 1993 (National Guard Release)
++.\"
++.\" Japanese Version Copyright (c) 1997 Kazuyoshi Furutaka
++.\"         all rights reserved.
++.\" Translated Fri Feb 14 23:06:00 JST 1997
++.\"         by Kazuyoshi Furutaka <furutaka@Flux.tokai.jaeri.go.jp>
++.\" Updated & Modified Thu Oct 14 1997 by NAKANO Takeo <nakano@apm.seikei.ac.jp>
++.\" Updated Fri Jan 12 2001 by Kentaro Shirakata <argrath@ub32.org>
++.\" Updated Mon Mar  4 2002 by kentaro Shirakata <argrath@ub32.org>
++.\" Modified Sat 21 Sep 2002 by NAKANO Takeo <nakano@apm.seikei.ac.jp>
++.\"
++.TH LASTLOG 8
++.SH 名前
++lastlog \- lastlog ファイルを調べる
++.SH 書式
++.TP 8
++\fBlastlog\fR [(\fB\-u\fR|\fB\-\-user\fR) \fIlogin\fR]
++[(\fB\-t\fR|\fB\-\-time\fR) \fIdays\fR] [(\fB\-h\fR|\fB\-\-help\fR)]
++.SH 説明
++\fBlastlog\fR は最終ログインの記録ファイル
++\fI/var/log/lastlog\fR の内容を整形して表示する。
++\fBログイン名\fR・\fBポート\fR・\fB最終ログイン時刻\fR、が表示される。
++オプションを指定しなかった場合、デフォルトでは
++lastlog エントリを UID の数値でソートして表示する。
++.TP
++\fB\-u\fR, \fB\-\-user\fR \fIlogin\-name\fR
++\fIlogin\-name\fR の記録だけを表示する。
++.TP
++\fB\-t\fR, \fB\-\-time\fR \fIdays\fR
++最近 \fIdays\fR 日以内の最終ログインを表示する。
++.TP
++\fB\-h\fR, \fB\-\-help\fR
++オンラインヘルプを表示して終了する。
++.PP
++\fB\-u\fR フラグを用いると \fB\-t\fR は無視される。
++.\"nakano というのが実際の動作のように見えるのだが。
++.PP
++一度もログインしていないユーザに対しては、
++ポートと時刻の代わりに
++\fB"**Never logged in**"\fR
++というメッセージが表示される。
++.SH ファイル
++\fI/var/log/lastlog\fR \- lastlog 記録ファイル
++.SH 警告
++UID 番号に大きな飛びがあると、
++lastlog プログラムは長時間画面に何も出力しないまま
++実行を続ける (例えば mmdf が 800 で最後の UID が 170 の場合、
++UID が 171\-799 の間プログラムは何も出力しないので、
++ハングしたように見える)。
++.SH 著者
++Julianne Frances Haugh (jockgrrl@ix.netcom.com)
++.BR
++Phillip Street
+diff -urN sysvinit-2.86/man/intl/pl/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/pl/man8/lastlog.8
+--- sysvinit-2.86/man/intl/pl/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/pl/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,69 @@
++.\"     Title: lastlog
++.\"    Author: 
++.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
++.\"      Date: 19/06/2006
++.\"    Manual: Polecenia Zarządzania Systemem
++.\"    Source: Polecenia Zarządzania Systemem
++.\"
++.TH "LASTLOG" "8" "19/06/2006" "Polecenia Zarządzania Systemem" "Polecenia Zarządzania Systemem"
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.SH "NAZWA"
++lastlog \- wyświetla informacje o ostanim logowaniu dla wybranego lub wszystkich użytkowaników
++.SH "SKŁADNIA"
++.HP 8
++\fBlastlog\fR [\fIopcje\fR]
++.SH "OPIS"
++.PP
++Polecenie
++\fBlastlog\fR
++formatuje i wyświetla zawartość bazy ostatnich logowań zapisanych w pliku
++\fI/var/log/lastlog\fR. Wyświetlone zostaną
++\fInazwa użytkownika\fR,
++\fIport\fR
++i
++\fIczas\fR
++ostatniego logowania. Domyślnie (bez flag) pozycje wyświetlane są w kolejności w jakiej są w pliku
++\fI/etc/passwd\fR.
++.SH "OPCJE"
++.PP
++Polecenie
++\fBlastlog\fR
++posiada następujące opcje:
++.TP 3n
++\fB\-b\fR, \fB\-\-before\fR\fIDNI\fR
++Wyświetlenie rekordów lastlog starszych niż zadana
++\fIDNI\fR.
++.TP 3n
++\fB\-h\fR, \fB\-\-help\fR
++Wyświetlenie komunikatu pomocy i zakończenie działania.
++.TP 3n
++\fB\-t\fR, \fB\-\-time\fR\fIDNI\fR
++Wyświetlenie rekordów lastlog nie starszych niż zadana ilość
++\fIDNI\fR.
++.TP 3n
++\fB\-u\fR, \fB\-\-user\fR\fILOGIN\fR
++Wyświetlenie informacji o ostanim logowaniu dla użytkownika
++\fILOGIN\fR.
++.TP 3n
++Opcja \fB\-t\fR przesłania użycie opcji \fB\-u\fR.
++.PP
++Jeżeli użytkownik nigdy się nie logował to zamiast portu i czasu logowania wyświetlany jest komunikat
++\fI**Nigdy nie zalogowany**\fR
++(użytkownik nigdy się nie logował).
++.SH "UWAGI"
++.PP
++Baza danych
++\fIlastlog\fR
++jest plikiem zawierajacym informacje o ostanim logowaniu każdego użytkowanika. Pliku tego nie powinnoa się okresowo kasować i zakąłdać od nowa (rotacja). Plik ten jest plikiem z dziurami tak więc jego rozmiar jest zwykle znacznie mniejszy pokazywany przez polecenie "\fBls \-l\fR" (pokazujące że jest on dużych rozmiarów jeżeli masz w
++\fIpasswd\fR
++użytkowaników z wysokimi wartościami UID). Mozesz wyświetlić rzeczywisty rozmiar tego pliku używając polecenia "\fBls \-s\fR".
++.SH "PLIKI"
++.TP 3n
++\fI/var/log/lastlog\fR
++Baza danych ostatnich logowań użytkowników.
++.SH "OSTRZEŻENIA"
++.PP
++Duże luki w numeracji UID powodują, że program będzie pracował dłużej, nie wyświetlając wyników (np. jeśli w bazie lastlog nie ma wpisów dla o UID pomiedzy 170, a 800, to program będzie sprawiał wrażenie zawieszonego w trakcie przetwarzania wpisów dla użytkowanikół o UID 171\-799).
+diff -urN sysvinit-2.86/man/intl/ru/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/ru/man8/lastlog.8
+--- sysvinit-2.86/man/intl/ru/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/ru/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,64 @@
++.\"     Title: lastlog
++.\"    Author: 
++.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
++.\"      Date: 06/24/2006
++.\"    Manual: Команды управления системой
++.\"    Source: Команды управления системой
++.\"
++.TH "lastlog" "8" "06/24/2006" "Команды управления системой" "Команды управления системой"
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.SH "НАЗВАНИЕ"
++lastlog \- выводит отчёт о последней регистрации в системе всех или указанного пользователя
++.SH "СИНТАКСИС"
++.HP 8
++\fBlastlog\fR [\fIпараметры\fR]
++.SH "ОПИСАНИЕ"
++.PP
++Программа
++\fBlastlog\fR
++упорядочивает и выводит содержимое файла
++\fI/var/log/lastlog\fR, который содержит даты последнего входа пользователей систему. Выводятся
++\fIимя пользователя\fR,
++\fIпорт\fR
++и
++\fIдата последнего входа в систему\fR. По умолчанию (вызов без параметров) показываются записи файла lastlog, отсортированные согласно расположению пользователей в файле
++\fI/etc/passwd\fR.
++.SH "ПАРАМЕТРЫ"
++.PP
++Параметры команды
++\fBlastlog\fR:
++.TP 3n
++\fB\-b\fR, \fB\-\-before\fR\fIДНЕЙ\fR
++Показать записи lastlog за последние
++\fIДНЕЙ\fR.
++.TP 3n
++\fB\-h\fR, \fB\-\-help\fR
++Показать краткую справку и закончить работу.
++.TP 3n
++\fB\-t\fR, \fB\-\-time\fR\fIДНЕЙ\fR
++Показать записи lastlog новее чем
++\fIДНЕЙ\fR.
++.TP 3n
++\fB\-u\fR, \fB\-\-user\fR\fIИМЯ\fR
++Показать запись lastlog только для указанного пользователя с emphasis remap="I">ИМЕНЕМ
++.TP 3n
++Параметр \fB\-t\fR отменяет действие параметра \fB\-u\fR.
++.PP
++Если пользователь никогда не регистрировался в системе, то будет показано сообщение
++\fI** Никогда не входил в систему**\fR
++вместо названия порта и даты.
++.SH "ЗАМЕЧАНИЕ"
++.PP
++Файл
++\fIlastlog\fR
++содержит информацию о последней регистрации в системе каждого пользователя. Вы не должны применять к нему ротацию журнальных файлов. Этот файл является разреженным, поэтому его размер на диске гораздо меньше, чем показывает команда "\fBls \-l\fR" (которая может показывать, что это очень большой файл, если значения идентификаторов пользователей в системе достигают больших значений). Чтобы увидеть реальный размер введите "\fBls \-s\fR".
++.SH "ФАЙЛЫ"
++.TP 3n
++\fI/var/log/lastlog\fR
++содержит список завершённых сеансов работы с системой
++.SH "ПРЕДОСТЕРЕЖЕНИЯ"
++.PP
++Большие промежутки в значениях идентификаторов пользователей приводят к тому, что программа некоторое время ничего не выводит на экран (то есть, если в базе данных lastlog нет пользователей с идентификаторами с 170 по 800, то во время обработки UID с 171 по 799 программа кажется повисшей).
+diff -urN sysvinit-2.86/man/intl/sv/man8/lastlog.8 sysvinit-2.86-lastlog/man/intl/sv/man8/lastlog.8
+--- sysvinit-2.86/man/intl/sv/man8/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/intl/sv/man8/lastlog.8	2006-08-03 12:00:56.000000000 +0200
+@@ -0,0 +1,70 @@
++.\"     Title: lastlog
++.\"    Author: 
++.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
++.\"      Date: 20.07.2006
++.\"    Manual: Systemhanteringskommandon
++.\"    Source: Systemhanteringskommandon
++.\"
++.TH "LASTLOG" "8" "20\-07\-2006" "Systemhanteringskommandon" "Systemhanteringskommandon"
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.SH "NAMN"
++lastlog \- reports the most recent login of all users or of a given user
++.SH "SYNOPSIS"
++.HP 8
++\fBlastlog\fR [\fIflaggor\fR]
++.SH "BESKRIVNING"
++.PP
++
++\fBlastlog\fR
++formats and prints the contents of the last login log
++\fI/var/log/lastlog\fR
++file. The
++\fIlogin\-name\fR,
++\fIport\fR, and
++\fIlast login time\fR
++will be printed. The default (no flags) causes lastlog entries to be printed, sorted by their order in
++\fI/etc/passwd\fR.
++.SH "FLAGGOR"
++.PP
++Flaggorna som gäller för kommandot
++\fBlastlog\fR
++är:
++.TP 3n
++\fB\-b\fR, \fB\-\-before\fR\fIDAGAR\fR
++Print only lastlog records older than
++\fIDAYS\fR.
++.TP 3n
++\fB\-h\fR, \fB\-\-help\fR
++Visa hjälpmeddelande och avsluta.
++.TP 3n
++\fB\-t\fR, \fB\-\-time\fR\fIDAGAR\fR
++Print the lastlog records more recent than
++\fIDAYS\fR.
++.TP 3n
++\fB\-u\fR, \fB\-\-user\fR\fIINLOGGNINGSNAMN\fR
++Print the lastlog record for user with specified
++\fILOGIN\fR
++only.
++.TP 3n
++Flaggan \fB\-t\fR åsidosätter användningen av \fB\-u\fR.
++.PP
++If the user has never logged in the message
++\fI** Never logged in**\fR
++will be displayed instead of the port and time.
++.SH "NOTERA"
++.PP
++The
++\fIlastlog\fR
++file is a database which contains info on the last login of each user. You should not rotate it. It is a sparse file, so its size on the disk is usually much smaller than the one shown by "\fBls \-l\fR" (which can indicate a really big file if you have in
++\fIpasswd\fR
++users with a high UID). You can display its real size with "\fBls \-s\fR".
++.SH "FILER"
++.TP 3n
++\fI/var/log/lastlog\fR
++Databastider för tidigare användarinloggningar.
++.SH "TÄNK PÅ"
++.PP
++Large gaps in UID numbers will cause the lastlog program to run longer with no output to the screen (i.e. if in lastlog database there is no entries for users with UID between 170 and 800 lastlog will appear to hang as it processes entries with UIDs 171\-799).
+diff -urN sysvinit-2.86/man/lastlog.8 sysvinit-2.86-lastlog/man/lastlog.8
+--- sysvinit-2.86/man/lastlog.8	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/man/lastlog.8	2006-07-30 22:53:59.000000000 +0200
+@@ -0,0 +1,70 @@
++.\"     Title: lastlog
++.\"    Author: 
++.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
++.\"      Date: 07/30/2006
++.\"    Manual: System Management Commands
++.\"    Source: System Management Commands
++.\"
++.TH "LASTLOG" "8" "07/30/2006" "System Management Commands" "System Management Commands"
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.SH "NAME"
++lastlog \- reports the most recent login of all users or of a given user
++.SH "SYNOPSIS"
++.HP 8
++\fBlastlog\fR [\fIoptions\fR]
++.SH "DESCRIPTION"
++.PP
++
++\fBlastlog\fR
++formats and prints the contents of the last login log
++\fI/var/log/lastlog\fR
++file. The
++\fIlogin\-name\fR,
++\fIport\fR, and
++\fIlast login time\fR
++will be printed. The default (no flags) causes lastlog entries to be printed, sorted by their order in
++\fI/etc/passwd\fR.
++.SH "OPTIONS"
++.PP
++The options which apply to the
++\fBlastlog\fR
++command are:
++.TP 3n
++\fB\-b\fR, \fB\-\-before\fR \fIDAYS\fR
++Print only lastlog records older than
++\fIDAYS\fR.
++.TP 3n
++\fB\-h\fR, \fB\-\-help\fR
++Display help message and exit.
++.TP 3n
++\fB\-t\fR, \fB\-\-time\fR \fIDAYS\fR
++Print the lastlog records more recent than
++\fIDAYS\fR.
++.TP 3n
++\fB\-u\fR, \fB\-\-user\fR \fILOGIN\fR
++Print the lastlog record for user with specified
++\fILOGIN\fR
++only.
++.TP 3n
++The \fB\-t\fR flag overrides the use of \fB\-u\fR.
++.PP
++If the user has never logged in the message
++\fI** Never logged in**\fR
++will be displayed instead of the port and time.
++.SH "NOTE"
++.PP
++The
++\fIlastlog\fR
++file is a database which contains info on the last login of each user. You should not rotate it. It is a sparse file, so its size on the disk is usually much smaller than the one shown by "\fBls \-l\fR" (which can indicate a really big file if you have in
++\fIpasswd\fR
++users with a high UID). You can display its real size with "\fBls \-s\fR".
++.SH "FILES"
++.TP 3n
++\fI/var/log/lastlog\fR
++Database times of previous user logins.
++.SH "CAVEATS"
++.PP
++Large gaps in UID numbers will cause the lastlog program to run longer with no output to the screen (i.e. if in lastlog database there is no entries for users with UID between 170 and 800 lastlog will appear to hang as it processes entries with UIDs 171\-799).
+diff -urN sysvinit-2.86/src/Makefile sysvinit-2.86-lastlog/src/Makefile
+--- sysvinit-2.86/src/Makefile	2007-08-22 17:02:49.000000000 +0200
++++ sysvinit-2.86-lastlog/src/Makefile	2007-08-22 16:57:59.000000000 +0200
+@@ -16,12 +16,12 @@
+ 
+ # For some known distributions we do not build all programs, otherwise we do.
+ BIN	=
+-SBIN	= init halt shutdown runlevel killall5
++SBIN	= init halt shutdown runlevel killall5 lastlog
+ USRBIN	= last mesg
+ 
+ MAN1	= last.1 lastb.1 mesg.1
+ MAN5	= initscript.5 inittab.5
+-MAN8	= halt.8 init.8 killall5.8 pidof.8 poweroff.8 reboot.8 runlevel.8
++MAN8	= halt.8 init.8 killall5.8 pidof.8 poweroff.8 reboot.8 runlevel.8 lastlog.8
+ MAN8	+= shutdown.8 telinit.8
+ 
+ ifeq ($(DISTRO),)
+@@ -66,6 +66,9 @@
+ last:		last.o oldutmp.h
+ 		$(CC) $(LDFLAGS) -o $@ last.o
+ 
++lastlog:	lastlog.o
++		$(CC) $(LDFLAGS) -o $@ lastlog.o
++
+ mesg:		mesg.o
+ 		$(CC) $(LDFLAGS) -o $@ mesg.o
+ 
+diff -urN sysvinit-2.86/src/lastlog.c sysvinit-2.86-lastlog/src/lastlog.c
+--- sysvinit-2.86/src/lastlog.c	1970-01-01 01:00:00.000000000 +0100
++++ sysvinit-2.86-lastlog/src/lastlog.c	2007-08-22 16:52:15.000000000 +0200
+@@ -0,0 +1,217 @@
++/*
++ * Copyright 1989 - 1994, Julianne Frances Haugh
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of Julianne F. Haugh nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY JULIE HAUGH AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED. IN NO EVENT SHALL JULIE HAUGH OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#ident "$Id$"
++
++#include <getopt.h>
++#include <lastlog.h>
++#include <pwd.h>
++#include <stdio.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <time.h>
++#include <stdlib.h>
++/*
++ * Needed for MkLinux DR1/2/2.1 - J.
++ */
++#ifndef LASTLOG_FILE
++#define LASTLOG_FILE "/var/log/lastlog"
++#endif
++/*
++ * Global variables
++ */
++static FILE *lastlogfile;	/* lastlog file stream */
++static off_t user;		/* one single user, specified on command line */
++static int days;		/* number of days to consider for print command */
++static time_t seconds;		/* that number of days in seconds */
++static int inverse_days;	/* number of days to consider for print command */
++static time_t inverse_seconds;	/* that number of days in seconds */
++
++
++static int uflg = 0;		/* set if user is a valid user id */
++static int tflg = 0;		/* print is restricted to most recent days */
++static int bflg = 0;		/* print excludes most recent days */
++static struct lastlog lastlog;	/* scratch structure to play with ... */
++static struct stat statbuf;	/* fstat buffer for file size */
++static struct passwd *pwent;
++
++#define	NOW	(time ((time_t *) 0))
++
++static void usage (void)
++{
++	fprintf (stdout, "Usage: lastlog [options]\n"
++			   "\n"
++			   "Options:\n"
++			   "  -b, --before DAYS	print only lastlog records older than DAYS\n"
++			   "  -h, --help		display this help message and exit\n"
++			   "  -t, --time DAYS	print only lastlog records more recent than DAYS\n"
++			   "  -u, --user LOGIN	print lastlog record for user with specified LOGIN\n"
++			   "\n");
++	exit(1);
++}
++
++static void print_one (const struct passwd *pw)
++{
++	static int once;
++	char *cp;
++	struct tm *tm;
++	time_t ll_time;
++
++#ifdef HAVE_STRFTIME
++	char ptime[80];
++#endif
++
++	if (!pw)
++		return;
++
++	if (!once) {
++#ifdef HAVE_LL_HOST
++		printf ("Username         Port     From             Latest\n");
++#else
++		printf ("Username                Port     Latest\n");
++#endif
++		once++;
++	}
++	ll_time = lastlog.ll_time;
++	tm = localtime (&ll_time);
++#ifdef HAVE_STRFTIME
++	strftime (ptime, sizeof (ptime), "%a %b %e %H:%M:%S %z %Y", tm);
++	cp = ptime;
++#else
++	cp = asctime (tm);
++	cp[24] = '\0';
++#endif
++
++	if (lastlog.ll_time == (time_t) 0)
++		cp = "**Never logged in**\0";
++
++#ifdef HAVE_LL_HOST
++	printf ("%-16s %-8.8s %-16.16s %s\n", pw->pw_name,
++		lastlog.ll_line, lastlog.ll_host, cp);
++#else
++	printf ("%-16s\t%-8.8s %s\n", pw->pw_name, lastlog.ll_line, cp);
++#endif
++}
++
++static void print (void)
++{
++	off_t offset;
++
++	if (uflg) {
++		offset = user * sizeof lastlog;
++
++		if (fstat (fileno (lastlogfile), &statbuf)) {
++			perror (LASTLOG_FILE);
++			return;
++		}
++		if (offset >= statbuf.st_size)
++			return;
++
++		fseeko (lastlogfile, offset, SEEK_SET);
++		if (fread ((char *) &lastlog, sizeof lastlog, 1,
++			   lastlogfile) == 1)
++			print_one (pwent);
++		else
++			perror (LASTLOG_FILE);
++	} else {
++		setpwent ();
++		while ((pwent = getpwent ())) {
++			user = pwent->pw_uid;
++			offset = user * sizeof lastlog;
++
++			fseeko (lastlogfile, offset, SEEK_SET);
++			if (fread ((char *) &lastlog, sizeof lastlog, 1,
++				   lastlogfile) != 1)
++				continue;
++
++			if (tflg && NOW - lastlog.ll_time > seconds)
++				continue;
++
++			if (bflg && NOW - lastlog.ll_time < inverse_seconds)
++				continue;
++
++			print_one (pwent);
++		}
++	}
++}
++
++int main (int argc, char **argv)
++{
++	int c;
++	static struct option const longopts[] = {
++		{"help", no_argument, NULL, 'h'},
++		{"time", required_argument, NULL, 't'},
++		{"before", required_argument, NULL, 'b'},
++		{"user", required_argument, NULL, 'u'},
++		{NULL, 0, NULL, '\0'}
++	};
++
++	while ((c = getopt_long (argc, argv, "ht:b:u:", longopts, NULL)) != -1) {
++		switch (c) {
++		case 'h':
++			usage ();
++			break;
++		case 't':
++			days = atoi (optarg);
++			seconds = days * (24L*3600L);
++			tflg++;
++			break;
++		case 'b':
++			inverse_days = atoi (optarg);
++			inverse_seconds = inverse_days * (24L*3600L);
++			bflg++;
++			break;
++		case 'u':
++			pwent = getpwnam (optarg);
++			if (!pwent) {
++				fprintf (stderr, "Unknown User: %s\n", optarg);
++				exit (1);
++			}
++			uflg++;
++			user = pwent->pw_uid;
++			break;
++		default:
++			usage ();
++			break;
++		}
++	}
++	if (argc > optind) {
++		fprintf (stderr, "lastlog: unexpected argument: %s\n", argv[optind]);
++		usage();
++	}
++
++	if ((lastlogfile = fopen (LASTLOG_FILE, "r")) == (FILE *) 0) {
++		perror (LASTLOG_FILE);
++		exit (1);
++	}
++
++	print ();
++	fclose (lastlogfile);
++	exit (0);
++}
