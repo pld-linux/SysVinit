@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	9
+Release:	10
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch8:		sysvinit-pidof.patch
 Patch9:		sysvinit-killall5.patch
 Patch10:	sysvinit-selinux.patch
 Patch11:	sysvinit-nopowerstates-single.patch
+Patch12:	sysvinit-lastlog.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
 %endif
@@ -121,6 +122,7 @@ sonlanmalarını sağlar/denetler.
 %patch9 -p1
 %{?with_selinux:%patch10 -p1}
 %patch11 -p1
+%patch12 -p1
 
 %build
 %{__make} -C src \
@@ -158,6 +160,8 @@ echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 rm -f $RPM_BUILD_ROOT%{_includedir}/initreq.h
 rm -f $RPM_BUILD_ROOT%{_mandir}/README.sysvinit-non-english-man-pages
+
+cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -204,6 +208,7 @@ fi
 %attr(640,root,root) %ghost /var/log/btmpx
 
 %{_mandir}/man[158]/*
+%lang(cs) %{_mandir}/cs/man[158]/*
 %lang(de) %{_mandir}/de/man[158]/*
 %lang(es) %{_mandir}/es/man[158]/*
 %lang(fi) %{_mandir}/fi/man[158]/*
@@ -214,6 +219,8 @@ fi
 %lang(ja) %{_mandir}/ja/man[158]/*
 %lang(ko) %{_mandir}/ko/man[158]/*
 %lang(pl) %{_mandir}/pl/man[158]/*
+%lang(ru) %{_mandir}/ru/man[158]/*
+%lang(sv) %{_mandir}/sv/man[158]/*
 
 # devel?
 #%{_includedir}/initreq.h
