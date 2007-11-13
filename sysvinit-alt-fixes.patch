@@ -56,7 +56,7 @@ diff -upk.orig sysvinit-2.86.orig/src/init.c sysvinit-2.86/src/init.c
 +		 *	The existing init process execs a new init binary.
 +		 */
 +		env = init_buildenv(0);
-+		execl(myname, myname, "--init", NULL, env);
++		execle(myname, myname, "--init", NULL, env);
 +	}
  
  	/*
