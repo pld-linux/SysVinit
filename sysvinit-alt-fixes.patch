@@ -1,0 +1,72 @@
+diff -upk.orig sysvinit-2.86.orig/src/bootlogd.c sysvinit-2.86/src/bootlogd.c
+--- sysvinit-2.86.orig/src/bootlogd.c	2007-01-06 14:37:36 +0000
++++ sysvinit-2.86/src/bootlogd.c	2007-01-06 14:38:09 +0000
+@@ -232,6 +232,9 @@ int consolename(char *res, int rlen)
+ #ifdef TIOCGDEV
+ 	if (ioctl(0, TIOCGDEV, &kdev) == 0)
+ 		return findtty(res, rlen, (dev_t)kdev);
++#ifndef ENOIOCTLCMD
++#define ENOIOCTLCMD 515
++#endif
+ 	if (errno != ENOIOCTLCMD) return -1;
+ #endif
+ 
+diff -upk.orig sysvinit-2.86.orig/src/init.c sysvinit-2.86/src/init.c
+--- sysvinit-2.86.orig/src/init.c	2007-01-06 14:37:36 +0000
++++ sysvinit-2.86/src/init.c	2007-01-06 14:38:09 +0000
+@@ -785,7 +785,7 @@ char **init_buildenv(int child)
+ 	for (n = 0; environ[n]; n++)
+ 		;
+ 	n += NR_EXTRA_ENV + 8;
+-	e = calloc(n, sizeof(char *));
++	e = imalloc(n * sizeof(char *));
+ 
+ 	for (n = 0; environ[n]; n++)
+ 		e[n] = istrdup(environ[n]);
+@@ -814,6 +814,9 @@ void init_freeenv(char **e)
+ {
+ 	int		n;
+ 
++	if (!e)
++		return;
++
+ 	for (n = 0; e[n]; n++)
+ 		free(e[n]);
+ 	free(e);
+@@ -1834,7 +1837,7 @@ void re_exec(void)
+ 	CHILD		*ch;
+ 	sigset_t	mask, oldset;
+ 	pid_t		pid;
+-	char		**env;
++	char		**env = 0;
+ 	int		fd;
+ 
+ 	if (strchr("S0123456",runlevel) == NULL)
+@@ -1882,11 +1885,13 @@ void re_exec(void)
+ 		exit(0);
+ 	}
+ 
+-	/*
+-	 *	The existing init process execs a new init binary.
+-	 */
+-	env = init_buildenv(0);
+-	execle(myname, myname, "--init", NULL, env);
++	if (pid > 0) {
++		/*
++		 *	The existing init process execs a new init binary.
++		 */
++		env = init_buildenv(0);
++		execle(myname, myname, "--init", NULL, env);
++	}
+ 
+ 	/*
+ 	 *	We shouldn't be here, something failed. 
+@@ -2557,7 +2562,7 @@ int telinit(const char *progname, int ar
+ 		if (!strchr("0123456789SsQqAaBbCcUu", argv[optind][0]))
+ 			usage(progname);
+ 		request.cmd = INIT_CMD_RUNLVL;
+-		request.runlevel  = env ? 0 : argv[optind][0];
++		request.runlevel  = argv[optind][0];
+ 		request.sleeptime = sltime;
+ 	}
+ 
