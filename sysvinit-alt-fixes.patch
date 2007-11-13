@@ -42,7 +42,7 @@ diff -upk.orig sysvinit-2.86.orig/src/init.c sysvinit-2.86/src/init.c
  	int		fd;
  
  	if (strchr("S0123456",runlevel) == NULL)
-@@ -1882,11 +1885,13 @@ void re_exec(void)
+@@ -1885,11 +1885,13 @@
  		exit(0);
  	}
  
@@ -50,13 +50,13 @@ diff -upk.orig sysvinit-2.86.orig/src/init.c sysvinit-2.86/src/init.c
 -	 *	The existing init process execs a new init binary.
 -	 */
 -	env = init_buildenv(0);
--	execle(myname, myname, "--init", NULL, env);
+-	execl(myname, myname, "--init", NULL, env);
 +	if (pid > 0) {
 +		/*
 +		 *	The existing init process execs a new init binary.
 +		 */
 +		env = init_buildenv(0);
-+		execle(myname, myname, "--init", NULL, env);
++		execl(myname, myname, "--init", NULL, env);
 +	}
  
  	/*
