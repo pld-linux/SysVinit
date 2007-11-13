@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	10
+Release:	10.1
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -35,6 +35,7 @@ Patch9:		sysvinit-killall5.patch
 Patch10:	sysvinit-selinux.patch
 Patch11:	sysvinit-nopowerstates-single.patch
 Patch12:	sysvinit-lastlog.patch
+Patch13:	sysvinit-alt-fixes.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
 %endif
@@ -123,6 +124,7 @@ sonlanmalarını sağlar/denetler.
 %{?with_selinux:%patch10 -p1}
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 %build
 %{__make} -C src \
@@ -178,7 +180,9 @@ chmod 600 %{_sysconfdir}/ioctl.save
 chmod 640 /var/log/faillog
 chmod 660 /var/log/lastlog
 chmod 640 /var/log/btmpx
+%{_sbindir}/telinit u || :
 
+%triggerpostun -- glibc
 %{_sbindir}/telinit u || :
 
 %postun
