@@ -52,6 +52,8 @@ Requires:	logrotate
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	mingetty
 Provides:	group(utmp)
+Provides:	virtual(init-daemon)
+Obsoletes:	virtual(init-daemon)
 Obsoletes:	vserver-SysVinit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
