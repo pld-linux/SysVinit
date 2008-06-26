@@ -1,0 +1,34 @@
+diff -Naur sysvinit-2.86/src/last.c sysvinit-2.86-ipv6/src/last.c
+--- sysvinit-2.86/src/last.c	2004-07-30 14:16:26.000000000 +0200
++++ sysvinit-2.86-ipv6/src/last.c	2006-07-19 16:14:24.000000000 +0200
+@@ -307,14 +307,15 @@
+ 	struct sockaddr		*sa;
+ 	int			salen, flags;
+ 	unsigned int		topnibble;
++	unsigned int		azero = 0, sitelocal = 0;
+ 	int			mapped = 0;
+ 
+ 	flags = useip ? NI_NUMERICHOST : 0;
+ 
+ 	/*
+ 	 *	IPv4 or IPv6 ? We use 2 heuristics:
+-	 *	1. Current IPv6 range uses 2000-3fff. Outside of
+-	 *	   that is illegal and must be IPv4.
++	 *	1. Current IPv6 range uses 2000-3fff or fec0-feff.
++	 *	   Outside of that is illegal and must be IPv4.
+ 	 *	2. If last 3 bytes are 0, must be IPv4
+ 	 *	3. If IPv6 in IPv4, handle as IPv4
+ 	 *
+@@ -323,7 +324,11 @@
+ 	if (a[0] == 0 && a[1] == 0 && a[2] == htonl (0xffff))
+ 		mapped = 1;
+ 	topnibble = ntohl((unsigned int)a[0]) >> 28;
+-	if (topnibble < 2 || topnibble > 3 || mapped ||
++
++	azero = ntohl((unsigned int)a[0]) >> 16;
++	sitelocal = (azero >= 0xfec0 && azero <= 0xfeff) ? 1 : 0;
++	
++	if (((topnibble < 2 || topnibble > 3) && (!sitelocal)) || mapped ||
+ 	    (a[1] == 0 && a[2] == 0 && a[3] == 0)) {
+ 		/* IPv4 */
+ 		sin.sin_family = AF_INET;

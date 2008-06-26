@@ -1,0 +1,37 @@
+--- sysvinit-2.86/src/init.c.silence	2006-08-08 20:50:37.000000000 -0400
++++ sysvinit-2.86/src/init.c	2006-08-08 20:54:24.000000000 -0400
+@@ -117,6 +117,7 @@
+ char *console_dev;		/* Console device. */
+ int pipe_fd = -1;		/* /dev/initctl */
+ int did_boot = 0;		/* Did we already do BOOT* stuff? */
++int quiet = 0;			/* Should we be relatively silent? */
+ int main(int, char **);
+ 
+ /*	Used by re-exec part */
+@@ -1673,7 +1674,7 @@
+ 			initlog(L_SY, "Trying to re-exec init");
+ 			return 'U';
+ 		default:
+-		  	initlog(L_VB, "Switching to runlevel: %c", foo);
++		  	if (!quiet) initlog(L_VB, "Switching to runlevel: %c", foo);
+ 	}
+ 
+ 	if (foo == 'Q') return runlevel;
+@@ -2425,7 +2426,7 @@
+   	/*
+ 	 *	Say hello to the world
+ 	 */
+-  	initlog(L_CO, bootmsg, "booting");
++  	if (!quiet) initlog(L_CO, bootmsg, "booting");
+ 
+   	/*
+ 	 *	See if we have to start an emergency shell.
+@@ -2657,6 +2658,8 @@
+ 		else if (!strcmp(argv[f], "-z")) {
+ 			/* Ignore -z xxx */
+ 			if (argv[f + 1]) f++;
++		} else if (!strcmp(argv[f], "quiet")) {
++			quiet = 1;
+ 		} else if (strchr("0123456789sS", argv[f][0])
+ 			&& strlen(argv[f]) == 1)
+ 			dfl_level = argv[f][0];

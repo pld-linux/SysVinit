@@ -1,0 +1,10 @@
+--- sysvinit-2.86/src/halt.c.foo	2005-12-20 15:09:35.000000000 -0500
++++ sysvinit-2.86/src/halt.c	2005-12-20 15:09:25.000000000 -0500
+@@ -178,6 +178,7 @@
+ 	/*
+ 	 *	Find out who we are
+ 	 */
++	if (argv[0][0] == '-') argv[0]++;
+ 	if ((progname = strrchr(argv[0], '/')) != NULL)
+ 		progname++;
+ 	else

@@ -1,7 +1,6 @@
-diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
---- sysvinit-2.86.org/src/init.c	2004-07-30 14:16:20.000000000 +0200
-+++ sysvinit-2.86/src/init.c	2005-12-24 23:22:51.000000000 +0100
-@@ -42,6 +42,8 @@
+--- sysvinit-2.85/src/init.c.selinux	2005-10-14 14:16:24.000000000 -0400
++++ sysvinit-2.85/src/init.c	2005-10-14 14:16:24.000000000 -0400
+@@ -48,6 +48,8 @@
  #include <stdarg.h>
  #include <sys/syslog.h>
  #include <sys/time.h>
@@ -10,7 +9,7 @@ diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
  
  #ifdef __i386__
  #  if (__GLIBC__ >= 2)
-@@ -2599,6 +2601,7 @@
+@@ -2513,6 +2515,7 @@
  	char			*p;
  	int			f;
  	int			isinit;
@@ -18,7 +17,7 @@ diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
  
  	/* Get my own name */
  	if ((p = strrchr(argv[0], '/')) != NULL)
-@@ -2662,6 +2665,20 @@
+@@ -2576,6 +2579,20 @@
  		maxproclen += strlen(argv[f]) + 1;
  	}
  
@@ -30,7 +29,7 @@ diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
 +	    if (enforce > 0) {
 +	      /* SELinux in enforcing mode but load_policy failed */
 +	      /* At this point, we probably can't open /dev/console, so log() won't work */
-+		    initlog(L_VB,"Unable to load SELinux Policy. Machine is in enforcing mode. Halting now.");
++		    printf("Unable to load SELinux Policy. Machine is in enforcing mode. Halting now.\n");
 +	      exit(1);
 +	    }
 +	  }
@@ -39,11 +38,10 @@ diff -ur sysvinit-2.86.org/src/init.c sysvinit-2.86/src/init.c
  	/* Start booting. */
  	argv0 = argv[0];
  	argv[1] = NULL;
-diff -ur sysvinit-2.86.org/src/Makefile sysvinit-2.86/src/Makefile
---- sysvinit-2.86.org/src/Makefile	2005-12-24 23:21:59.000000000 +0100
-+++ sysvinit-2.86/src/Makefile	2005-12-24 23:23:14.000000000 +0100
-@@ -58,7 +58,7 @@
- all:		$(BIN) $(SBIN) $(USRBIN)
+--- sysvinit-2.85/src/Makefile.selinux	2005-10-14 14:16:24.000000000 -0400
++++ sysvinit-2.85/src/Makefile	2005-10-14 14:16:24.000000000 -0400
+@@ -32,7 +32,7 @@
+ all:		$(PROGS)
  
  init:		init.o init_utmp.o
 -		$(CC) $(LDFLAGS) $(STATIC) -o $@ init.o init_utmp.o
@@ -51,7 +49,7 @@ diff -ur sysvinit-2.86.org/src/Makefile sysvinit-2.86/src/Makefile
  
  halt:		halt.o ifdown.o hddown.o utmp.o reboot.h
  		$(CC) $(LDFLAGS) -o $@ halt.o ifdown.o hddown.o utmp.o
-@@ -79,7 +79,7 @@
+@@ -50,7 +50,7 @@
  		$(CC) $(LDFLAGS) -o $@ runlevel.o
  
  sulogin:	sulogin.o md5_broken.o md5_crypt_broken.o arc4random.o bcrypt.o blowfish.o
@@ -60,20 +58,19 @@ diff -ur sysvinit-2.86.org/src/Makefile sysvinit-2.86/src/Makefile
  
  wall:		dowall.o wall.o
  		$(CC) $(LDFLAGS) -o $@ dowall.o wall.o
-diff -ur sysvinit-2.86.org/src/sulogin.c sysvinit-2.86/src/sulogin.c
---- sysvinit-2.86.org/src/sulogin.c	2005-12-24 23:21:59.000000000 +0100
-+++ sysvinit-2.86/src/sulogin.c	2005-12-24 23:23:33.000000000 +0100
-@@ -30,6 +30,9 @@
+--- sysvinit-2.85/src/sulogin.c.selinux	2005-10-14 14:16:24.000000000 -0400
++++ sysvinit-2.85/src/sulogin.c	2005-10-14 14:18:42.000000000 -0400
+@@ -28,7 +28,9 @@
+ #endif
  #include "md5.h"
  #include "blowfish.h"
- 
 +#include <selinux/selinux.h>
 +#include <selinux/get_context_list.h>
-+
+
  #define CHECK_DES	1
  #define CHECK_MD5	1
- #define CHECK_BLOWFISH	1
-@@ -362,6 +365,19 @@
+ 
+@@ -332,6 +335,19 @@
  	signal(SIGINT, SIG_DFL);
  	signal(SIGTSTP, SIG_DFL);
  	signal(SIGQUIT, SIG_DFL);
