@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	15
+Release:	16
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -45,8 +45,10 @@ Patch19:	sysvinit-maxproclen.patch
 Patch20:	sysvinit-quiet.patch
 Patch21:	sysvinit-timeval.patch
 Patch22:	sysvinit-no-abort.patch
+Patch23:	sysvinit-rebootconfirmation.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
+BuildRequires:	libsepol-devel
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(post):	fileutils
@@ -143,6 +145,7 @@ sonlanmalarını sağlar/denetler.
 %patch20 -p1
 %patch21 -p1
 %patch22 -p1
+%patch23 -p0
 
 %build
 %{__make} -C src \
