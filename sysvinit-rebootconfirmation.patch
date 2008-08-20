@@ -13,7 +13,7 @@
  	fprintf(stderr, "\t-f: force halt/reboot, don't call shutdown.\n");
  	fprintf(stderr, "\t-h: put harddisks in standby mode.\n");
  	fprintf(stderr, "\t-i: shut down all network interfaces.\n");
-+	fprintf(stderr, "\t-c: aks for confirmation.\n");
++	fprintf(stderr, "\t-c: ask for confirmation.\n");
  	if (!strcmp(progname, "halt"))
  		fprintf(stderr, "\t-p: power down the system (if possible, otherwise halt).\n");
  	exit(1);
