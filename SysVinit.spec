@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	18
+Release:	19
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -58,7 +58,6 @@ Requires(pre):	/usr/sbin/groupadd
 Requires:	/bin/awk
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	login
-Requires:	logrotate
 Requires:	mingetty
 Provides:	group(utmp)
 Provides:	virtual(init-daemon)
