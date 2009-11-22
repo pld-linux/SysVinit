@@ -216,7 +216,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{Propaganda,Changelog,*.lsm}
+%doc doc/{Propaganda,Changelog,*.lsm} src/initscript.sample
 
 %attr(755,root,root) /bin/mountpoint
 %attr(755,root,root) %{_sbindir}/*
