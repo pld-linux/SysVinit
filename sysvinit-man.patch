@@ -41,7 +41,7 @@ diff -Nru sysvinit-2.85.orig/man/init.8 sysvinit-2.85/man/init.8
  .PP
  When starting a new process, \fBinit\fP first checks whether the file
 -\fI/etc/initscript\fP exists. If it does, it uses this script to
-+\fI/etc/sysconfig/initscript\fP exists. If it does, it uses this script to
++\fI/etc/rc.d/rc.init\fP exists. If it does, it uses this script to
  start the process.
  .PP
  Each time a child terminates, \fBinit\fP records the fact and the reason
@@ -55,7 +55,7 @@ diff -Nru sysvinit-2.85.orig/man/init.8 sysvinit-2.85/man/init.8
  .nf
  /etc/inittab
 -/etc/initscript
-+/etc/sysconfig/initscript
++/etc/rc.d/rc.init
  /dev/console
 -/var/run/utmp
 -/var/log/wtmp
@@ -79,17 +79,17 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  initscript \- script that executes inittab commands.
  .SH SYNOPSIS
 -/bin/sh /etc/initscript id runlevels action process
-+/bin/sh /etc/sysconfig/initscript id runlevels action process
++/bin/sh /etc/rc.d/rc.init id runlevels action process
  .SH DESCRIPTION
 -When the shell script \fI/etc/initscript\fP is present, \fBinit\fP
-+When the shell script \fI/etc/sysconfig/initscript\fP is present, \fBinit\fP
++When the shell script \fI/etc/rc.d/rc.init\fP is present, \fBinit\fP
  will use it to execute the commands from \fIinittab\fP.
  This script can be used to set things like \fBulimit\fP and
  \fBumask\fP default values for every process.
  .SH EXAMPLES
  This is a sample initscript, which might be installed on your
 -system as \fI/etc/initscript.sample\fP.
-+system as \fI/etc/sysconfig/initscript.sample\fP.
++system as \fI/usr/share/doc/SysVinit-2.86/initscript.sample.gz\fP.
  .RS
  .sp
  .nf
@@ -98,7 +98,7 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  #              wants to spawn like this:
  #
 -#              /bin/sh /etc/initscript <id> <level> <action> <process>
-+# /bin/sh /etc/sysconfig/initscript <id> <level> <action> <process>
++# /bin/sh /etc/rc.d/rc.init <id> <level> <action> <process>
  #
  
    # Set umask to safe level, and enable core dumps.
@@ -107,7 +107,7 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  .SH FILES
  /etc/inittab,
 -/etc/initscript.
-+/etc/sysconfig/initscript.
++/etc/rc.d/rc.init
  .SH AUTHOR
  Miquel van Smoorenburg ,<miquels@cistron.nl>
  .SH "SEE ALSO"
