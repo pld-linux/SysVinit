@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	24
+Release:	25
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -63,6 +63,7 @@ Provides:	group(utmp)
 Provides:	virtual(init-daemon)
 Obsoletes:	virtual(init-daemon)
 Obsoletes:	vserver-SysVinit
+Obsoletes:	upstart-SysVinit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
