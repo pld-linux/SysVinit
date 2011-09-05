@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	25
+Release:	26
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -51,7 +51,6 @@ BuildRequires:	libselinux-devel >= 1.28
 BuildRequires:	libsepol-devel
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.202
-Requires(post):	fileutils
 Requires(postun):	/usr/sbin/groupdel
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -59,11 +58,12 @@ Requires:	/bin/awk
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	login
 Requires:	mingetty
+Requires:	util-linux >= 2.20-5
 Provides:	group(utmp)
 Provides:	virtual(init-daemon)
+Obsoletes:	upstart-SysVinit
 Obsoletes:	virtual(init-daemon)
 Obsoletes:	vserver-SysVinit
-Obsoletes:	upstart-SysVinit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -186,6 +186,9 @@ rm -f $RPM_BUILD_ROOT%{_mandir}/README.sysvinit-non-english-man-pages
 
 cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 
+# in util-linux
+rm $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -219,7 +222,6 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{Propaganda,Changelog,*.lsm} src/initscript.sample
 
-%attr(755,root,root) /bin/mountpoint
 %attr(755,root,root) /bin/pidof
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/last
