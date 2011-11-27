@@ -240,7 +240,7 @@ fi
 %attr(755,root,root) %{_sbindir}/runlevel
 %attr(755,root,root) %{_sbindir}/shutdown
 %attr(755,root,root) %{_sbindir}/telinit
-%attr(640,root,root) /etc/logrotate.d/sysvinit
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/sysvinit
 %ghost %{_sysconfdir}/initrunlvl
 %ghost /var/run/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
