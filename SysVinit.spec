@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	26
+Release:	27
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -54,6 +54,7 @@ BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(postun):	/usr/sbin/groupdel
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
+Requires:	%{name}-tools = %{version}-%{release}
 Requires:	/bin/awk
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	login
@@ -119,6 +120,14 @@ sonlanmalarını sağlar/denetler.
 функціями вашої системи. SysVinit містить програму init, першу
 програму, яку запускає ядро Linux під час загрузки системи. Після
 цього init керує запуском, виконанням та зупинкою всіх інших програм.
+
+%package tools
+Summary:	Tools used for process and utmp management
+Group:		Base
+
+%description tools
+The sysvinit-tools package contains various tools used for process
+management.
 
 %prep
 %setup -q -n sysvinit-%{version}
@@ -222,14 +231,15 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{Propaganda,Changelog,*.lsm} src/initscript.sample
 
-%attr(755,root,root) /bin/pidof
-%attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_bindir}/last
-%attr(755,root,root) %{_bindir}/lastb
-%attr(755,root,root) %{_bindir}/mesg
-%attr(755,root,root) %{_bindir}/utmpx-dump
-%attr(2755,root,tty) %{_bindir}/wall
-
+%attr(755,root,root) %{_sbindir}/bootlogd
+%attr(755,root,root) %{_sbindir}/halt
+%attr(755,root,root) %{_sbindir}/init
+%attr(755,root,root) %{_sbindir}/lastlog
+%attr(755,root,root) %{_sbindir}/poweroff
+%attr(755,root,root) %{_sbindir}/reboot
+%attr(755,root,root) %{_sbindir}/runlevel
+%attr(755,root,root) %{_sbindir}/shutdown
+%attr(755,root,root) %{_sbindir}/telinit
 %attr(640,root,root) /etc/logrotate.d/sysvinit
 %ghost %{_sysconfdir}/initrunlvl
 %ghost /var/run/initrunlvl
@@ -239,20 +249,145 @@ fi
 %attr(664,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
 
-%{_mandir}/man[158]/*
-%lang(cs) %{_mandir}/cs/man[158]/*
-%lang(de) %{_mandir}/de/man[158]/*
-%lang(es) %{_mandir}/es/man[158]/*
-%lang(fi) %{_mandir}/fi/man[158]/*
-%lang(fr) %{_mandir}/fr/man[158]/*
-%lang(hu) %{_mandir}/hu/man[158]/*
-%lang(id) %{_mandir}/id/man[158]/*
-%lang(it) %{_mandir}/it/man[158]/*
-%lang(ja) %{_mandir}/ja/man[158]/*
-%lang(ko) %{_mandir}/ko/man[158]/*
-%lang(pl) %{_mandir}/pl/man[158]/*
-%lang(ru) %{_mandir}/ru/man[158]/*
-%lang(sv) %{_mandir}/sv/man[158]/*
+%{_mandir}/man5/inittab.5*
+%{_mandir}/man5/initscript.5*
+%{_mandir}/man8/bootlogd.8*
+%{_mandir}/man8/halt.8*
+%{_mandir}/man8/init.8*
+%{_mandir}/man8/lastlog.8*
+%{_mandir}/man8/poweroff.8
+%{_mandir}/man8/reboot.8
+%{_mandir}/man8/runlevel.8*
+%{_mandir}/man8/shutdown.8*
+%{_mandir}/man8/telinit.8
+%lang(cs) %{_mandir}/cs/man8/lastlog.8*
+%lang(de) %{_mandir}/de/man8/init.8*
+%lang(de) %{_mandir}/de/man8/telinit.8
+%lang(es) %{_mandir}/es/man5/initscript.5*
+%lang(es) %{_mandir}/es/man5/inittab.5*
+%lang(es) %{_mandir}/es/man8/halt.8*
+%lang(es) %{_mandir}/es/man8/init.8*
+%lang(es) %{_mandir}/es/man8/poweroff.8
+%lang(es) %{_mandir}/es/man8/reboot.8
+%lang(es) %{_mandir}/es/man8/runlevel.8*
+%lang(es) %{_mandir}/es/man8/shutdown.8*
+%lang(es) %{_mandir}/es/man8/telinit.8
+%lang(fr) %{_mandir}/fr/man8/halt.8*
+%lang(fr) %{_mandir}/fr/man8/lastlog.8*
+%lang(fr) %{_mandir}/fr/man8/reboot.8
+%lang(fr) %{_mandir}/fr/man8/runlevel.8*
+%lang(fr) %{_mandir}/fr/man8/shutdown.8*
+%lang(hu) %{_mandir}/hu/man5/inittab.5*
+%lang(hu) %{_mandir}/hu/man8/init.8*
+%lang(hu) %{_mandir}/hu/man8/lastlog.8*
+%lang(hu) %{_mandir}/hu/man8/shutdown.8*
+%lang(hu) %{_mandir}/hu/man8/telinit.8
+%lang(id) %{_mandir}/id/man8/halt.8*
+%lang(id) %{_mandir}/id/man8/reboot.8
+%lang(id) %{_mandir}/id/man8/shutdown.8*
+%lang(it) %{_mandir}/it/man5/initscript.5*
+%lang(it) %{_mandir}/it/man5/inittab.5*
+%lang(it) %{_mandir}/it/man8/halt.8*
+%lang(it) %{_mandir}/it/man8/init.8*
+%lang(it) %{_mandir}/it/man8/lastlog.8*
+%lang(it) %{_mandir}/it/man8/reboot.8
+%lang(it) %{_mandir}/it/man8/runlevel.8*
+%lang(it) %{_mandir}/it/man8/shutdown.8*
+%lang(it) %{_mandir}/it/man8/telinit.8
+%lang(ja) %{_mandir}/ja/man5/initscript.5*
+%lang(ja) %{_mandir}/ja/man5/inittab.5*
+%lang(ja) %{_mandir}/ja/man8/halt.8*
+%lang(ja) %{_mandir}/ja/man8/init.8*
+%lang(ja) %{_mandir}/ja/man8/lastlog.8*
+%lang(ja) %{_mandir}/ja/man8/poweroff.8
+%lang(ja) %{_mandir}/ja/man8/reboot.8
+%lang(ja) %{_mandir}/ja/man8/runlevel.8*
+%lang(ja) %{_mandir}/ja/man8/shutdown.8*
+%lang(ja) %{_mandir}/ja/man8/telinit.8
+%lang(ko) %{_mandir}/ko/man5/initscript.5*
+%lang(ko) %{_mandir}/ko/man5/inittab.5*
+%lang(ko) %{_mandir}/ko/man8/halt.8*
+%lang(ko) %{_mandir}/ko/man8/init.8*
+%lang(ko) %{_mandir}/ko/man8/reboot.8
+%lang(ko) %{_mandir}/ko/man8/runlevel.8*
+%lang(ko) %{_mandir}/ko/man8/shutdown.8*
+%lang(ko) %{_mandir}/ko/man8/telinit.8
+%lang(pl) %{_mandir}/pl/man5/initscript.5*
+%lang(pl) %{_mandir}/pl/man5/inittab.5*
+%lang(pl) %{_mandir}/pl/man8/halt.8*
+%lang(pl) %{_mandir}/pl/man8/init.8*
+%lang(pl) %{_mandir}/pl/man8/lastlog.8*
+%lang(pl) %{_mandir}/pl/man8/poweroff.8
+%lang(pl) %{_mandir}/pl/man8/reboot.8
+%lang(pl) %{_mandir}/pl/man8/runlevel.8*
+%lang(pl) %{_mandir}/pl/man8/shutdown.8*
+%lang(pl) %{_mandir}/pl/man8/telinit.8
+%lang(ru) %{_mandir}/ru/man8/lastlog.8*
+%lang(sv) %{_mandir}/sv/man8/lastlog.8*
 
 # devel?
 #%{_includedir}/initreq.h
+
+%files tools
+%defattr(644,root,root,755)
+%attr(755,root,root) /bin/pidof
+%attr(755,root,root) %{_sbindir}/killall5
+%attr(755,root,root) %{_sbindir}/pidof
+%attr(755,root,root) %{_sbindir}/sulogin
+%attr(755,root,root) %{_bindir}/last
+%attr(755,root,root) %{_bindir}/lastb
+%attr(755,root,root) %{_bindir}/mesg
+%attr(755,root,root) %{_bindir}/utmpx-dump
+%attr(755,root,root) %{_bindir}/wall
+%{_mandir}/man1/last.1*
+%{_mandir}/man1/lastb.1*
+%{_mandir}/man1/mesg.1*
+%{_mandir}/man1/wall.1*
+%{_mandir}/man8/killall5.8*
+%{_mandir}/man8/pidof.8*
+%{_mandir}/man8/sulogin.8*
+%lang(es) %{_mandir}/es/man1/last.1*
+%lang(es) %{_mandir}/es/man1/lastb.1
+%lang(es) %{_mandir}/es/man1/mesg.1*
+%lang(es) %{_mandir}/es/man1/wall.1*
+%lang(es) %{_mandir}/es/man8/killall5.8*
+%lang(es) %{_mandir}/es/man8/pidof.8*
+%lang(es) %{_mandir}/es/man8/sulogin.8*
+%lang(fi) %{_mandir}/fi/man1/last.1*
+%lang(fi) %{_mandir}/fi/man1/mesg.1*
+%lang(fi) %{_mandir}/fi/man1/wall.1*
+%lang(fr) %{_mandir}/fr/man1/last.1*
+%lang(fr) %{_mandir}/fr/man1/mesg.1*
+%lang(fr) %{_mandir}/fr/man1/wall.1*
+%lang(fr) %{_mandir}/fr/man8/killall5.8*
+%lang(fr) %{_mandir}/fr/man8/pidof.8*
+%lang(hu) %{_mandir}/hu/man1/last.1*
+%lang(hu) %{_mandir}/hu/man1/mesg.1*
+%lang(hu) %{_mandir}/hu/man1/wall.1*
+%lang(it) %{_mandir}/it/man1/last.1*
+%lang(it) %{_mandir}/it/man1/lastb.1
+%lang(it) %{_mandir}/it/man1/mesg.1*
+%lang(it) %{_mandir}/it/man1/wall.1*
+%lang(it) %{_mandir}/it/man8/killall5.8*
+%lang(it) %{_mandir}/it/man8/pidof.8*
+%lang(it) %{_mandir}/it/man8/sulogin.8*
+%lang(ja) %{_mandir}/ja/man1/last.1*
+%lang(ja) %{_mandir}/ja/man1/lastb.1
+%lang(ja) %{_mandir}/ja/man1/mesg.1*
+%lang(ja) %{_mandir}/ja/man1/wall.1*
+%lang(ja) %{_mandir}/ja/man8/killall5.8*
+%lang(ja) %{_mandir}/ja/man8/pidof.8*
+%lang(ja) %{_mandir}/ja/man8/sulogin.8*
+%lang(ko) %{_mandir}/ko/man1/last.1*
+%lang(ko) %{_mandir}/ko/man1/lastb.1
+%lang(ko) %{_mandir}/ko/man1/mesg.1*
+%lang(ko) %{_mandir}/ko/man8/killall5.8*
+%lang(ko) %{_mandir}/ko/man8/pidof.8*
+%lang(ko) %{_mandir}/ko/man8/sulogin.8*
+%lang(pl) %{_mandir}/pl/man1/last.1*
+%lang(pl) %{_mandir}/pl/man1/lastb.1
+%lang(pl) %{_mandir}/pl/man1/mesg.1*
+%lang(pl) %{_mandir}/pl/man1/wall.1*
+%lang(pl) %{_mandir}/pl/man8/killall5.8*
+%lang(pl) %{_mandir}/pl/man8/pidof.8*
+%lang(pl) %{_mandir}/pl/man8/sulogin.8*
