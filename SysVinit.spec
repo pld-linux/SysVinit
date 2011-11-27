@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	27
+Release:	28
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -234,7 +234,6 @@ fi
 %attr(755,root,root) %{_sbindir}/bootlogd
 %attr(755,root,root) %{_sbindir}/halt
 %attr(755,root,root) %{_sbindir}/init
-%attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/poweroff
 %attr(755,root,root) %{_sbindir}/reboot
 %attr(755,root,root) %{_sbindir}/runlevel
@@ -260,7 +259,6 @@ fi
 %{_mandir}/man8/runlevel.8*
 %{_mandir}/man8/shutdown.8*
 %{_mandir}/man8/telinit.8
-%lang(cs) %{_mandir}/cs/man8/lastlog.8*
 %lang(de) %{_mandir}/de/man8/init.8*
 %lang(de) %{_mandir}/de/man8/telinit.8
 %lang(es) %{_mandir}/es/man5/initscript.5*
@@ -273,13 +271,11 @@ fi
 %lang(es) %{_mandir}/es/man8/shutdown.8*
 %lang(es) %{_mandir}/es/man8/telinit.8
 %lang(fr) %{_mandir}/fr/man8/halt.8*
-%lang(fr) %{_mandir}/fr/man8/lastlog.8*
 %lang(fr) %{_mandir}/fr/man8/reboot.8
 %lang(fr) %{_mandir}/fr/man8/runlevel.8*
 %lang(fr) %{_mandir}/fr/man8/shutdown.8*
 %lang(hu) %{_mandir}/hu/man5/inittab.5*
 %lang(hu) %{_mandir}/hu/man8/init.8*
-%lang(hu) %{_mandir}/hu/man8/lastlog.8*
 %lang(hu) %{_mandir}/hu/man8/shutdown.8*
 %lang(hu) %{_mandir}/hu/man8/telinit.8
 %lang(id) %{_mandir}/id/man8/halt.8*
@@ -289,7 +285,6 @@ fi
 %lang(it) %{_mandir}/it/man5/inittab.5*
 %lang(it) %{_mandir}/it/man8/halt.8*
 %lang(it) %{_mandir}/it/man8/init.8*
-%lang(it) %{_mandir}/it/man8/lastlog.8*
 %lang(it) %{_mandir}/it/man8/reboot.8
 %lang(it) %{_mandir}/it/man8/runlevel.8*
 %lang(it) %{_mandir}/it/man8/shutdown.8*
@@ -298,7 +293,6 @@ fi
 %lang(ja) %{_mandir}/ja/man5/inittab.5*
 %lang(ja) %{_mandir}/ja/man8/halt.8*
 %lang(ja) %{_mandir}/ja/man8/init.8*
-%lang(ja) %{_mandir}/ja/man8/lastlog.8*
 %lang(ja) %{_mandir}/ja/man8/poweroff.8
 %lang(ja) %{_mandir}/ja/man8/reboot.8
 %lang(ja) %{_mandir}/ja/man8/runlevel.8*
@@ -316,14 +310,11 @@ fi
 %lang(pl) %{_mandir}/pl/man5/inittab.5*
 %lang(pl) %{_mandir}/pl/man8/halt.8*
 %lang(pl) %{_mandir}/pl/man8/init.8*
-%lang(pl) %{_mandir}/pl/man8/lastlog.8*
 %lang(pl) %{_mandir}/pl/man8/poweroff.8
 %lang(pl) %{_mandir}/pl/man8/reboot.8
 %lang(pl) %{_mandir}/pl/man8/runlevel.8*
 %lang(pl) %{_mandir}/pl/man8/shutdown.8*
 %lang(pl) %{_mandir}/pl/man8/telinit.8
-%lang(ru) %{_mandir}/ru/man8/lastlog.8*
-%lang(sv) %{_mandir}/sv/man8/lastlog.8*
 
 # devel?
 #%{_includedir}/initreq.h
@@ -332,6 +323,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) /bin/pidof
 %attr(755,root,root) %{_sbindir}/killall5
+%attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
 %attr(755,root,root) %{_sbindir}/sulogin
 %attr(755,root,root) %{_bindir}/last
@@ -346,6 +338,7 @@ fi
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/pidof.8*
 %{_mandir}/man8/sulogin.8*
+%lang(cs) %{_mandir}/cs/man8/lastlog.8*
 %lang(es) %{_mandir}/es/man1/last.1*
 %lang(es) %{_mandir}/es/man1/lastb.1
 %lang(es) %{_mandir}/es/man1/mesg.1*
@@ -360,15 +353,18 @@ fi
 %lang(fr) %{_mandir}/fr/man1/mesg.1*
 %lang(fr) %{_mandir}/fr/man1/wall.1*
 %lang(fr) %{_mandir}/fr/man8/killall5.8*
+%lang(fr) %{_mandir}/fr/man8/lastlog.8*
 %lang(fr) %{_mandir}/fr/man8/pidof.8*
 %lang(hu) %{_mandir}/hu/man1/last.1*
 %lang(hu) %{_mandir}/hu/man1/mesg.1*
 %lang(hu) %{_mandir}/hu/man1/wall.1*
+%lang(hu) %{_mandir}/hu/man8/lastlog.8*
 %lang(it) %{_mandir}/it/man1/last.1*
 %lang(it) %{_mandir}/it/man1/lastb.1
 %lang(it) %{_mandir}/it/man1/mesg.1*
 %lang(it) %{_mandir}/it/man1/wall.1*
 %lang(it) %{_mandir}/it/man8/killall5.8*
+%lang(it) %{_mandir}/it/man8/lastlog.8*
 %lang(it) %{_mandir}/it/man8/pidof.8*
 %lang(it) %{_mandir}/it/man8/sulogin.8*
 %lang(ja) %{_mandir}/ja/man1/last.1*
@@ -376,6 +372,7 @@ fi
 %lang(ja) %{_mandir}/ja/man1/mesg.1*
 %lang(ja) %{_mandir}/ja/man1/wall.1*
 %lang(ja) %{_mandir}/ja/man8/killall5.8*
+%lang(ja) %{_mandir}/ja/man8/lastlog.8*
 %lang(ja) %{_mandir}/ja/man8/pidof.8*
 %lang(ja) %{_mandir}/ja/man8/sulogin.8*
 %lang(ko) %{_mandir}/ko/man1/last.1*
@@ -389,5 +386,8 @@ fi
 %lang(pl) %{_mandir}/pl/man1/mesg.1*
 %lang(pl) %{_mandir}/pl/man1/wall.1*
 %lang(pl) %{_mandir}/pl/man8/killall5.8*
+%lang(pl) %{_mandir}/pl/man8/lastlog.8*
 %lang(pl) %{_mandir}/pl/man8/pidof.8*
 %lang(pl) %{_mandir}/pl/man8/sulogin.8*
+%lang(ru) %{_mandir}/ru/man8/lastlog.8*
+%lang(sv) %{_mandir}/sv/man8/lastlog.8*
