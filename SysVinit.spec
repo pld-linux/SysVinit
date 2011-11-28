@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.86
-Release:	28
+Release:	29
 License:	GPL
 Group:		Base
 Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
@@ -175,23 +175,23 @@ install -d $RPM_BUILD_ROOT{/bin,%{_bindir},%{_sbindir},%{_mandir}/man{1,5,8}} \
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
-ln -sf ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
-ln -sf killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
+ln -s ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
+ln -s killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 
-> $RPM_BUILD_ROOT/var/run/initrunlvl
 > $RPM_BUILD_ROOT%{_sysconfdir}/ioctl.save
+> $RPM_BUILD_ROOT/var/log/btmpx
 > $RPM_BUILD_ROOT/var/log/faillog
 > $RPM_BUILD_ROOT/var/log/lastlog
 > $RPM_BUILD_ROOT/var/log/wtmpx
-> $RPM_BUILD_ROOT/var/log/btmpx
+> $RPM_BUILD_ROOT/var/run/initrunlvl
 
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
 bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
-rm -f $RPM_BUILD_ROOT%{_includedir}/initreq.h
-rm -f $RPM_BUILD_ROOT%{_mandir}/README.sysvinit-non-english-man-pages
+%{__rm} $RPM_BUILD_ROOT%{_includedir}/initreq.h
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/README.sysvinit-non-english-man-pages
 
 cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 
@@ -205,14 +205,14 @@ rm -rf $RPM_BUILD_ROOT
 %groupadd -g 22 utmp
 
 %post
-touch %{_sysconfdir}/ioctl.save /var/log/{{fail,last}log,btmpx}
+touch %{_sysconfdir}/ioctl.save /var/log/{btmpx,{fail,last}log}
 chmod 000 %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
 chown root:root %{_sysconfdir}/ioctl.save /var/log/faillog
 chown root:utmp /var/log/lastlog
 chmod 600 %{_sysconfdir}/ioctl.save
+chmod 640 /var/log/btmpx
 chmod 640 /var/log/faillog
 chmod 664 /var/log/lastlog
-chmod 640 /var/log/btmpx
 if [ -p /dev/initctl ]; then
 	%{_sbindir}/telinit u || :
 fi
@@ -243,10 +243,8 @@ fi
 %ghost %{_sysconfdir}/initrunlvl
 %ghost /var/run/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
-%attr(640,root,root) %ghost /var/log/faillog
-%attr(664,root,utmp) %ghost /var/log/lastlog
-%attr(664,root,utmp) %ghost /var/log/wtmpx
 %attr(640,root,root) %ghost /var/log/btmpx
+%attr(664,root,utmp) %ghost /var/log/wtmpx
 
 %{_mandir}/man5/inittab.5*
 %{_mandir}/man5/initscript.5*
@@ -331,6 +329,8 @@ fi
 %attr(755,root,root) %{_bindir}/mesg
 %attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(755,root,root) %{_bindir}/wall
+%attr(640,root,root) %ghost /var/log/faillog
+%attr(664,root,utmp) %ghost /var/log/lastlog
 %{_mandir}/man1/last.1*
 %{_mandir}/man1/lastb.1*
 %{_mandir}/man1/mesg.1*
