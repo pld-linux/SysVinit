@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	0.1
+Release:	1
 License:	GPL
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -24,17 +24,17 @@ Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-m
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
-Patch3:		sysvinit-wtmp.patch
-Patch4:		sysvinit-man.patch
-Patch5:		sysvinit-halt.patch
-Patch7:		sysvinit-autofsck.patch
-Patch8:		sysvinit-pidof.patch
-Patch9:		sysvinit-killall5.patch
-Patch11:	sysvinit-nopowerstates-single.patch
-Patch12:	sysvinit-lastlog.patch
-Patch13:	sysvinit-alt-fixes.patch
-Patch20:	sysvinit-quiet.patch
-Patch23:	sysvinit-rebootconfirmation.patch
+Patch2:		sysvinit-wtmp.patch
+Patch3:		sysvinit-man.patch
+Patch4:		sysvinit-halt.patch
+Patch5:		sysvinit-autofsck.patch
+Patch6:		sysvinit-pidof.patch
+Patch7:		sysvinit-killall5.patch
+Patch8:		sysvinit-nopowerstates-single.patch
+Patch9:		sysvinit-lastlog.patch
+Patch10:	sysvinit-alt-fixes.patch
+Patch11:	sysvinit-quiet.patch
+Patch12:	sysvinit-rebootconfirmation.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
 BuildRequires:	libsepol-devel
@@ -122,17 +122,17 @@ management.
 %setup -q -n sysvinit-%{version}dsf
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 %patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch20 -p1
-%patch23 -p0
+%patch12 -p0
 
 %build
 %{__make} -C src \
