@@ -1,18 +1,17 @@
-diff -Nru sysvinit-2.85.orig/man/halt.8 sysvinit-2.85/man/halt.8
---- sysvinit-2.85.orig/man/halt.8	Wed Nov 21 22:11:22 2001
-+++ sysvinit-2.85/man/halt.8	Thu Apr 24 12:08:24 2003
-@@ -35,7 +35,7 @@
+--- sysvinit-2.88dsf/man/halt.8.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/man/halt.8	2011-12-03 22:54:42.947155231 +0100
+@@ -52,7 +52,7 @@ halt, reboot, poweroff \- stop the syste
  .\"{{{  Description
  .SH DESCRIPTION
  \fBHalt\fP notes that the system is being brought down in the file
 -\fI/var/log/wtmp\fP, and then either tells the kernel to halt, reboot or
 +\fI/var/log/wtmpx\fP, and then either tells the kernel to halt, reboot or
- poweroff the system.
+ power-off the system.
  .PP
  If \fBhalt\fP or \fBreboot\fP is called when the system is
-@@ -52,10 +52,10 @@
- .IP \fB\-n\fP
- Don't sync before reboot or halt.
+@@ -70,10 +70,10 @@ and 6, that is when the systems shutdown
+ Don't sync before reboot or halt. Note that the kernel and storage
+ drivers may still sync.
  .IP \fB\-w\fP
 -Don't actually reboot or halt but only write the wtmp record
 -(in the \fI/var/log/wtmp\fP file).
@@ -24,7 +23,7 @@ diff -Nru sysvinit-2.85.orig/man/halt.8 sysvinit-2.85/man/halt.8
  .IP \fB\-f\fP
  Force halt or reboot, don't call \fBshutdown\fP(8).
  .IP \fB\-i\fP
-@@ -76,7 +76,7 @@
+@@ -94,7 +94,7 @@ Under older \fBsysvinit\fP releases , \f
  never be called directly. From release 2.74 on \fBhalt\fP and \fBreboot\fP
  invoke \fBshutdown\fP(8) if the system is not in runlevel 0 or 6. This
  means that if \fBhalt\fP or \fBreboot\fP cannot find out the current
@@ -33,48 +32,9 @@ diff -Nru sysvinit-2.85.orig/man/halt.8 sysvinit-2.85/man/halt.8
  correctly) \fBshutdown\fP will be called, which might not be what you want.
  Use the \fB-f\fP flag if you want to do a hard \fBhalt\fP or \fBreboot\fP.
  .PP
-diff -Nru sysvinit-2.85.orig/man/init.8 sysvinit-2.85/man/init.8
---- sysvinit-2.85.orig/man/init.8	Fri Apr 18 23:05:03 2003
-+++ sysvinit-2.85/man/init.8	Thu Apr 24 12:11:37 2003
-@@ -76,11 +76,11 @@
- are processed.
- .PP
- When starting a new process, \fBinit\fP first checks whether the file
--\fI/etc/initscript\fP exists. If it does, it uses this script to
-+\fI/etc/rc.d/rc.init\fP exists. If it does, it uses this script to
- start the process.
- .PP
- Each time a child terminates, \fBinit\fP records the fact and the reason
--it died in \fB/var/run/utmp\fP and \fB/var/log/wtmp\fP,
-+it died in \fB/var/run/utmpx\fP and \fB/var/log/wtmpx\fP,
- provided that these files exist.
- .SH CHANGING RUNLEVELS
- After it has spawned all of the processes specified, \fBinit\fP waits
-@@ -240,10 +240,10 @@
- .SH FILES
- .nf
- /etc/inittab
--/etc/initscript
-+/etc/rc.d/rc.init
- /dev/console
--/var/run/utmp
--/var/log/wtmp
-+/var/run/utmpx
-+/var/log/wtmpx
- /dev/initctl
- .fi
- .\"}}}
-@@ -280,5 +280,5 @@
- .BR kill (1),
- .BR inittab (5),
- .BR initscript (5),
--.BR utmp (5)
-+.BR utmpx (5)
- .\"}}}
-diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
---- sysvinit-2.85.orig/man/initscript.5	Fri Dec 24 23:31:21 1999
-+++ sysvinit-2.85/man/initscript.5	Thu Apr 24 12:08:24 2003
-@@ -2,15 +2,15 @@
+--- sysvinit-2.88dsf/man/initscript.5.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/man/initscript.5	2011-12-03 22:52:27.399373671 +0100
+@@ -19,15 +19,15 @@
  .SH NAME
  initscript \- script that executes inittab commands.
  .SH SYNOPSIS
@@ -89,11 +49,11 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  .SH EXAMPLES
  This is a sample initscript, which might be installed on your
 -system as \fI/etc/initscript.sample\fP.
-+system as \fI/usr/share/doc/SysVinit-2.86/initscript.sample.gz\fP.
++system as \fI/usr/share/doc/SysVinit-2.88/initscript.sample.gz\fP.
  .RS
  .sp
  .nf
-@@ -20,7 +20,7 @@
+@@ -37,7 +37,7 @@ system as \fI/etc/initscript.sample\fP.
  # initscript   Executed by init(8) for every program it
  #              wants to spawn like this:
  #
@@ -102,7 +62,7 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  #
  
    # Set umask to safe level, and enable core dumps.
-@@ -42,7 +42,7 @@
+@@ -65,7 +65,7 @@ with this can make your system un(re)boo
  .RE
  .SH FILES
  /etc/inittab,
@@ -111,24 +71,9 @@ diff -Nru sysvinit-2.85.orig/man/initscript.5 sysvinit-2.85/man/initscript.5
  .SH AUTHOR
  Miquel van Smoorenburg ,<miquels@cistron.nl>
  .SH "SEE ALSO"
-diff -Nru sysvinit-2.85.orig/man/inittab.5 sysvinit-2.85/man/inittab.5
---- sysvinit-2.85.orig/man/inittab.5	Tue Dec  4 21:17:47 2001
-+++ sysvinit-2.85/man/inittab.5	Thu Apr 24 12:08:24 2003
-@@ -47,8 +47,8 @@
- specifies the process to be executed.  If the process field starts with
- a `+' character, 
- .B init 
--will not do utmp and wtmp accounting for that process.  This is needed for 
--gettys that insist on doing their own utmp/wtmp housekeeping.  This is also 
-+will not do utmpx and wtmp accounting for that process.  This is needed for 
-+gettys that insist on doing their own utmpx/wtmpx housekeeping.  This is also 
- a historic bug.
- .\"}}}
- .PP
-diff -Nru sysvinit-2.85.orig/man/last.1 sysvinit-2.85/man/last.1
---- sysvinit-2.85.orig/man/last.1	Thu Jul 29 12:50:34 1999
-+++ sysvinit-2.85/man/last.1	Thu Apr 24 12:08:24 2003
-@@ -29,7 +29,7 @@
+--- sysvinit-2.88dsf/man/last.1.wiget	2010-02-19 16:51:36.000000000 +0100
++++ sysvinit-2.88dsf/man/last.1	2011-12-03 22:54:06.585311434 +0100
+@@ -47,7 +47,7 @@ last, lastb \- show listing of last logg
  .\"{{{  Description
  .SH DESCRIPTION
  .B Last
@@ -137,7 +82,7 @@ diff -Nru sysvinit-2.85.orig/man/last.1 sysvinit-2.85/man/last.1
  designated by the \fB\-f\fP flag) and displays a list of all
  users logged in (and out) since that file was created.  Names of users
  and tty's can be given, in which case \fBlast\fP will show only those entries
-@@ -46,7 +46,7 @@
+@@ -64,12 +64,12 @@ Thus \fBlast reboot\fP will show a log o
  was created.
  .PP
  \fBLastb\fP is the same as \fBlast\fP, except that by default it shows a log
@@ -146,13 +91,13 @@ diff -Nru sysvinit-2.85.orig/man/last.1 sysvinit-2.85/man/last.1
  .\"}}}
  .\"{{{  Options
  .SH OPTIONS
-@@ -67,21 +67,21 @@
- This option is like \fB-d\fP in that it displays the IP number of the remote
- host, but it displays the IP number in numbers-and-dots notation.
- .IP \fB\-o\fP
--Read an old-type wtmp file (written by linux-libc5 applications).
-+Read an old-type wtmpx file (written by linux-libc5 applications).
- .IP \fB\-x\fP
+ .IP "\fB\-f\fP \fIfile\fP"
+-Tells \fBlast\fP to use a specific file instead of \fB/var/log/wtmp\fP.
++Tells \fBlast\fP to use a specific file instead of \fB/var/log/wtmpx\fP.
+ .IP \fB\-\fP\fInum\fP
+ This is a count telling \fBlast\fP how many lines to show.
+ .IP "\fB\-n\fP \fInum\fP"
+@@ -101,16 +101,16 @@ Display full user and domain names in th
  Display the system shutdown entries and run level changes.
  .\"}}}
  .SH NOTES
@@ -173,11 +118,71 @@ diff -Nru sysvinit-2.85.orig/man/last.1 sysvinit-2.85/man/last.1
  .\"}}}
  .\"{{{  Author
  .SH AUTHOR
-diff -Nru sysvinit-2.85.orig/man/runlevel.8 sysvinit-2.85/man/runlevel.8
---- sysvinit-2.85.orig/man/runlevel.8	Tue May 27 12:33:54 1997
-+++ sysvinit-2.85/man/runlevel.8	Thu Apr 24 12:08:24 2003
-@@ -3,20 +3,20 @@
- runlevel -- find the current and previous system runlevel.
+--- sysvinit-2.88dsf/man/shutdown.8.wiget	2010-03-23 15:37:01.000000000 +0100
++++ sysvinit-2.88dsf/man/shutdown.8	2011-12-03 22:52:27.399373671 +0100
+@@ -155,7 +155,7 @@ one of the virtual consoles. If \fBshutd
+ argument (add this to the invocation of shutdown in /etc/inittab),
+ it checks to see if the file \fI/etc/shutdown.allow\fP is present.
+ It then compares the login names in that file with the list of people
+-that are logged in on a virtual console (from \fI/var/run/utmp\fP). Only
++that are logged in on a virtual console (from \fI/var/run/utmpx\fP). Only
+ if one of those authorized users \fBor root\fP is logged in, it will
+ proceed. Otherwise it will write the message
+ .sp 1
+--- sysvinit-2.88dsf/man/init.8.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/man/init.8	2011-12-03 22:52:27.399373671 +0100
+@@ -96,11 +96,11 @@ mounted before users can log in.  Then a
+ are processed.
+ .PP
+ When starting a new process, \fBinit\fP first checks whether the file
+-\fI/etc/initscript\fP exists. If it does, it uses this script to
++\fI/etc/rc.d/rc.init\fP exists. If it does, it uses this script to
+ start the process.
+ .PP
+ Each time a child terminates, \fBinit\fP records the fact and the reason
+-it died in \fB/var/run/utmp\fP and \fB/var/log/wtmp\fP,
++it died in \fB/var/run/utmpx\fP and \fB/var/log/wtmpx\fP,
+ provided that these files exist.
+ .SH CHANGING RUNLEVELS
+ After it has spawned all of the processes specified, \fBinit\fP waits
+@@ -269,10 +269,10 @@ file in the directory \fI/etc/init.d\fP
+ .SH FILES
+ .nf
+ /etc/inittab
+-/etc/initscript
++/etc/rc.d/rc.init
+ /dev/console
+-/var/run/utmp
+-/var/log/wtmp
++/var/run/utmpx
++/var/log/wtmpx
+ /dev/initctl
+ .fi
+ .\"}}}
+@@ -309,5 +309,5 @@ page by Michael Haardt (u31b3hs@pool.inf
+ .BR kill (1),
+ .BR inittab (5),
+ .BR initscript (5),
+-.BR utmp (5)
++.BR utmpx (5)
+ .\"}}}
+--- sysvinit-2.88dsf/man/inittab.5.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/man/inittab.5	2011-12-03 22:52:27.399373671 +0100
+@@ -64,8 +64,8 @@ describes which action should be taken.
+ specifies the process to be executed.  If the process field starts with
+ a `+' character, 
+ .B init 
+-will not do utmp and wtmp accounting for that process.  This is needed for 
+-gettys that insist on doing their own utmp/wtmp housekeeping.  This is also 
++will not do utmpx and wtmp accounting for that process.  This is needed for 
++gettys that insist on doing their own utmpx/wtmpx housekeeping.  This is also 
+ a historic bug.
+ .\"}}}
+ .PP
+--- sysvinit-2.88dsf/man/runlevel.8.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/man/runlevel.8	2011-12-03 22:52:27.399373671 +0100
+@@ -20,20 +20,20 @@
+ runlevel -- find the previous and current system runlevel.
  .SH SYNOPSIS
  .B runlevel 
 -.RI [ utmp ]
@@ -201,7 +206,7 @@ diff -Nru sysvinit-2.85.orig/man/runlevel.8 sysvinit-2.85/man/runlevel.8
  file exists, or if no runlevel record can be found,
  .B runlevel
  prints the word \fBunknown\fP and exits with an error.
-@@ -28,12 +28,12 @@
+@@ -45,12 +45,12 @@ However, in newer versions of \fBinit\fP
  is also available in the environment variables \fBRUNLEVEL\fP and
  \fBPREVLEVEL\fP.
  .SH OPTIONS
@@ -218,15 +223,3 @@ diff -Nru sysvinit-2.85.orig/man/runlevel.8 sysvinit-2.85/man/runlevel.8
 +.BR utmpx (5)
  .SH AUTHOR
  Miquel van Smoorenburg, miquels@cistron.nl
-diff -Nru sysvinit-2.85.orig/man/shutdown.8 sysvinit-2.85/man/shutdown.8
---- sysvinit-2.85.orig/man/shutdown.8	Tue Oct  2 23:27:50 2001
-+++ sysvinit-2.85/man/shutdown.8	Thu Apr 24 12:08:24 2003
-@@ -127,7 +127,7 @@
- argument (add this to the invocation of shutdown in /etc/inittab),
- it checks to see if the file \fI/etc/shutdown.allow\fP is present.
- It then compares the login names in that file with the list of people
--that are logged in on a virtual console (from \fI/var/run/utmp\fP). Only
-+that are logged in on a virtual console (from \fI/var/run/utmpx\fP). Only
- if one of those authorized users \fBor root\fP is logged in, it will
- proceed. Otherwise it will write the message
- .sp 1

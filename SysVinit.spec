@@ -13,38 +13,27 @@ Summary(ru.UTF-8):	Программы, управляющие базовыми �
 Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	2.86
-Release:	29
+Version:	2.88
+Release:	0.1
 License:	GPL
 Group:		Base
-Source0:	ftp://ftp.cistron.nl/pub/people/miquels/software/sysvinit-%{version}.tar.gz
-# Source0-md5:	7d5d61c026122ab791ac04c8a84db967
+Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
+# Source0-md5:	6eda8a97b86e0a6f59dabbf25202aa6f
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
-Patch2:		sysvinit-md5-bigendian.patch
 Patch3:		sysvinit-wtmp.patch
 Patch4:		sysvinit-man.patch
 Patch5:		sysvinit-halt.patch
-Patch6:		sysvinit-blowfish.patch
 Patch7:		sysvinit-autofsck.patch
 Patch8:		sysvinit-pidof.patch
 Patch9:		sysvinit-killall5.patch
-Patch10:	sysvinit-selinux.patch
 Patch11:	sysvinit-nopowerstates-single.patch
 Patch12:	sysvinit-lastlog.patch
 Patch13:	sysvinit-alt-fixes.patch
-Patch14:	sysvinit-chroot.patch
-Patch15:	sysvinit-console-open.patch
-Patch16:	sysvinit-godot.patch
-Patch17:	sysvinit-haltname.patch
-Patch18:	sysvinit-ipv6.patch
-Patch19:	sysvinit-maxproclen.patch
 Patch20:	sysvinit-quiet.patch
-Patch21:	sysvinit-timeval.patch
-Patch22:	sysvinit-no-abort.patch
 Patch23:	sysvinit-rebootconfirmation.patch
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
@@ -130,37 +119,27 @@ The sysvinit-tools package contains various tools used for process
 management.
 
 %prep
-%setup -q -n sysvinit-%{version}
+%setup -q -n sysvinit-%{version}dsf
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%{?with_selinux:%patch10 -p1}
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
 %patch20 -p1
-%patch21 -p1
-%patch22 -p1
 %patch23 -p0
 
 %build
 %{__make} -C src \
+	%{?with_selinux:WITH_SELINUX=yes} \
 	CC="%{__cc}" \
 	LCRYPT="-lcrypt" \
-	OPTIMIZE="%{rpmcflags}" \
+	CFLAGS="%{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}"
 
 %install
@@ -177,6 +156,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -s ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -s killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
+ln -s utmpdump $RPM_BUILD_ROOT%{_bindir}/utmpx-dump
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/ioctl.save
 > $RPM_BUILD_ROOT/var/log/btmpx
@@ -186,6 +166,7 @@ ln -s killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
 > $RPM_BUILD_ROOT/var/run/initrunlvl
 
 echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
+echo .so utmpdump.1 > $RPM_BUILD_ROOT%{_mandir}/man1/utmpx-dump.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -320,6 +301,7 @@ fi
 %files tools
 %defattr(644,root,root,755)
 %attr(755,root,root) /bin/pidof
+%attr(755,root,root) %{_sbindir}/fstab-decode
 %attr(755,root,root) %{_sbindir}/killall5
 %attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
@@ -327,6 +309,7 @@ fi
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
 %attr(755,root,root) %{_bindir}/mesg
+%attr(755,root,root) %{_bindir}/utmpdump
 %attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(755,root,root) %{_bindir}/wall
 %attr(640,root,root) %ghost /var/log/faillog
@@ -335,9 +318,12 @@ fi
 %{_mandir}/man1/lastb.1*
 %{_mandir}/man1/mesg.1*
 %{_mandir}/man1/wall.1*
+%{_mandir}/man1/utmpdump.1*
+%{_mandir}/man1/utmpx-dump.1*
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/pidof.8*
 %{_mandir}/man8/sulogin.8*
+%{_mandir}/man8/fstab-decode.8*
 %lang(cs) %{_mandir}/cs/man8/lastlog.8*
 %lang(es) %{_mandir}/es/man1/last.1*
 %lang(es) %{_mandir}/es/man1/lastb.1

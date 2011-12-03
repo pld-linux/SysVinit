@@ -1,36 +1,40 @@
---- sysvinit-2.86/src/killall5.c.orig	2004-12-26 23:07:15.505343096 +0100
-+++ sysvinit-2.86/src/killall5.c	2004-12-26 23:20:43.017582576 +0100
-@@ -193,6 +193,7 @@
- 		if (p->argv0) free(p->argv0);
+diff -u sysvinit-2.88dsf/src/killall5.c sysvinit-2.88dsf/src/killall5.c
+--- sysvinit-2.88dsf/src/killall5.c	2011-12-03 23:12:52.373139250 +0100
++++ sysvinit-2.88dsf/src/killall5.c	2011-12-03 23:19:21.498025134 +0100
+@@ -479,6 +479,7 @@
  		if (p->argv1) free(p->argv1);
+ 		if (p->statname) free(p->statname);
  		if (p->pathname) free(p->pathname);
 +		if (p->statname) free(p->statname);
  		free(p);
  	}
  	plist = NULL;
-@@ -210,7 +211,7 @@
+@@ -496,7 +497,7 @@
  		/* Open the status file. */
- 		snprintf(path, sizeof(path), "/proc/%s/stat", d->d_name);
+ 		snprintf(path, sizeof(path), "%s/stat", d->d_name);
  
 -		/* Read SID & statname from it. */
 +		/* Read statname from it. */
-  		if ((fp = fopen(path, "r")) != NULL) {
+ 		if ((fp = fopen(path, "r")) != NULL) {
  			buf[0] = 0;
  			fgets(buf, sizeof(buf), fp);
-@@ -223,11 +224,11 @@
+@@ -509,7 +510,6 @@
  				/* Read program name. */
  				q = strrchr(buf, ')');
  				if (q == NULL) {
 -					p->sid = 0;
  					nsyslog(LOG_ERR,
- 					"can't get program name from %s\n",
+ 					"can't get program name from /proc/%s\n",
  						path);
+@@ -517,6 +517,7 @@
+ 					if (p->argv1) free(p->argv1);
+ 					if (p->statname) free(p->statname);
  					free(p);
 +					fclose(fp);
  					continue;
  				}
  				s++;
-@@ -242,20 +243,23 @@
+@@ -531,23 +532,26 @@
  
  			/* Get session, startcode, endcode. */
  			startcode = endcode = 0;
@@ -52,6 +56,9 @@
 -					path);
 +				nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
 +				free(p->statname);
+ 				if (p->argv0) free(p->argv0);
+ 				if (p->argv1) free(p->argv1);
+ 				if (p->statname) free(p->statname);
  				free(p);
  				continue;
  			}
@@ -60,4 +67,4 @@
 -			fclose(fp);
  		} else {
  			/* Process disappeared.. */
- 			free(p);
+ 			if (p->argv0) free(p->argv0);
