@@ -113,7 +113,7 @@ sonlanmalarını sağlar/denetler.
 %package tools
 Summary:	Tools used for process and utmp management
 Group:		Base
-Conflicts:	SysVinit < 2.87
+Conflicts:	SysVinit < 2.86-27
 Conflicts:	rc-scripts < 0.4.5.1-6
 
 %description tools
