@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	2
+Release:	3
 License:	GPL
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -114,6 +114,7 @@ sonlanmalarını sağlar/denetler.
 Summary:	Tools used for process and utmp management
 Group:		Base
 Conflicts:	SysVinit < 2.87
+Conflicts:	rc-scripts < 0.4.5.1-5
 
 %description tools
 The sysvinit-tools package contains various tools used for process
