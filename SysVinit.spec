@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_with	preconfigured
 %bcond_without	selinux		# build without SELinux support
-#
+
 Summary:	System V initialization program
 Summary(de.UTF-8):	System V-Intialisierungsprogramm
 Summary(es.UTF-8):	Programa de inicialización System V
@@ -14,7 +14,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	4
+Release:	5
 License:	GPL
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -52,7 +52,7 @@ Requires:	util-linux >= 2.20-5
 Provides:	group(utmp)
 Provides:	virtual(init-daemon)
 Obsoletes:	upstart-SysVinit
-Obsoletes:	virtual(init-daemon)
+#Obsoletes:	virtual(init-daemon)
 Obsoletes:	vserver-SysVinit
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
