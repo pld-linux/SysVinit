@@ -1,8 +1,7 @@
 #
 # Conditional build:
-%bcond_with	preconfigured
 %bcond_without	selinux		# build without SELinux support
-
+#
 Summary:	System V initialization program
 Summary(de.UTF-8):	System V-Intialisierungsprogramm
 Summary(es.UTF-8):	Programa de inicialización System V
@@ -15,7 +14,7 @@ Summary(uk.UTF-8):	Програми, що керують базовими сис
 Name:		SysVinit
 Version:	2.88
 Release:	6
-License:	GPL
+License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
 # Source0-md5:	6eda8a97b86e0a6f59dabbf25202aa6f
@@ -35,6 +34,7 @@ Patch9:		sysvinit-lastlog.patch
 Patch10:	sysvinit-alt-fixes.patch
 Patch11:	sysvinit-quiet.patch
 Patch12:	sysvinit-rebootconfirmation.patch
+URL:		http://savannah.nongnu.org/projects/sysvinit/
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
 BuildRequires:	libsepol-devel
@@ -111,14 +111,17 @@ sonlanmalarını sağlar/denetler.
 
 %package tools
 Summary:	Tools used for process and utmp management
+Summary(pl.UTF-8):	Narzędzia do zarządzania procesami i bazą utmp
 Group:		Base
 Obsoletes:	upstart-SysVinit
 Conflicts:	SysVinit < 2.86-27
 Conflicts:	rc-scripts < 0.4.5.1-6
 
 %description tools
-The sysvinit-tools package contains various tools used for process
-management.
+This package contains various tools used for process management.
+
+%description tools -l pl.UTF-8
+Ten pakiet zawiera różne narzędzia do zarządzania procesami.
 
 %prep
 %setup -q -n sysvinit-%{version}dsf
@@ -212,7 +215,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{Propaganda,Changelog,*.lsm} src/initscript.sample
+%doc COPYRIGHT README doc/{Changelog,Propaganda} src/initscript.sample
 
 %attr(755,root,root) %{_sbindir}/bootlogd
 %attr(755,root,root) %{_sbindir}/halt
