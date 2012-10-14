@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	8
+Release:	8.1
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -183,6 +183,8 @@ cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 
 # in util-linux
 rm $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
+rm $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
+rm $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -310,11 +312,9 @@ fi
 %attr(755,root,root) %{_sbindir}/killall5
 %attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
-%attr(755,root,root) %{_sbindir}/sulogin
 %attr(755,root,root) %{_bindir}/last
 %attr(755,root,root) %{_bindir}/lastb
 %attr(755,root,root) %{_bindir}/mesg
-%attr(755,root,root) %{_bindir}/utmpdump
 %attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(755,root,root) %{_bindir}/wall
 %attr(640,root,root) %ghost /var/log/faillog
@@ -323,11 +323,9 @@ fi
 %{_mandir}/man1/lastb.1*
 %{_mandir}/man1/mesg.1*
 %{_mandir}/man1/wall.1*
-%{_mandir}/man1/utmpdump.1*
 %{_mandir}/man1/utmpx-dump.1*
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/pidof.8*
-%{_mandir}/man8/sulogin.8*
 %{_mandir}/man8/fstab-decode.8*
 %lang(cs) %{_mandir}/cs/man8/lastlog.8*
 %lang(es) %{_mandir}/es/man1/last.1*
@@ -336,7 +334,6 @@ fi
 %lang(es) %{_mandir}/es/man1/wall.1*
 %lang(es) %{_mandir}/es/man8/killall5.8*
 %lang(es) %{_mandir}/es/man8/pidof.8*
-%lang(es) %{_mandir}/es/man8/sulogin.8*
 %lang(fi) %{_mandir}/fi/man1/last.1*
 %lang(fi) %{_mandir}/fi/man1/mesg.1*
 %lang(fi) %{_mandir}/fi/man1/wall.1*
@@ -357,7 +354,6 @@ fi
 %lang(it) %{_mandir}/it/man8/killall5.8*
 %lang(it) %{_mandir}/it/man8/lastlog.8*
 %lang(it) %{_mandir}/it/man8/pidof.8*
-%lang(it) %{_mandir}/it/man8/sulogin.8*
 %lang(ja) %{_mandir}/ja/man1/last.1*
 %lang(ja) %{_mandir}/ja/man1/lastb.1
 %lang(ja) %{_mandir}/ja/man1/mesg.1*
@@ -365,13 +361,11 @@ fi
 %lang(ja) %{_mandir}/ja/man8/killall5.8*
 %lang(ja) %{_mandir}/ja/man8/lastlog.8*
 %lang(ja) %{_mandir}/ja/man8/pidof.8*
-%lang(ja) %{_mandir}/ja/man8/sulogin.8*
 %lang(ko) %{_mandir}/ko/man1/last.1*
 %lang(ko) %{_mandir}/ko/man1/lastb.1
 %lang(ko) %{_mandir}/ko/man1/mesg.1*
 %lang(ko) %{_mandir}/ko/man8/killall5.8*
 %lang(ko) %{_mandir}/ko/man8/pidof.8*
-%lang(ko) %{_mandir}/ko/man8/sulogin.8*
 %lang(pl) %{_mandir}/pl/man1/last.1*
 %lang(pl) %{_mandir}/pl/man1/lastb.1
 %lang(pl) %{_mandir}/pl/man1/mesg.1*
@@ -379,6 +373,5 @@ fi
 %lang(pl) %{_mandir}/pl/man8/killall5.8*
 %lang(pl) %{_mandir}/pl/man8/lastlog.8*
 %lang(pl) %{_mandir}/pl/man8/pidof.8*
-%lang(pl) %{_mandir}/pl/man8/sulogin.8*
 %lang(ru) %{_mandir}/ru/man8/lastlog.8*
 %lang(sv) %{_mandir}/sv/man8/lastlog.8*
