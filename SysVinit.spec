@@ -116,6 +116,7 @@ Group:		Base
 Obsoletes:	upstart-SysVinit
 Conflicts:	SysVinit < 2.86-27
 Conflicts:	rc-scripts < 0.4.5.1-6
+Conflicts:	util-linux < 2.22
 
 %description tools
 This package contains various tools used for process management.
