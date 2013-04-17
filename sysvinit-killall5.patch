@@ -1,14 +1,6 @@
 diff -u sysvinit-2.88dsf/src/killall5.c sysvinit-2.88dsf/src/killall5.c
 --- sysvinit-2.88dsf/src/killall5.c	2011-12-03 23:12:52.373139250 +0100
 +++ sysvinit-2.88dsf/src/killall5.c	2011-12-03 23:19:21.498025134 +0100
-@@ -479,6 +479,7 @@
- 		if (p->argv1) free(p->argv1);
- 		if (p->statname) free(p->statname);
- 		if (p->pathname) free(p->pathname);
-+		if (p->statname) free(p->statname);
- 		free(p);
- 	}
- 	plist = NULL;
 @@ -496,7 +497,7 @@
  		/* Open the status file. */
  		snprintf(path, sizeof(path), "%s/stat", d->d_name);
