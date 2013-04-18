@@ -26,7 +26,7 @@ diff -u sysvinit-2.88dsf/src/killall5.c sysvinit-2.88dsf/src/killall5.c
  					continue;
  				}
  				s++;
-@@ -531,23 +532,26 @@
+@@ -531,23 +532,25 @@
  
  			/* Get session, startcode, endcode. */
  			startcode = endcode = 0;
@@ -47,7 +47,6 @@ diff -u sysvinit-2.88dsf/src/killall5.c sysvinit-2.88dsf/src/killall5.c
 -				nsyslog(LOG_ERR, "can't read sid from %s\n",
 -					path);
 +				nsyslog(LOG_ERR, "can't read sid for pid %d\n", pid);
-+				free(p->statname);
  				if (p->argv0) free(p->argv0);
  				if (p->argv1) free(p->argv1);
  				if (p->statname) free(p->statname);
