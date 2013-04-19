@@ -13,13 +13,14 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	11
+Release:	12
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
 # Source0-md5:	6eda8a97b86e0a6f59dabbf25202aa6f
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
+Source3:	crypttab.5
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
@@ -182,10 +183,15 @@ bzip2 -dc %{SOURCE2} | tar xf - -C $RPM_BUILD_ROOT%{_mandir}
 
 cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 
+cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
+
 # in util-linux
 rm $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
 rm $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
 rm $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
+
+# fools rpm-build-macros, don't package this file
+:>$RPM_BUILD_ROOT%{_mandir}/man1/utmpdump.1
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -235,6 +241,7 @@ fi
 %attr(640,root,root) %ghost /var/log/btmpx
 %attr(664,root,utmp) %ghost /var/log/wtmpx
 
+%{_mandir}/man5/crypttab.5*
 %{_mandir}/man5/inittab.5*
 %{_mandir}/man5/initscript.5*
 %{_mandir}/man8/bootlogd.8*
