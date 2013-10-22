@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	14
+Release:	15
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -49,7 +49,7 @@ Requires:	/bin/awk
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	login
 Requires:	mingetty
-Requires:	util-linux >= 2.20-5
+Requires:	util-linux >= 2.24-1
 Provides:	group(utmp)
 Provides:	virtual(init-daemon)
 Obsoletes:	virtual(init-daemon)
@@ -173,7 +173,6 @@ ln -s utmpdump $RPM_BUILD_ROOT%{_bindir}/utmpx-dump
 > $RPM_BUILD_ROOT/var/log/wtmpx
 > $RPM_BUILD_ROOT/var/run/initrunlvl
 
-echo .so last.1 > $RPM_BUILD_ROOT%{_mandir}/man1/lastb.1
 echo .so utmpdump.1 > $RPM_BUILD_ROOT%{_mandir}/man1/utmpx-dump.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
@@ -190,6 +189,7 @@ cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
 rm $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
 rm $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
 rm $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
+rm $RPM_BUILD_ROOT{/usr/bin/{last,lastb,mesg},%{_mandir}/man1/{last,lastb,mesg}.1*,%{_mandir}/*/man1/{last,lastb,mesg}.1*}
 
 # fools rpm-build-macros, don't package this file
 :>$RPM_BUILD_ROOT%{_mandir}/man1/utmpdump.1
@@ -321,63 +321,35 @@ fi
 %attr(755,root,root) %{_sbindir}/killall5
 %attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
-%attr(755,root,root) %{_bindir}/last
-%attr(755,root,root) %{_bindir}/lastb
-%attr(755,root,root) %{_bindir}/mesg
 %attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(2755,root,tty) %{_bindir}/wall
 %attr(640,root,root) %ghost /var/log/faillog
 %attr(664,root,utmp) %ghost /var/log/lastlog
-%{_mandir}/man1/last.1*
-%{_mandir}/man1/lastb.1*
-%{_mandir}/man1/mesg.1*
 %{_mandir}/man1/wall.1*
 %{_mandir}/man1/utmpx-dump.1*
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/pidof.8*
 %{_mandir}/man8/fstab-decode.8*
-%lang(cs) %{_mandir}/cs/man8/lastlog.8*
-%lang(es) %{_mandir}/es/man1/last.1*
-%lang(es) %{_mandir}/es/man1/lastb.1
-%lang(es) %{_mandir}/es/man1/mesg.1*
 %lang(es) %{_mandir}/es/man1/wall.1*
 %lang(es) %{_mandir}/es/man8/killall5.8*
 %lang(es) %{_mandir}/es/man8/pidof.8*
-%lang(fi) %{_mandir}/fi/man1/last.1*
-%lang(fi) %{_mandir}/fi/man1/mesg.1*
 %lang(fi) %{_mandir}/fi/man1/wall.1*
-%lang(fr) %{_mandir}/fr/man1/last.1*
-%lang(fr) %{_mandir}/fr/man1/mesg.1*
 %lang(fr) %{_mandir}/fr/man1/wall.1*
 %lang(fr) %{_mandir}/fr/man8/killall5.8*
 %lang(fr) %{_mandir}/fr/man8/lastlog.8*
 %lang(fr) %{_mandir}/fr/man8/pidof.8*
-%lang(hu) %{_mandir}/hu/man1/last.1*
-%lang(hu) %{_mandir}/hu/man1/mesg.1*
 %lang(hu) %{_mandir}/hu/man1/wall.1*
 %lang(hu) %{_mandir}/hu/man8/lastlog.8*
-%lang(it) %{_mandir}/it/man1/last.1*
-%lang(it) %{_mandir}/it/man1/lastb.1
-%lang(it) %{_mandir}/it/man1/mesg.1*
 %lang(it) %{_mandir}/it/man1/wall.1*
 %lang(it) %{_mandir}/it/man8/killall5.8*
 %lang(it) %{_mandir}/it/man8/lastlog.8*
 %lang(it) %{_mandir}/it/man8/pidof.8*
-%lang(ja) %{_mandir}/ja/man1/last.1*
-%lang(ja) %{_mandir}/ja/man1/lastb.1
-%lang(ja) %{_mandir}/ja/man1/mesg.1*
 %lang(ja) %{_mandir}/ja/man1/wall.1*
 %lang(ja) %{_mandir}/ja/man8/killall5.8*
 %lang(ja) %{_mandir}/ja/man8/lastlog.8*
 %lang(ja) %{_mandir}/ja/man8/pidof.8*
-%lang(ko) %{_mandir}/ko/man1/last.1*
-%lang(ko) %{_mandir}/ko/man1/lastb.1
-%lang(ko) %{_mandir}/ko/man1/mesg.1*
 %lang(ko) %{_mandir}/ko/man8/killall5.8*
 %lang(ko) %{_mandir}/ko/man8/pidof.8*
-%lang(pl) %{_mandir}/pl/man1/last.1*
-%lang(pl) %{_mandir}/pl/man1/lastb.1
-%lang(pl) %{_mandir}/pl/man1/mesg.1*
 %lang(pl) %{_mandir}/pl/man1/wall.1*
 %lang(pl) %{_mandir}/pl/man8/killall5.8*
 %lang(pl) %{_mandir}/pl/man8/lastlog.8*
