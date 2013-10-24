@@ -186,10 +186,10 @@ cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
 
 # in util-linux
-rm $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
-rm $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
-rm $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
-rm $RPM_BUILD_ROOT{/usr/bin/{last,lastb,mesg},%{_mandir}/man1/{last,lastb,mesg}.1*,%{_mandir}/*/man1/{last,lastb,mesg}.1*}
+%{__rm} $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
+%{__rm} $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
+%{__rm} $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
+%{__rm} $RPM_BUILD_ROOT{/usr/bin/{last,lastb,mesg},%{_mandir}/man1/{last,lastb,mesg}.1*,%{_mandir}/*/man1/{last,lastb,mesg}.1*}
 
 # fools rpm-build-macros, don't package this file
 :>$RPM_BUILD_ROOT%{_mandir}/man1/utmpdump.1
@@ -248,7 +248,6 @@ fi
 %{_mandir}/man8/bootlogd.8*
 %{_mandir}/man8/halt.8*
 %{_mandir}/man8/init.8*
-%{_mandir}/man8/lastlog.8*
 %{_mandir}/man8/poweroff.8
 %{_mandir}/man8/reboot.8
 %{_mandir}/man8/runlevel.8*
@@ -328,8 +327,10 @@ fi
 %{_mandir}/man1/wall.1*
 %{_mandir}/man1/utmpx-dump.1*
 %{_mandir}/man8/killall5.8*
+%{_mandir}/man8/lastlog.8*
 %{_mandir}/man8/pidof.8*
 %{_mandir}/man8/fstab-decode.8*
+%lang(cs) %{_mandir}/cs/man8/lastlog.8*
 %lang(es) %{_mandir}/es/man1/wall.1*
 %lang(es) %{_mandir}/es/man8/killall5.8*
 %lang(es) %{_mandir}/es/man8/pidof.8*
