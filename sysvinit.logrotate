@@ -2,10 +2,10 @@
 #	don't rotate!
 #}
 
-/var/log/btmpx {
+/var/log/btmp {
 }
 
-/var/log/wtmpx {
+/var/log/wtmp {
 	create 664 root utmp
 	monthly
 }

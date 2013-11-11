@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	15
+Release:	16
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -54,7 +54,7 @@ Provides:	group(utmp)
 Provides:	virtual(init-daemon)
 Obsoletes:	virtual(init-daemon)
 Obsoletes:	vserver-SysVinit
-Conflicts:	rc-scripts < 0.4.5.5-2
+Conflicts:	rc-scripts < 0.4.9-1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -164,16 +164,14 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/logrotate.d/sysvinit
 
 ln -s ../var/run/initrunlvl $RPM_BUILD_ROOT%{_sysconfdir}
 ln -s killall5 $RPM_BUILD_ROOT%{_sbindir}/pidof
-ln -s utmpdump $RPM_BUILD_ROOT%{_bindir}/utmpx-dump
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/ioctl.save
-> $RPM_BUILD_ROOT/var/log/btmpx
+> $RPM_BUILD_ROOT/var/log/btmp
 > $RPM_BUILD_ROOT/var/log/faillog
 > $RPM_BUILD_ROOT/var/log/lastlog
-> $RPM_BUILD_ROOT/var/log/wtmpx
+> $RPM_BUILD_ROOT/var/log/wtmp
 > $RPM_BUILD_ROOT/var/run/initrunlvl
 
-echo .so utmpdump.1 > $RPM_BUILD_ROOT%{_mandir}/man1/utmpx-dump.1
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/poweroff.8
 echo .so halt.8 > $RPM_BUILD_ROOT%{_mandir}/man8/reboot.8
 echo .so init.8 > $RPM_BUILD_ROOT%{_mandir}/man8/telinit.8
@@ -201,12 +199,12 @@ rm -rf $RPM_BUILD_ROOT
 %groupadd -g 22 utmp
 
 %post
-touch %{_sysconfdir}/ioctl.save /var/log/{btmpx,{fail,last}log}
+touch %{_sysconfdir}/ioctl.save /var/log/{btmp,{fail,last}log}
 chmod 000 %{_sysconfdir}/ioctl.save /var/log/{fail,last}log
 chown root:root %{_sysconfdir}/ioctl.save /var/log/faillog
 chown root:utmp /var/log/lastlog
 chmod 600 %{_sysconfdir}/ioctl.save
-chmod 640 /var/log/btmpx
+chmod 640 /var/log/btmp
 chmod 640 /var/log/faillog
 chmod 664 /var/log/lastlog
 if [ -p /dev/initctl ]; then
@@ -221,6 +219,16 @@ fi
 %postun
 if [ "$1" = "0" ]; then
 	%groupremove utmp
+fi
+
+%triggerpostun -- SysVinit < 2.88-16
+if [ -e /var/log/wtmpx ]; then
+	# wtmp always takes precedence, it's safe to remove wtmpx
+	if [ -s /var/log/wtmp ]; then
+		rm -f /var/log/wtmpx
+	else
+		mv /var/log/wtmpx /var/log/wtmp
+	fi
 fi
 
 %files
@@ -239,8 +247,8 @@ fi
 %ghost %{_sysconfdir}/initrunlvl
 %ghost /var/run/initrunlvl
 %attr(600,root,root) %ghost %{_sysconfdir}/ioctl.save
-%attr(640,root,root) %ghost /var/log/btmpx
-%attr(664,root,utmp) %ghost /var/log/wtmpx
+%attr(640,root,root) %ghost /var/log/btmp
+%attr(664,root,utmp) %ghost /var/log/wtmp
 
 %{_mandir}/man5/crypttab.5*
 %{_mandir}/man5/inittab.5*
@@ -320,12 +328,10 @@ fi
 %attr(755,root,root) %{_sbindir}/killall5
 %attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
-%attr(755,root,root) %{_bindir}/utmpx-dump
 %attr(2755,root,tty) %{_bindir}/wall
 %attr(640,root,root) %ghost /var/log/faillog
 %attr(664,root,utmp) %ghost /var/log/lastlog
 %{_mandir}/man1/wall.1*
-%{_mandir}/man1/utmpx-dump.1*
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/lastlog.8*
 %{_mandir}/man8/pidof.8*
