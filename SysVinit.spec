@@ -189,9 +189,6 @@ cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
 %{__rm} $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
 %{__rm} $RPM_BUILD_ROOT{/usr/bin/{last,lastb,mesg},%{_mandir}/man1/{last,lastb,mesg}.1*,%{_mandir}/*/man1/{last,lastb,mesg}.1*}
 
-# fools rpm-build-macros, don't package this file
-:>$RPM_BUILD_ROOT%{_mandir}/man1/utmpdump.1
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
