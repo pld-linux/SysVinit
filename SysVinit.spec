@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.88
-Release:	18
+Release:	19
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
@@ -35,6 +35,10 @@ Patch9:		sysvinit-lastlog.patch
 Patch10:	sysvinit-alt-fixes.patch
 Patch11:	sysvinit-quiet.patch
 Patch12:	sysvinit-rebootconfirmation.patch
+Patch13:	63_init_keep_utf8_ttyflag.patch
+Patch14:	64_init_selinux_enabled.patch
+Patch15:	95_kfreebsd_bootlogd.patch
+Patch16:	96_allow_multiple_console_output.patch
 URL:		http://savannah.nongnu.org/projects/sysvinit/
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
@@ -141,13 +145,17 @@ Ten pakiet zawiera różne narzędzia do zarządzania procesami.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p0
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
 
 %build
 %{__make} -C src \
 	%{?with_selinux:WITH_SELINUX=yes} \
 	CC="%{__cc}" \
 	LCRYPT="-lcrypt" \
-	CFLAGS="%{rpmcflags}" \
+	CFLAGS="%{rpmcflags} %{rpmcppflags}" \
 	LDFLAGS="%{rpmldflags}"
 
 %install
