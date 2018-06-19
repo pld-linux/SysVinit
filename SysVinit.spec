@@ -12,33 +12,28 @@ Summary(ru.UTF-8):	Программы, управляющие базовыми �
 Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	2.88
-Release:	19
+Version:	2.90
+Release:	0.1
 License:	GPL v2+
 Group:		Base
-Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}dsf.tar.bz2
-# Source0-md5:	6eda8a97b86e0a6f59dabbf25202aa6f
+Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
+# Source0-md5:	7b6a16bde3da494b6aac7283b79c81de
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
-Source3:	crypttab.5
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
+Source3:	crypttab.5
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-wtmp.patch
 Patch3:		sysvinit-man.patch
 Patch4:		sysvinit-halt.patch
 Patch5:		sysvinit-autofsck.patch
-Patch6:		sysvinit-pidof.patch
-Patch7:		sysvinit-killall5.patch
+
 Patch8:		sysvinit-nopowerstates-single.patch
 Patch9:		sysvinit-lastlog.patch
 Patch10:	sysvinit-alt-fixes.patch
 Patch11:	sysvinit-quiet.patch
 Patch12:	sysvinit-rebootconfirmation.patch
-Patch13:	63_init_keep_utf8_ttyflag.patch
-Patch14:	64_init_selinux_enabled.patch
-Patch15:	95_kfreebsd_bootlogd.patch
-Patch16:	96_allow_multiple_console_output.patch
 URL:		http://savannah.nongnu.org/projects/sysvinit/
 %if %{with selinux}
 BuildRequires:	libselinux-devel >= 1.28
@@ -131,24 +126,19 @@ This package contains various tools used for process management.
 Ten pakiet zawiera różne narzędzia do zarządzania procesami.
 
 %prep
-%setup -q -n sysvinit-%{version}dsf
+%setup -q -n sysvinit-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
+
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p0
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
 
 %build
 %{__make} -C src \
@@ -192,7 +182,6 @@ cp -a man/intl/* $RPM_BUILD_ROOT%{_mandir}
 cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
 
 # in util-linux
-%{__rm} $RPM_BUILD_ROOT{/bin/mountpoint,%{_mandir}/man1/mountpoint.1*}
 %{__rm} $RPM_BUILD_ROOT{/sbin/sulogin,%{_mandir}/man8/sulogin.8*,%{_mandir}/*/man8/sulogin.8*}
 %{__rm} $RPM_BUILD_ROOT{/usr/bin/utmpdump,%{_mandir}/man1/utmpdump.1*}
 %{__rm} $RPM_BUILD_ROOT{/usr/bin/{last,lastb,mesg},%{_mandir}/man1/{last,lastb,mesg}.1*,%{_mandir}/*/man1/{last,lastb,mesg}.1*}
@@ -240,7 +229,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT README doc/{Changelog,Propaganda} src/initscript.sample
+%doc COPYRIGHT README doc/{Changelog,Propaganda} doc/initscript.sample
 
 %attr(755,root,root) %{_sbindir}/bootlogd
 %attr(755,root,root) %{_sbindir}/halt
@@ -258,6 +247,7 @@ fi
 %attr(664,root,utmp) %ghost /var/log/wtmp
 
 %{_mandir}/man5/crypttab.5*
+%{_mandir}/man5/initctl.5*
 %{_mandir}/man5/inittab.5*
 %{_mandir}/man5/initscript.5*
 %{_mandir}/man8/bootlogd.8*

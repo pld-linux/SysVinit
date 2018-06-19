@@ -1,6 +1,6 @@
 --- sysvinit-2.88dsf/src/Makefile.wiget	2010-04-11 11:30:27.000000000 +0200
 +++ sysvinit-2.88dsf/src/Makefile	2011-12-03 23:38:27.970109228 +0100
-@@ -15,13 +15,13 @@ STATIC	=
+@@ -23,13 +23,13 @@ MNTPOINT=
  
  # For some known distributions we do not build all programs, otherwise we do.
  BIN	=
@@ -9,23 +9,23 @@
  USRBIN	= last mesg
  
  MAN1	= last.1 lastb.1 mesg.1
- MAN5	= initscript.5 inittab.5
+ MAN5	= initscript.5 inittab.5 initctl.5
  MAN8	= halt.8 init.8 killall5.8 pidof.8 poweroff.8 reboot.8 runlevel.8
 -MAN8	+= shutdown.8 telinit.8 fstab-decode.8
 +MAN8	+= shutdown.8 telinit.8 fstab-decode.8 lastlog.8
  
  ifeq ($(DISTRO),)
- BIN	+= mountpoint
-@@ -96,6 +96,9 @@ halt:		halt.o ifdown.o hddown.o utmp.o r
+ SBIN	+= sulogin bootlogd
+@@ -115,6 +115,9 @@ halt:		halt.o ifdown.o hddown.o utmp.o
+ last:		LDLIBS += $(STATIC)
+ last:		last.o
  
- last:		last.o oldutmp.h
- 
++lastlog:	LDLIBS += $(STATIC)
 +lastlog:	lastlog.o
-+		$(CC) $(LDFLAGS) -o $@ lastlog.o
 +
+ mesg:		LDLIBS += $(STATIC)
  mesg:		mesg.o
  
- mountpoint:	mountpoint.o
 --- sysvinit-2.88dsf/src/lastlog.c.wiget	2011-12-03 23:31:01.697380950 +0100
 +++ sysvinit-2.88dsf/src/lastlog.c	2011-12-03 23:31:01.697380950 +0100
 @@ -0,0 +1,217 @@

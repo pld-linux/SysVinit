@@ -9,8 +9,8 @@
    all programs that init starts (so that you can set a generic
    umask, ulimit eg for ALL processes - see initscript.sample).
  - A "sulogin" program added that always asks for the root
---- sysvinit-2.88dsf/src/initscript.sample.wiget	2009-09-10 10:28:49.000000000 +0200
-+++ sysvinit-2.88dsf/src/initscript.sample	2011-12-03 22:25:33.574721688 +0100
+--- sysvinit-2.88dsf/doc/initscript.sample.wiget	2009-09-10 10:28:49.000000000 +0200
++++ sysvinit-2.88dsf/doc/initscript.sample	2011-12-03 22:25:33.574721688 +0100
 @@ -1,14 +1,14 @@
  #
 -# initscript	If this script is intalled as /etc/initscript,
