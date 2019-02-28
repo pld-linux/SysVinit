@@ -16,7 +16,7 @@
 +			close(open(file, O_CREAT|O_RDWR, 0644));
 +			free(file);
 +				
- 			do_shutdown(do_reboot ? "-r" : "-h", tm);
+ 			do_shutdown(do_reboot ? "-r" : "-h", do_poweroff, tm);
 +		}
  	}
  

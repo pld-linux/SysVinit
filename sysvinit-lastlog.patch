@@ -4,15 +4,15 @@
  
  # For some known distributions we do not build all programs, otherwise we do.
  BIN	=
--SBIN	= init halt shutdown runlevel killall5 fstab-decode
-+SBIN	= init halt shutdown runlevel killall5 fstab-decode lastlog
- USRBIN	= last mesg
+-SBIN	= init halt shutdown runlevel killall5 fstab-decode logsave
++SBIN	= init halt shutdown runlevel killall5 fstab-decode logsave lastlog
+ USRBIN	= last mesg readbootlog
  
- MAN1	= last.1 lastb.1 mesg.1
+ MAN1	= last.1 lastb.1 mesg.1 readbootlog.1
  MAN5	= initscript.5 inittab.5 initctl.5
  MAN8	= halt.8 init.8 killall5.8 pidof.8 poweroff.8 reboot.8 runlevel.8
--MAN8	+= shutdown.8 telinit.8 fstab-decode.8
-+MAN8	+= shutdown.8 telinit.8 fstab-decode.8 lastlog.8
+-MAN8	+= shutdown.8 telinit.8 fstab-decode.8 logsave.8
++MAN8	+= shutdown.8 telinit.8 fstab-decode.8 logsave.8 lastlog.8
  
  ifeq ($(DISTRO),)
  SBIN	+= sulogin bootlogd

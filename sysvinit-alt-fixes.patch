@@ -1,14 +1,5 @@
 --- sysvinit-2.88dsf/src/init.c.wiget	2011-12-03 23:39:16.988206898 +0100
 +++ sysvinit-2.88dsf/src/init.c	2011-12-03 23:47:53.761427001 +0100
-@@ -880,7 +880,7 @@ char **init_buildenv(int child)
- 	n += NR_EXTRA_ENV;
- 	if (child)
- 		n += 8;
--	e = calloc(n, sizeof(char *));
-+	e = imalloc(n * sizeof(char *));
- 
- 	for (n = 0; environ[n]; n++)
- 		e[n] = istrdup(environ[n]);
 @@ -911,6 +911,9 @@ void init_freeenv(char **e)
  {
  	int		n;
@@ -44,12 +35,4 @@
  
  	/*
  	 *	We shouldn't be here, something failed. 
-@@ -2729,7 +2737,7 @@ int telinit(char *progname, int argc, ch
- 		if (!strchr("0123456789SsQqAaBbCcUu", argv[optind][0]))
- 			usage(progname);
- 		request.cmd = INIT_CMD_RUNLVL;
--		request.runlevel  = env ? 0 : argv[optind][0];
-+		request.runlevel  = argv[optind][0];
- 		request.sleeptime = sltime;
- 	}
- 
+

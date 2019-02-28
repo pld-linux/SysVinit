@@ -26,7 +26,7 @@
  #ifndef SHUTDOWN_TIME
  #  define SHUTDOWN_TIME 254
  #endif
-@@ -247,27 +266,6 @@ int uread(FILE *fp, struct utmp *u, int
+@@ -270,28 +270,6 @@ int uread(FILE *fp, struct utmp *u, int
  #endif
  
  /*
@@ -36,10 +36,11 @@
 -#define BTMP_FILE getbtmp()
 -char *getbtmp()
 -{
--	static char btmp[128];
+-	static char btmp[PATH_MAX + 5];  /* max path + btmp + null terminator */
 -	char *p;
 -
--	strcpy(btmp, WTMP_FILE);
+-        memset(btmp, '\0', PATH_MAX + 5);
+-	strncpy(btmp, WTMP_FILE, PATH_MAX);
 -	if ((p = strrchr(btmp, '/')) == NULL)
 -		p = btmp;
 -	else

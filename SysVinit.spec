@@ -12,12 +12,12 @@ Summary(ru.UTF-8):	Программы, управляющие базовыми �
 Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	2.90
-Release:	0.1
+Version:	2.94
+Release:	1
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
-# Source0-md5:	7b6a16bde3da494b6aac7283b79c81de
+# Source0-md5:	885ae742d51dbae8d16f535455c0240a
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
@@ -25,7 +25,7 @@ Source3:	crypttab.5
 Patch0:		sysvinit-paths.patch
 Patch1:		sysvinit-bequiet.patch
 Patch2:		sysvinit-wtmp.patch
-Patch3:		sysvinit-man.patch
+
 Patch4:		sysvinit-halt.patch
 Patch5:		sysvinit-autofsck.patch
 
@@ -130,7 +130,7 @@ Ten pakiet zawiera różne narzędzia do zarządzania procesami.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+
 %patch4 -p1
 %patch5 -p1
 
@@ -234,6 +234,7 @@ fi
 %attr(755,root,root) %{_sbindir}/bootlogd
 %attr(755,root,root) %{_sbindir}/halt
 %attr(755,root,root) %{_sbindir}/init
+%attr(755,root,root) %{_sbindir}/logsave
 %attr(755,root,root) %{_sbindir}/poweroff
 %attr(755,root,root) %{_sbindir}/reboot
 %attr(755,root,root) %{_sbindir}/runlevel
@@ -253,6 +254,7 @@ fi
 %{_mandir}/man8/bootlogd.8*
 %{_mandir}/man8/halt.8*
 %{_mandir}/man8/init.8*
+%{_mandir}/man8/logsave.8*
 %{_mandir}/man8/poweroff.8
 %{_mandir}/man8/reboot.8
 %{_mandir}/man8/runlevel.8*
@@ -325,9 +327,11 @@ fi
 %attr(755,root,root) %{_sbindir}/killall5
 %attr(755,root,root) %{_sbindir}/lastlog
 %attr(755,root,root) %{_sbindir}/pidof
+%attr(2755,root,tty) %{_bindir}/readbootlog
 %attr(2755,root,tty) %{_bindir}/wall
 %attr(640,root,root) %ghost /var/log/faillog
 %attr(664,root,utmp) %ghost /var/log/lastlog
+%{_mandir}/man1/readbootlog.1*
 %{_mandir}/man1/wall.1*
 %{_mandir}/man8/killall5.8*
 %{_mandir}/man8/lastlog.8*
