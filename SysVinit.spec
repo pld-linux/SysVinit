@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.94
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
@@ -213,12 +213,16 @@ chmod 600 %{_sysconfdir}/ioctl.save
 chmod 640 /var/log/btmp
 chmod 640 /var/log/faillog
 chmod 664 /var/log/lastlog
-if [ -p /dev/initctl ]; then
+if [ -p /run/initctl ]; then
 	%{_sbindir}/telinit u || :
 fi
 
+%triggerun -- SysVinit < 2.94-1
+# it will be needed once until reboot happens
+[ -p /dev/initctl -a ! -e /run/initctl ] && ln -s /dev/initctl /run/initctl
+
 %triggerpostun -- glibc
-if [ -p /dev/initctl ]; then
+if [ -p /run/initctl ]; then
 	%{_sbindir}/telinit u || :
 fi
 
