@@ -12,12 +12,12 @@ Summary(ru.UTF-8):	Программы, управляющие базовыми �
 Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	2.94
-Release:	3
+Version:	2.96
+Release:	1
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
-# Source0-md5:	885ae742d51dbae8d16f535455c0240a
+# Source0-md5:	48cebffebf2a96ab09bec14bf9976016
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
