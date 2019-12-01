@@ -1,6 +1,7 @@
---- sysvinit-2.88dsf/src/last.c.wiget	2010-02-19 16:51:36.000000000 +0100
-+++ sysvinit-2.88dsf/src/last.c	2011-12-03 22:48:11.526513957 +0100
-@@ -45,6 +45,25 @@
+diff -ruNp sysvinit-2.96.orig/src/last.c sysvinit-2.96/src/last.c
+--- sysvinit-2.96.orig/src/last.c	2019-09-11 19:43:12.000000000 +0200
++++ sysvinit-2.96/src/last.c	2019-12-01 05:14:37.344902512 +0100
+@@ -44,6 +44,25 @@
  #include <arpa/inet.h>
  #include "oldutmp.h"
  
@@ -26,7 +27,7 @@
  #ifndef SHUTDOWN_TIME
  #  define SHUTDOWN_TIME 254
  #endif
-@@ -270,28 +270,6 @@ int uread(FILE *fp, struct utmp *u, int
+@@ -251,28 +270,6 @@ int uread(FILE *fp, struct utmp *u, int
  #endif
  
  /*
@@ -55,7 +56,7 @@
   *	Print a short date.
   */
  char *showdate()
-@@ -384,6 +382,8 @@ int list(struct utmp *p, time_t t, int w
+@@ -381,6 +378,8 @@ int list(struct utmp *p, time_t t, int w
  	strncat(utline, p->ut_line, UT_LINESIZE);
  	if (strncmp(utline, "ftp", 3) == 0 && isdigit(utline[3]))
  		utline[3] = 0;
@@ -64,7 +65,7 @@
  	if (strncmp(utline, "uucp", 4) == 0 && isdigit(utline[4]))
  		utline[4] = 0;
  
-@@ -666,10 +666,10 @@ int main(int argc, char **argv)
+@@ -708,10 +707,10 @@ int main(int argc, char **argv)
     *	Which file do we want to read?
     */
    if (strcmp(progname, "lastb") == 0) {
@@ -77,9 +78,10 @@
    if (altufile)
  	ufile = altufile;
    time(&lastdown);
---- sysvinit-2.88dsf/src/utmp.c.wiget	2009-11-24 11:03:19.000000000 +0100
-+++ sysvinit-2.88dsf/src/utmp.c	2011-12-03 22:49:25.353492892 +0100
-@@ -76,7 +76,9 @@ char *line)			/* Which line is this */
+diff -ruNp sysvinit-2.96.orig/src/utmp.c sysvinit-2.96/src/utmp.c
+--- sysvinit-2.96.orig/src/utmp.c	2019-09-11 19:43:12.000000000 +0200
++++ sysvinit-2.96/src/utmp.c	2019-12-01 05:15:12.143729210 +0100
+@@ -80,7 +80,9 @@ char *line)			/* Which line is this */
  	 *	this if we have updwtmp() so we can see if the
  	 *	wtmp file is accessible.
  	 */
@@ -89,7 +91,17 @@
  
  #ifdef INIT_MAIN
  	/*
-@@ -160,8 +162,10 @@ char *oldline)			/* Line of old utmp ent
+@@ -140,8 +142,8 @@ char *line)			/* Which line is this */
+ 	updwtmp(WTMP_FILE, &utmp);
+ #else
+ 	write(fd, (char *)&utmp, sizeof(utmp));
+-#endif
+ 	close(fd);
++#endif
+ }
+ 
+ /*
+@@ -164,8 +166,10 @@ char *oldline)			/* Line of old utmp ent
  	/*
  	 *	Can't do much if UTMP_FILE is not present or not writable.
  	 */
