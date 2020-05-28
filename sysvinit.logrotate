@@ -3,9 +3,16 @@
 #}
 
 /var/log/btmp {
+	missingok
+	monthly
+	create 0640 root root
+	rotate 1
 }
 
 /var/log/wtmp {
-	create 664 root utmp
+	missingok
 	monthly
+	create 0664 root utmp
+	minsize 1M
+	rotate 1
 }
