@@ -17,7 +17,7 @@ Release:	1
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
-# Source0-md5:	e11bc4b3eac6e6ddee7f8306230749a9
+# Source0-md5:	e3254f7622ea5cf2322b1b386a98ba59
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
