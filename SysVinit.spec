@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.98
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
@@ -50,8 +50,8 @@ Requires:	login
 Requires:	mingetty
 Requires:	util-linux >= 2.24-1
 Provides:	group(utmp)
-Provides:	virtual(init-daemon)
-Obsoletes:	virtual(init-daemon)
+Provides:	virtual-init-daemon
+Obsoletes:	virtual-init-daemon
 Obsoletes:	vserver-SysVinit
 Conflicts:	rc-scripts < 0.4.9-1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
