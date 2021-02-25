@@ -1,6 +1,7 @@
---- src/halt.c-dupa	2008-08-20 14:45:39.019976250 +0200
-+++ src/halt.c	2008-08-20 14:49:35.418750250 +0200
-@@ -64,7 +64,7 @@
+diff -urNp -x '*.orig' src/halt.c src/halt.c
+--- src/halt.c	2021-02-25 08:12:01.388254734 +0100
++++ src/halt.c	2021-02-25 08:12:01.484924408 +0100
+@@ -75,7 +75,7 @@ extern void write_wtmp(char *user, char
   */
  void usage(void)
  {
@@ -9,7 +10,7 @@
  		progname, strcmp(progname, "halt") ? "" : " [-p]");
  	fprintf(stderr, "\t-n: don't sync before halting the system\n");
  	fprintf(stderr, "\t-w: only write a wtmp reboot record and exit.\n");
-@@ -72,6 +72,7 @@
+@@ -83,6 +83,7 @@ void usage(void)
  	fprintf(stderr, "\t-f: force halt/reboot, don't call shutdown.\n");
  	fprintf(stderr, "\t-h: put harddisks in standby mode.\n");
  	fprintf(stderr, "\t-i: shut down all network interfaces.\n");
@@ -17,7 +18,7 @@
  	if (!strcmp(progname, "halt"))
  		fprintf(stderr, "\t-p: power down the system (if possible, otherwise halt).\n");
  	exit(1);
-@@ -172,8 +173,10 @@
+@@ -193,8 +194,10 @@ int main(int argc, char **argv)
  	int do_ifdown = 0;
  	int do_hddown = 0;
  	int do_poweroff = 0;
@@ -28,7 +29,7 @@
  
  	/*
  	 *	Find out who we are
-@@ -190,7 +193,7 @@
+@@ -212,7 +215,7 @@ int main(int argc, char **argv)
  	/*
  	 *	Get flags
  	 */
@@ -37,7 +38,7 @@
  		switch(c) {
  			case 'n':
  				do_sync = 0;
-@@ -214,6 +217,9 @@
+@@ -236,6 +239,9 @@ int main(int argc, char **argv)
  			case 'p':
  				do_poweroff = 1;
  				break;
@@ -47,8 +48,8 @@
  			case 't':
  				tm = optarg;
  				break;
-@@ -231,6 +237,11 @@
- 	(void)chdir("/");
+@@ -256,6 +262,11 @@ int main(int argc, char **argv)
+ 	}
  
  	if (!do_hard && !do_nothing) {
 +		if (do_confirm) {

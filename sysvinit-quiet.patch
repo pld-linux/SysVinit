@@ -1,14 +1,15 @@
---- sysvinit-2.86/src/init.c.silence	2006-08-08 20:50:37.000000000 -0400
-+++ sysvinit-2.86/src/init.c	2006-08-08 20:54:24.000000000 -0400
-@@ -117,6 +117,7 @@
+diff -urNp -x '*.orig' sysvinit-2.99.org/src/init.c sysvinit-2.99/src/init.c
+--- sysvinit-2.99.org/src/init.c	2021-02-25 08:11:43.504364931 +0100
++++ sysvinit-2.99/src/init.c	2021-02-25 08:11:43.584367421 +0100
+@@ -153,6 +153,7 @@ struct utmp utproto;		/* Only used for s
  char *console_dev;		/* Console device. */
- int pipe_fd = -1;		/* /dev/initctl */
+ int pipe_fd = -1;		/* /run/initctl */
  int did_boot = 0;		/* Did we already do BOOT* stuff? */
 +int quiet = 0;			/* Should we be relatively silent? */
  int main(int, char **);
  
  /*	Used by re-exec part */
-@@ -1673,7 +1674,7 @@
+@@ -2069,7 +2070,7 @@ int read_level(int arg)
  			initlog(L_SY, "Trying to re-exec init");
  			return 'U';
  		default:
@@ -16,8 +17,8 @@
 +		  	if (!quiet) initlog(L_VB, "Switching to runlevel: %c", foo);
  	}
  
- 	if (foo == 'Q') return runlevel;
-@@ -2425,7 +2426,7 @@
+ 	if (foo == 'Q') {
+@@ -2893,7 +2894,7 @@ void init_main(void)
    	/*
  	 *	Say hello to the world
  	 */
@@ -26,7 +27,7 @@
  
    	/*
  	 *	See if we have to start an emergency shell.
-@@ -2657,6 +2658,8 @@
+@@ -3162,6 +3163,8 @@ int main(int argc, char **argv)
  		else if (!strcmp(argv[f], "-z")) {
  			/* Ignore -z xxx */
  			if (argv[f + 1]) f++;

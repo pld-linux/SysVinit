@@ -1,10 +1,11 @@
---- sysvinit-2.86/src/shutdown.c.orig	2004-07-30 13:59:04.000000000 +0200
-+++ sysvinit-2.86/src/shutdown.c	2004-12-26 22:58:22.690343288 +0100
-@@ -324,6 +324,7 @@
+diff -urNp -x '*.orig' sysvinit-2.99.org/src/shutdown.c sysvinit-2.99/src/shutdown.c
+--- sysvinit-2.99.org/src/shutdown.c	2021-02-21 19:02:25.000000000 +0100
++++ sysvinit-2.99/src/shutdown.c	2021-02-25 08:11:05.983197168 +0100
+@@ -377,6 +377,7 @@ void fastdown()
  	}
  #endif
  
 +	unlink("/.autofsck");
  	/* script failed or not present: do it ourself. */
- 	sleep(1); /* Give init the chance to collect zombies. */
- 
+ 	/* Give init the chance to collect zombies. */
+         /* sleep(1); */

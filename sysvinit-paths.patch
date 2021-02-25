@@ -1,5 +1,6 @@
---- sysvinit-2.88dsf/doc/Propaganda.wiget	2009-09-10 10:28:49.000000000 +0200
-+++ sysvinit-2.88dsf/doc/Propaganda	2011-12-03 22:25:33.574721688 +0100
+diff -urNp -x '*.orig' sysvinit-2.99.org/doc/Propaganda sysvinit-2.99/doc/Propaganda
+--- sysvinit-2.99.org/doc/Propaganda	2021-02-21 19:02:25.000000000 +0100
++++ sysvinit-2.99/doc/Propaganda	2021-02-25 08:10:45.835903318 +0100
 @@ -46,7 +46,7 @@ Some other general changes:
    /var/run/utmp (it's also shown on the command line if you do a "ps").
  - unreckognized options are silently ignored (such as the infamous
@@ -9,8 +10,9 @@
    all programs that init starts (so that you can set a generic
    umask, ulimit eg for ALL processes - see initscript.sample).
  - A "sulogin" program added that always asks for the root
---- sysvinit-2.88dsf/doc/initscript.sample.wiget	2009-09-10 10:28:49.000000000 +0200
-+++ sysvinit-2.88dsf/doc/initscript.sample	2011-12-03 22:25:33.574721688 +0100
+diff -urNp -x '*.orig' sysvinit-2.99.org/doc/initscript.sample sysvinit-2.99/doc/initscript.sample
+--- sysvinit-2.99.org/doc/initscript.sample	2021-02-21 19:02:25.000000000 +0100
++++ sysvinit-2.99/doc/initscript.sample	2021-02-25 08:10:45.835903318 +0100
 @@ -1,14 +1,14 @@
  #
 -# initscript	If this script is intalled as /etc/initscript,
@@ -29,9 +31,10 @@
  #
  # Version:	@(#)initscript 1.10 10-Dec-1995 MvS.
  #
---- sysvinit-2.88dsf/src/paths.h.wiget	2010-04-11 11:30:27.000000000 +0200
-+++ sysvinit-2.88dsf/src/paths.h	2011-12-03 22:30:54.881898668 +0100
-@@ -34,7 +34,7 @@
+diff -urNp -x '*.orig' sysvinit-2.99.org/src/paths.h sysvinit-2.99/src/paths.h
+--- sysvinit-2.99.org/src/paths.h	2021-02-21 19:02:25.000000000 +0100
++++ sysvinit-2.99/src/paths.h	2021-02-25 08:10:45.835903318 +0100
+@@ -35,7 +35,7 @@
  #define SDPID		"/var/run/shutdown.pid"	/* PID of shutdown program */
  #define SHELL		"/bin/sh"		/* Default shell */
  #define SULOGIN		"/sbin/sulogin"		/* Sulogin */
@@ -39,4 +42,4 @@
 +#define INITSCRIPT	"/etc/rc.d/rc.init"	/* Initscript. */
  #define PWRSTAT_OLD	"/etc/powerstatus"	/* COMPAT: SIGPWR reason (OK/BAD) */
  #define PWRSTAT		"/var/run/powerstatus"	/* COMPAT: SIGPWR reason (OK/BAD) */
- 
+ #define RUNLEVEL_LOG    "/var/run/runlevel"     /* neutral place to store run level */
