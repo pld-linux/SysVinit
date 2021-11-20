@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	2.99
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Base
 Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
