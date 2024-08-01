@@ -1,23 +1,18 @@
---- sysvinit-2.78/src/halt.c.halt	Wed Apr 19 15:48:23 2000
-+++ sysvinit-2.78/src/halt.c	Wed Apr 19 15:55:03 2000
-@@ -218,8 +218,19 @@
- 		 *	See if we are in runlevel 0 or 6.
- 		 */
- 		c = get_runlevel();
--		if (c != '0' && c != '6')
-+		if (c != '0' && c != '6') {
-+			char *file;
+--- sysvinit-3.10/src/halt.c~	2024-07-29 15:39:12.000000000 +0200
++++ sysvinit-3.10/src/halt.c	2024-08-01 08:41:12.739971452 +0200
+@@ -170,6 +170,15 @@ void do_shutdown(char *fl, int should_po
+ {
+ 	char *args[9];
+ 	int i = 0;
++        char *file;
 +
-+			if (do_poweroff) {
-+				file = strdup("/poweroff");
-+			} else {
-+				file = strdup("/halt");
-+			}
-+			close(open(file, O_CREAT|O_RDWR, 0644));
-+			free(file);
-+				
- 			do_shutdown(do_reboot ? "-r" : "-h", do_poweroff, tm);
-+		}
- 	}
++        if (should_poweroff) {
++            file = strdup("/poweroff");
++        } else {
++            file = strdup("/halt");
++        }
++        close(open(file, O_CREAT|O_RDWR, 0644));
++        free(file);
  
- 	/*
+ 	args[i++] = "shutdown";
+ 	args[i++] = fl;

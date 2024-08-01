@@ -12,12 +12,12 @@ Summary(ru.UTF-8):	Программы, управляющие базовыми �
 Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
-Version:	3.04
+Version:	3.10
 Release:	1
 License:	GPL v2+
 Group:		Base
-Source0:	http://download.savannah.gnu.org/releases/sysvinit/sysvinit-%{version}.tar.xz
-# Source0-md5:	9a00e5f15dd2f038f10feee50677ebff
+Source0:	https://github.com/slicer69/sysvinit/releases/download/%{version}/sysvinit-%{version}.tar.xz
+# Source0-md5:	b8fbe11062cf16d3b6a3709b7f6978d2
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
 # Source2-md5:	9ae8a63a4685368fae19707f95475cca
@@ -138,7 +138,7 @@ Ten pakiet zawiera różne narzędzia do zarządzania procesami.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p0
+%patch12 -p1
 
 %build
 %{__make} -C src \

@@ -1,62 +1,58 @@
-diff -urNp -x '*.orig' src/halt.c src/halt.c
---- src/halt.c	2021-02-25 08:12:01.388254734 +0100
-+++ src/halt.c	2021-02-25 08:12:01.484924408 +0100
-@@ -75,7 +75,7 @@ extern void write_wtmp(char *user, char
+--- sysvinit-3.10/src/halt.c.orig	2024-08-01 08:41:41.156638116 +0200
++++ sysvinit-3.10/src/halt.c	2024-08-01 08:48:11.933304753 +0200
+@@ -81,10 +81,11 @@ extern void write_wtmp(char *user, char
   */
  void usage(void)
  {
--	fprintf(stderr, "usage: %s [-n] [-w] [-d] [-f] [-h] [-i]%s\n",
-+	fprintf(stderr, "usage: %s [-n] [-w] [-d] [-f] [-h] [-i] [-c]%s\n",
- 		progname, strcmp(progname, "halt") ? "" : " [-p]");
- 	fprintf(stderr, "\t-n: don't sync before halting the system\n");
- 	fprintf(stderr, "\t-w: only write a wtmp reboot record and exit.\n");
-@@ -83,6 +83,7 @@ void usage(void)
+-	fprintf(stderr, "usage: %s [-d] [-f] [-h] [-i] [-n] [-w]%s%s\n",
++	fprintf(stderr, "usage: %s [-c] [-d] [-f] [-h] [-i] [-n] [-w]%s%s\n",
+ 		progname,
+ 		strcmp(progname, "halt") ? "" : " [-p]",
+ 		strcmp(progname, "reboot") ? "" : " [-k] [-m <message>]");
++        fprintf(stderr, "\t-c: ask for confirmation.\n");
+ 	fprintf(stderr, "\t-d: don't write a wtmp record.\n");
  	fprintf(stderr, "\t-f: force halt/reboot, don't call shutdown.\n");
  	fprintf(stderr, "\t-h: put harddisks in standby mode.\n");
- 	fprintf(stderr, "\t-i: shut down all network interfaces.\n");
-+	fprintf(stderr, "\t-c: ask for confirmation.\n");
- 	if (!strcmp(progname, "halt"))
- 		fprintf(stderr, "\t-p: power down the system (if possible, otherwise halt).\n");
- 	exit(1);
-@@ -193,8 +194,10 @@ int main(int argc, char **argv)
- 	int do_ifdown = 0;
+@@ -214,7 +215,9 @@ int main(int argc, char **argv)
  	int do_hddown = 0;
  	int do_poweroff = 0;
-+	int do_confirm = 0;
+ 	int do_kexec = 0;
++        int do_confirm = 0;
+         char *user_message = NULL;
++        char answer = 'n';
  	int c;
  	char *tm = NULL;
-+	char answer = 'n';
  
- 	/*
- 	 *	Find out who we are
-@@ -212,7 +215,7 @@ int main(int argc, char **argv)
+@@ -234,7 +237,7 @@ int main(int argc, char **argv)
  	/*
  	 *	Get flags
  	 */
--	while((c = getopt(argc, argv, ":ihdfnpwt:")) != EOF) {
-+	while((c = getopt(argc, argv, ":ihdfnpwct:")) != EOF) {
+-	while((c = getopt(argc, argv, ":ihdfm:npwkt:")) != EOF) {
++	while((c = getopt(argc, argv, ":ihdfm:npwkct:")) != EOF) {
  		switch(c) {
  			case 'n':
  				do_sync = 0;
-@@ -236,6 +239,9 @@ int main(int argc, char **argv)
- 			case 'p':
- 				do_poweroff = 1;
- 				break;
-+			case 'c':
-+				do_confirm = 1;
-+				break;
+@@ -268,6 +271,9 @@ int main(int argc, char **argv)
  			case 't':
  				tm = optarg;
  				break;
-@@ -256,6 +262,11 @@ int main(int argc, char **argv)
- 	}
++                        case 'c':
++                                do_confirm = 1;
++                                break;
+ 			default:
+ 				usage();
+ 		}
+@@ -300,6 +306,13 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 		}
  
- 	if (!do_hard && !do_nothing) {
 +		if (do_confirm) {
 +			fprintf(stderr, "Are you sure you want to reboot? N/y.\n");
 +			scanf("%c", &answer);
-+			if (tolower(answer) != 'y') exit(1);
++			if (tolower(answer) != 'y')
++				exit(1);
 +		}
++
  		/*
  		 *	See if we are in runlevel 0 or 6.
  		 */
