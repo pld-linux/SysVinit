@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	3.10
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Base
 Source0:	https://github.com/slicer69/sysvinit/releases/download/%{version}/sysvinit-%{version}.tar.xz
@@ -45,6 +45,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires:	%{name}-tools = %{version}-%{release}
 Requires:	/bin/awk
+Requires:	dev
 %{?with_selinux:Requires:	libselinux >= 1.18}
 Requires:	login
 Requires:	mingetty
