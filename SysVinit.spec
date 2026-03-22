@@ -16,7 +16,7 @@ Version:	3.14
 Release:	1
 License:	GPL v2+
 Group:		Base
-Source0:	https://github.com/slicer69/sysvinit/releases/download/%{version}/sysvinit-%{version}.tar.xz
+Source0:	https://codeberg.org/thejessesmith/sysvinit/releases/download/%{version}/sysvinit-%{version}.tar.xz
 # Source0-md5:	bc6890b975d19dc9db42d0c7364dd092
 Source1:	sysvinit.logrotate
 Source2:	http://www.mif.pg.gda.pl/homepages/ankry/man-PLD/sysvinit-non-english-man-pages.tar.bz2
