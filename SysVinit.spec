@@ -13,7 +13,7 @@ Summary(tr.UTF-8):	System V başlatma programı
 Summary(uk.UTF-8):	Програми, що керують базовими системними процесами
 Name:		SysVinit
 Version:	3.18
-Release:	1
+Release:	2
 License:	GPL v2+
 Group:		Base
 Source0:	https://codeberg.org/thejessesmith/sysvinit/releases/download/%{version}/sysvinit-%{version}.tar.xz
@@ -194,18 +194,6 @@ cp %{SOURCE3} $RPM_BUILD_ROOT%{_mandir}/man5
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-# not in trigger because wtmpx is %%ghost, and %%ghost-ed files
-# are removed when they'are uninstalled
-%pretrans
-if [ -e /var/log/wtmpx ]; then
-	# wtmp always takes precedence, it's safe to remove wtmpx
-	if [ -s /var/log/wtmp ]; then
-		%{__rm} -f /var/log/wtmpx
-	else
-		%{__mv} -f /var/log/wtmpx /var/log/wtmp
-	fi
-fi
 
 %pre
 %groupadd -g 22 utmp
